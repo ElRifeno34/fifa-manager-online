@@ -1,6 +1,6 @@
 # FIFA Manager Online
 
-Jeu de gestion de football multijoueur entre amis, avec matchs visualisés en 2D.
+Jeu de gestion de football avec matchs visualisés en 2D : offline en solo d'abord, puis online entre amis.
 
 - [Plan du projet](docs/PLAN.md)
 - [Architecture](docs/ARCHITECTURE.md)
@@ -11,7 +11,7 @@ Prérequis : Node.js 22+.
 
 ```bash
 npm install
-npm run dev        # lance l'app web sur http://localhost:3000
+npm run dev        # lance l'app web sur http://localhost:5173
 ```
 
 ## Scripts
