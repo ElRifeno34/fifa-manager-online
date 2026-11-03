@@ -1,8 +1,9 @@
-# FIFA Manager Online
+# Online Manager
 
-Jeu de gestion de football avec matchs visualisés en 2D : offline en solo d'abord, puis online entre amis.
+Jeu de gestion de football mobile (paysage) avec de vrais clubs, des matchs visualisés en 2D et du contenu raconté par IA. Offline en solo d'abord, puis online entre amis.
 
 - [Plan du projet](docs/PLAN.md)
+- [Game design](docs/GAME_DESIGN.md)
 - [Architecture](docs/ARCHITECTURE.md)
 
 ## Démarrer
