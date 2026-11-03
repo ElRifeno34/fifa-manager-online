@@ -88,12 +88,21 @@ Contenu : un compte officiel publie un fait du jeu ; les avis et commentaires vi
 
 ## 5. État d'avancement
 
-| Élément                                                       | Figma | Prototype |
-| ------------------------------------------------------------- | ----- | --------- |
-| Thème clair, palettes des clubs, styles Menu/M et Headline/XL | Fait  | —         |
-| Composants v2 (MenuTile, Chip, DataRow, CalendarDay, KeyHint) | Fait  | —         |
-| Écran hub desktop 1280×720                                    | —     | —         |
-| Écran hub mobile 844×390                                      | —     | —         |
-| Visionneuse du fil                                            | —     | —         |
+| Élément                                                       | Figma | v0   |
+| ------------------------------------------------------------- | ----- | ---- |
+| Thème clair, palettes des clubs, styles Menu/M et Headline/XL | Fait  | Fait |
+| Composants v2 (MenuTile, Chip, DataRow, CalendarDay, KeyHint) | Fait  | Fait |
+| Écran hub desktop 1280×720                                    | —     | Fait |
+| Écran hub mobile 844×390                                      | —     | Fait |
+| Visionneuse du fil                                            | —     | Fait |
 
-Bloqué le 2026-11-02 : limite d'appels Figma (plan Starter) et crédits Lovable épuisés.
+Le 2026-11-02, Figma (limite d'appels du plan Starter) et Lovable (crédits épuisés) étaient bloqués.
+La v2 a été prototypée avec deux autres outils, pour la DA uniquement :
+
+- **v0** (suit ce cahier des charges) : [chat v0](https://v0.app/chat/ebTFC4cDlOF). Next.js, réglages
+  club + thème, raccourcis, visionneuse du fil. Vérifié par v0 en 1280×720, 1920×1080 et 844×390.
+- **Base44** (interprétation libre du brief) : [éditeur Base44](https://app.base44.com/apps/6ae9534d952578c77a4327ea/editor/preview).
+  Club et journaux fictifs, génération d'éditions par IA, page de connexion ajoutée.
+
+Prochaine étape : reporter la variante retenue dans Figma (écrans) et Lovable quand ils seront de
+nouveau disponibles.
