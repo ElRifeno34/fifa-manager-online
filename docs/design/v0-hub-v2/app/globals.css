@@ -1,0 +1,157 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+/* Phones in landscape (and very short windows) switch to the compact layout. */
+@custom-variant short (@media (max-height: 500px));
+
+@theme inline {
+  --font-sans: var(--font-barlow), 'Barlow Fallback', system-ui, sans-serif;
+  --font-display: var(--font-barlow-condensed), 'Barlow Condensed Fallback', system-ui, sans-serif;
+
+  --color-base: var(--bg-base);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-overlay: var(--overlay);
+  --color-scrim: var(--scrim);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-inverse: var(--inverse);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --color-club: var(--club-primary);
+  --color-club-on: var(--club-on-primary);
+  --color-club-2: var(--club-secondary);
+  --color-club-on-2: var(--club-on-secondary);
+  --color-club-subtle: var(--club-primary-subtle);
+  --color-club-ink: var(--club-ink);
+  --color-club-accent-dark: var(--club-accent-dark);
+  --color-club-accent-on: var(--club-accent-on-primary);
+
+  --shadow-panel: 0 2px 6px rgb(18 26 35 / 0.08);
+  --shadow-lift: 0 6px 16px rgb(18 26 35 / 0.14);
+
+  /* shadcn token bridge so the stock Button keeps working */
+  --color-background: var(--bg-base);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--club-primary);
+  --color-primary-foreground: var(--club-on-primary);
+  --color-secondary: var(--raised);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--raised);
+  --color-muted-foreground: var(--ink-2);
+  --color-accent: var(--raised);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--danger);
+  --color-border: var(--line);
+  --color-input: var(--line-strong);
+  --color-ring: var(--club-ink);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+:root {
+  color-scheme: light;
+  --bg-base: #e4e9ef;
+  --surface: #ffffff;
+  --raised: #f3f5f8;
+  --overlay: #1d2630;
+  --scrim: #0b1118;
+  --line: #d5dce4;
+  --line-strong: #b7c2ce;
+  --ink: #121a23;
+  --ink-2: #4d5b6a;
+  --ink-3: #8592a1;
+  --inverse: #ffffff;
+  --success: #1f9d57;
+  --warning: #d98a00;
+  --danger: #e0364a;
+  --veil: rgb(238 242 246 / 0.6);
+  --pitch-fallback: linear-gradient(180deg, #dbe9f7 0%, #eef2f6 55%, #cfe3c8 100%);
+}
+
+.dark {
+  color-scheme: dark;
+  --bg-base: #0a0e13;
+  --surface: #111821;
+  --raised: #18212c;
+  --overlay: #1d2630;
+  --line: #243040;
+  --line-strong: #34445a;
+  --ink: #f1f4f8;
+  --ink-2: #a9b5c2;
+  --ink-3: #738193;
+  --veil: rgb(10 14 19 / 0.78);
+  --pitch-fallback: linear-gradient(180deg, #0f1722 0%, #0a0e13 100%);
+}
+
+/* Desktop reference is 1280x720 = 16px root. Everything is in rem, so the whole
+   hub scales up cleanly at 1920x1080 (24px root). */
+html {
+  font-size: clamp(11px, min(1.25vw, 2.2222vh), 24px);
+}
+
+@media (max-height: 500px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+  html {
+    background-color: var(--bg-base);
+  }
+  body {
+    @apply bg-base font-sans text-ink antialiased;
+    min-height: 100dvh;
+  }
+  :focus-visible {
+    outline: 2px solid var(--club-ink);
+    outline-offset: 2px;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+/* Applied for ~250ms while the club or theme changes. */
+html.theme-anim,
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    fill 200ms ease,
+    box-shadow 200ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-anim,
+  html.theme-anim * {
+    transition: none !important;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

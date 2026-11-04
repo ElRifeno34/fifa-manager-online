@@ -104,5 +104,24 @@ La v2 a été prototypée avec deux autres outils, pour la DA uniquement :
 - **Base44** (interprétation libre du brief) : [éditeur Base44](https://app.base44.com/apps/6ae9534d952578c77a4327ea/editor/preview).
   Club et journaux fictifs, génération d'éditions par IA, page de connexion ajoutée.
 
-Prochaine étape : reporter la variante retenue dans Figma (écrans) et Lovable quand ils seront de
-nouveau disponibles.
+### Décision du 2026-11-04
+
+**La DA v0 est retenue.** Son code source est archivé dans [v0-hub-v2/](v0-hub-v2/) (référence,
+non compilé). Elle a été envoyée telle quelle à Lovable, qui la porte dans le
+[projet Lovable](https://lovable.dev/projects/f47bb220-b1c6-4061-b2d6-4594a960bef9) avec ces ajouts :
+
+- **Menu à 9 entrées** : Avancer, Effectif, Tactique, **Entraînement**, **Transferts**,
+  Compétition, Médias, **Carrière coach**, Bureau du manager. « Avancer » reste une grande tuile,
+  les 8 autres deviennent des tuiles compactes ; tout tient sans défilement, raccourcis `1-9`.
+- **Menu plus vif** : « Avancer » en dégradé aux couleurs du club avec un reflet périodique ; autres
+  tuiles en blanc dépoli, icône dans une pastille teintée du club, barre de couleur au survol.
+- **Fond plus vivant** : photo de stade plus nette, lent zoom/panoramique, faisceaux de projecteurs,
+  particules lumineuses, reflet aux couleurs du club. Désactivé si l'utilisateur réduit les
+  animations ; interrupteur « Fond animé » dans les réglages.
+
+Les mêmes ajouts ont été demandés en parallèle à v0 ([chat v0](https://v0.app/chat/ebTFC4cDlOF)).
+Les deux versions sont faites (2026-11-04). L'archive [v0-hub-v2/](v0-hub-v2/) correspond à la
+version **d'avant** ces ajouts.
+
+Points non vérifiés par les outils : pause des animations quand l'onglet est caché (Lovable),
+survol à la souris et mode « réduire les animations » (v0), thème sombre en Real Madrid (v0).

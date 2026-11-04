@@ -481,8 +481,13 @@ Interface **mobile paysage**, pensée pour le **tactile**.
 | 15  | **Presse**              | Kiosque : unes des journaux du pays, puis articles (section 9.1)                           | Oui |
 | 16  | **Fil** (réseau social) | Fil de messages, hashtags tendance, likes et partages (section 9.2)                        | Oui |
 | 17  | Photos (réseau social)  | Grille de visuels générés par le jeu (section 9.2)                                         | Non |
-| 18  | Mercato                 | Recherche, offres, contrats                                                                | Non |
+| 18  | Transferts (mercato)    | Recherche, offres, contrats                                                                | Non |
 | 19  | Finances                | Budget, salaires, revenus                                                                  | Non |
+| 20  | Entraînement            | Programme de la semaine, charge, progression ciblée                                        | Non |
+| 21  | Carrière coach          | Profil de l'entraîneur : réputation, palmarès, contrat, offres d'autres clubs              | Non |
+
+Le menu du hub prévoit déjà les entrées Entraînement, Transferts et Carrière coach (DA v2, voir
+[design/HUB_V2.md](design/HUB_V2.md)) ; leurs écrans arrivent en phase 5.
 
 Si une version desktop arrive, on ajoutera les raccourcis clavier (`Espace` pour continuer, `Échap`
 pour revenir…).
