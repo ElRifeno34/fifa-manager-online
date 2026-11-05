@@ -1,0 +1,350 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+/* Phones in landscape (and very short windows) switch to the compact layout. */
+@custom-variant short (@media (max-height: 500px));
+
+@theme inline {
+  --font-sans: var(--font-archivo), 'Archivo Fallback', system-ui, sans-serif;
+  --font-display: var(--font-archivo), 'Archivo Fallback', system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono Fallback', ui-monospace, monospace;
+
+  --color-base: var(--bg-base);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-overlay: var(--overlay);
+  --color-scrim: var(--scrim);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-inverse: var(--inverse);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --color-club: var(--club-primary);
+  --color-club-on: var(--club-on-primary);
+  --color-club-2: var(--club-secondary);
+  --color-club-on-2: var(--club-on-secondary);
+  --color-club-subtle: var(--club-primary-subtle);
+  --color-club-ink: var(--club-ink);
+  --color-club-rule: var(--club-rule);
+  --color-club-accent-dark: var(--club-accent-dark);
+  --color-club-accent-on: var(--club-accent-on-primary);
+
+  /* Flat print language: no drop shadows anywhere. */
+  --shadow-panel: none;
+  --shadow-lift: none;
+
+  /* shadcn token bridge so the stock Button keeps working */
+  --color-background: var(--bg-base);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--club-primary);
+  --color-primary-foreground: var(--club-on-primary);
+  --color-secondary: var(--raised);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--raised);
+  --color-muted-foreground: var(--ink-2);
+  --color-accent: var(--raised);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--danger);
+  --color-border: var(--line);
+  --color-input: var(--line-strong);
+  --color-ring: var(--club-ink);
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+}
+
+:root {
+  color-scheme: light;
+  --bg-base: #e4e9ef;
+  --surface: #f5f3ef;
+  --sheet-alpha: 94%;
+  --raised: #ebe8e2;
+  --overlay: #111418;
+  --scrim: #0b1118;
+  --line: #d9d5ce;
+  --line-strong: #bdb8af;
+  --ink: #111418;
+  --ink-2: #5b6168;
+  --ink-3: #7a8087;
+  --inverse: #ffffff;
+  --success: #1f9d57;
+  --warning: #d98a00;
+  --danger: #e0364a;
+  --veil: linear-gradient(180deg, rgb(238 242 246 / 0.3), rgb(238 242 246 / 0.4));
+  --photo-filter: contrast(1.1) saturate(1.25);
+  --beam: rgb(255 255 255 / 0.62);
+  --beam-opacity: 0.55;
+  --particle: rgb(255 255 255 / 0.95);
+  --pitch-fallback: linear-gradient(180deg, #dbe9f7 0%, #eef2f6 55%, #cfe3c8 100%);
+}
+
+.dark {
+  color-scheme: dark;
+  --bg-base: #0a0e13;
+  --surface: #121417;
+  --sheet-alpha: 92%;
+  --raised: #1a1d21;
+  --overlay: #0a0b0d;
+  --line: #2a2e33;
+  --line-strong: #3d4248;
+  --ink: #ede9e4;
+  --ink-2: #a9adb2;
+  --ink-3: #80858b;
+  --veil: linear-gradient(180deg, rgb(6 10 20 / 0.55), rgb(8 12 18 / 0.4));
+  --photo-filter: brightness(0.34) contrast(1.2) saturate(1.1) hue-rotate(8deg);
+  --beam: rgb(176 204 255 / 0.8);
+  --beam-opacity: 0.85;
+  --particle: rgb(196 218 255 / 0.95);
+  --pitch-fallback: linear-gradient(180deg, #0f1722 0%, #0a0e13 100%);
+}
+
+/* Desktop reference is 1280x720 = 16px root. Everything is in rem, so the whole
+   hub scales up cleanly at 1920x1080 (24px root). */
+html {
+  font-size: clamp(11px, min(1.25vw, 2.2222vh), 24px);
+}
+
+@media (max-height: 500px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+  html {
+    background-color: var(--bg-base);
+  }
+  body {
+    @apply font-sans text-ink antialiased;
+    background-color: transparent;
+    min-height: 100dvh;
+  }
+  :focus-visible {
+    outline: 2px solid var(--club-ink);
+    outline-offset: 2px;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+/* Archivo condensed (wdth 75) is the display voice everywhere it is used. */
+@layer utilities {
+  .font-display {
+    font-stretch: 75%;
+  }
+}
+
+/* Small uppercase label: Archivo condensed 600, +8% tracking. */
+@utility caps {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-stretch: 75%;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.6875rem;
+  line-height: 1.2;
+}
+
+/* Applied for ~250ms while the club or theme changes. */
+html.theme-anim,
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    fill 200ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-anim,
+  html.theme-anim * {
+    transition: none !important;
+  }
+}
+
+/* ---------- Programme sheets: flat paper, hairline border, 2px club rule on top ---------- */
+
+@layer components {
+  .paper {
+    background-color: color-mix(in srgb, var(--surface) var(--sheet-alpha), transparent);
+    border: 1px solid var(--line);
+  }
+  .sheet {
+    background-color: color-mix(in srgb, var(--surface) var(--sheet-alpha), transparent);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--club-rule);
+  }
+}
+
+/* ---------- News carousel: segmented progress that drives the 8s timer ---------- */
+
+.seg-fill {
+  transform-origin: left center;
+  animation: seg-fill 8s linear forwards;
+}
+
+@keyframes seg-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+[data-paused='true'] .seg-fill {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seg-fill {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ---------- Animated stadium background (transform + opacity only) ---------- */
+
+.bg-photo {
+  filter: var(--photo-filter);
+  transform: scale(1.08);
+  will-change: transform;
+  animation: bg-kenburns 40s ease-in-out infinite alternate;
+}
+
+@keyframes bg-kenburns {
+  from {
+    transform: translate3d(-1.2%, -0.8%, 0) scale(1.07);
+  }
+  to {
+    transform: translate3d(1.2%, 0.8%, 0) scale(1.15);
+  }
+}
+
+.bg-beam {
+  position: absolute;
+  top: -4vh;
+  width: 62vw;
+  height: 120vh;
+  opacity: var(--beam-opacity);
+  background: conic-gradient(
+    from 158deg at 50% 0%,
+    transparent 0deg,
+    var(--beam) 22deg,
+    transparent 44deg
+  );
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 85%);
+  transform-origin: 50% 0;
+  will-change: transform, opacity;
+  animation: bg-beam-sway var(--dur, 30s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+
+@keyframes bg-beam-sway {
+  from {
+    transform: rotate(var(--from, -16deg));
+    opacity: calc(var(--beam-opacity) * 0.55);
+  }
+  to {
+    transform: rotate(var(--to, 12deg));
+    opacity: var(--beam-opacity);
+  }
+}
+
+.bg-sheen {
+  position: absolute;
+  width: 90vmax;
+  height: 90vmax;
+  border-radius: 9999px;
+  will-change: transform;
+  animation: bg-sheen-drift var(--dur, 36s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+
+@keyframes bg-sheen-drift {
+  from {
+    transform: translate3d(-6%, -4%, 0);
+  }
+  to {
+    transform: translate3d(8%, 6%, 0);
+  }
+}
+
+.bg-particle {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  border-radius: 9999px;
+  background: var(--particle);
+  box-shadow: 0 0 calc(var(--s) * 3) var(--particle);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: bg-particle-drift var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes bg-particle-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: var(--o);
+  }
+  100% {
+    transform: translate3d(var(--dx), -38vh, 0);
+    opacity: 0;
+  }
+}
+
+[data-bg-paused='true'] *,
+[data-bg-paused='true'] {
+  animation-play-state: paused !important;
+}
+
+/* Static photo when the user turns the animation off or prefers reduced motion. */
+html[data-bg='static'] .bg-motion {
+  display: none;
+}
+html[data-bg='static'] .bg-photo {
+  animation: none;
+  transform: scale(1.08);
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-motion {
+    display: none;
+  }
+  .bg-photo {
+    animation: none;
+    transform: scale(1.08);
+    will-change: auto;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

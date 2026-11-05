@@ -1,10 +1,27 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-club="real-madrid">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FIFA Manager Online</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Online Manager — Hub du manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap"
+    />
+    <script>
+      // Applies the saved club, theme and background choice before the first paint.
+      try {
+        var d = document.documentElement;
+        var c = localStorage.getItem("om-club");
+        if (c) d.setAttribute("data-club", c);
+        if (localStorage.getItem("om-theme") === "dark") d.classList.add("dark");
+        if (localStorage.getItem("om-bg-anim") === "off") d.setAttribute("data-bg", "static");
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

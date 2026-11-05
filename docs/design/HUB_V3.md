@@ -55,3 +55,43 @@ Les messages ne parlent que de faits du jeu (règles de la section 9 du game des
 Non vérifié par v0 : boutons Accepter / Refuser de `/messagerie`, focus des touches 1 à 9, thème
 sombre en Real Madrid. Limite connue : le calendrier fictif reste celui du Real (« El Clásico contre
 FC Barcelone » même quand on joue le Barça).
+
+## Implémentation dans le jeu (2026-11-05)
+
+La v3 est intégrée à l'app du jeu (`apps/web`, Vite + React Router), avec les améliorations UI/UX :
+
+- **Avancer** : prochain match + « 2 points à vérifier » ; s'il reste des alertes, une confirmation
+  propose « Voir la compo » ou « Continuer quand même » (aussi avec `Espace`).
+- **Recherche `Ctrl/⌘+K`** (+ bouton dans la barre du haut) : sections, messages, joueurs, clubs,
+  thème, réglages ; insensible aux accents.
+- **« Voir tout → »** sur le classement, les buteurs, le calendrier, la boîte de réception et les
+  actus.
+- **Messagerie** : lu/non lu partagé entre le hub et `/messagerie` (pour la session), filtres avec
+  état vide, ↑/↓, `Échap`, Accepter/Refuser avec « Annuler ».
+- **Données selon le club** : adversaire et derby (El Clásico, derby du Merseyside, Le Classique,
+  Der Klassiker), classement et buteurs de la bonne ligue, position et points, journal du pays,
+  messages et posts. Les personnes citées dans les messages sont fictives.
+- **Accessibilité** : lien « Aller au contenu », dialogues avec focus piégé, notifications annoncées,
+  contrastes AA vérifiés par des tests (`apps/web/src/lib/contrast.test.ts`) pour les 6 clubs et les
+  2 thèmes (gris discret et rouge des badges foncés pour passer AA).
+- Chargement : squelette sur les photos d'actu.
+
+Vérifié dans le navigateur à 1920×1080, 1280×720, 844×390 et 667×375 (Real Madrid clair, FC Barcelone
+sombre) : la colonne de gauche tient sans défilement partout. Non fait : cibles tactiles de 44 px
+sur téléphone (le layout compact les rend plus petites), test sur un vrai appareil.
+
+## Retouches du 2026-11-05 (soir)
+
+- **Retour à l'ancienne police** : Barlow (textes et chiffres tabulaires) et Barlow Condensed
+  (titres, libellés). Archivo et JetBrains Mono sont abandonnés.
+- **UI plus moderne** (même layout) : panneaux arrondis à 12 px avec ombre douce en deux couches,
+  plus de filet de couleur en haut des panneaux, listes sans traits avec survol en pastille, badges et
+  étiquettes en pilule, barre du haut et barre de raccourcis en pilules flottantes, légende du
+  carrousel en dégradé, « Avancer » avec léger relief et soulèvement au survol.
+- **Crash corrigé** : les contextes React (thème, état du jeu, notifications) étaient déclarés dans
+  les mêmes fichiers que leurs providers. Au rechargement à chaud, React recréait le contexte et l'app
+  plantait sur une page blanche (« useToast must be used inside ToastProvider »). Ils sont maintenant
+  dans `apps/web/src/components/providers/hooks.ts`.
+- **Filet de sécurité** : une erreur d'affichage montre un écran « Un problème est survenu » avec
+  Réessayer / Revenir au hub / Réinitialiser les réglages, au lieu d'une page blanche.
+- Replit n'a rien produit (limite atteinte avant la construction).

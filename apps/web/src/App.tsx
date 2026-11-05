@@ -1,23 +1,39 @@
-import { createRng } from "@fmo/engine";
-import { RevealGroup, RevealItem } from "./components/Reveal";
+import { Route, Routes, useLocation } from "react-router";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { AppBackground } from "@/components/hub/app-background";
+import { HomeHub } from "@/components/hub/home-hub";
+import { MailView } from "@/components/hub/mail-view";
+import { RotateOverlay } from "@/components/hub/rotate-overlay";
+import { SocialViewer } from "@/components/hub/social-viewer";
+import { ClubThemeProvider } from "@/components/providers/club-theme";
+import { GameStateProvider } from "@/components/providers/game-state";
+import { ToastProvider } from "@/components/providers/toast";
 
-const rng = createRng(2026);
+export default function App() {
+  const location = useLocation();
 
-function App() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-950 text-zinc-100">
-      <RevealGroup className="flex flex-col items-center gap-2">
-        <RevealItem>
-          <h1 className="text-3xl font-semibold">FIFA Manager Online</h1>
-        </RevealItem>
-        <RevealItem>
-          <p className="text-zinc-400">
-            Moteur branché — tirage déterministe : {rng.int(0, 5)} - {rng.int(0, 5)}
-          </p>
-        </RevealItem>
-      </RevealGroup>
-    </main>
+    <ErrorBoundary>
+      <ClubThemeProvider>
+        <GameStateProvider>
+          <ToastProvider>
+            <a href="#contenu" className="skip-link caps">
+              Aller au contenu
+            </a>
+            <AppBackground />
+            {/* A crash in one screen stays in that screen; changing route gives it a fresh try. */}
+            <ErrorBoundary key={location.pathname}>
+              <Routes>
+                <Route path="/" element={<HomeHub />} />
+                <Route path="/messagerie" element={<MailView />} />
+                <Route path="/medias/fil" element={<SocialViewer />} />
+                <Route path="*" element={<HomeHub />} />
+              </Routes>
+            </ErrorBoundary>
+            <RotateOverlay />
+          </ToastProvider>
+        </GameStateProvider>
+      </ClubThemeProvider>
+    </ErrorBoundary>
   );
 }
-
-export default App;
