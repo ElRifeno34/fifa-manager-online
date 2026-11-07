@@ -1,0 +1,140 @@
+{
+  "pack": {
+    "id": "premier-league-2026-27",
+    "name": "Premier League 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "premier-league",
+    "name": "Premier League",
+    "country": "Angleterre"
+  },
+  "tmCompetition": "GB1",
+  "openfootballPath": "2026-27/en.1.json",
+  "clubs": [
+    {
+      "id": "arsenal",
+      "name": "Arsenal",
+      "initials": "ARS",
+      "wikipedia": "Arsenal F.C."
+    },
+    {
+      "id": "aston-villa",
+      "name": "Aston Villa",
+      "initials": "AVL",
+      "wikipedia": "Aston Villa F.C."
+    },
+    {
+      "id": "bournemouth",
+      "name": "Bournemouth",
+      "initials": "BOU",
+      "wikipedia": "AFC Bournemouth"
+    },
+    {
+      "id": "brentford",
+      "name": "Brentford",
+      "initials": "BRE",
+      "wikipedia": "Brentford F.C."
+    },
+    {
+      "id": "brighton-hove-albion",
+      "name": "Brighton & Hove Albion",
+      "initials": "BHA",
+      "wikipedia": "Brighton & Hove Albion F.C."
+    },
+    {
+      "id": "chelsea",
+      "name": "Chelsea",
+      "initials": "CHE",
+      "wikipedia": "Chelsea F.C."
+    },
+    {
+      "id": "coventry-city",
+      "name": "Coventry City",
+      "initials": "COV",
+      "wikipedia": "Coventry City F.C."
+    },
+    {
+      "id": "crystal-palace",
+      "name": "Crystal Palace",
+      "initials": "CRY",
+      "wikipedia": "Crystal Palace F.C."
+    },
+    {
+      "id": "everton",
+      "name": "Everton",
+      "initials": "EVE",
+      "wikipedia": "Everton F.C."
+    },
+    {
+      "id": "fulham",
+      "name": "Fulham",
+      "initials": "FUL",
+      "wikipedia": "Fulham F.C."
+    },
+    {
+      "id": "hull-city",
+      "name": "Hull City",
+      "initials": "HUL",
+      "wikipedia": "Hull City A.F.C."
+    },
+    {
+      "id": "ipswich-town",
+      "name": "Ipswich Town",
+      "initials": "IPS",
+      "wikipedia": "Ipswich Town F.C."
+    },
+    {
+      "id": "leeds-united",
+      "name": "Leeds United",
+      "initials": "LEE",
+      "wikipedia": "Leeds United F.C.",
+      "primary": "#FFFFFF",
+      "secondary": "#1D428A"
+    },
+    {
+      "id": "liverpool",
+      "name": "Liverpool",
+      "initials": "LIV",
+      "wikipedia": "Liverpool F.C."
+    },
+    {
+      "id": "manchester-city",
+      "name": "Manchester City",
+      "initials": "MCI",
+      "wikipedia": "Manchester City F.C."
+    },
+    {
+      "id": "manchester-united",
+      "name": "Manchester United",
+      "initials": "MUN",
+      "wikipedia": "Manchester United F.C."
+    },
+    {
+      "id": "newcastle-united",
+      "name": "Newcastle United",
+      "initials": "NEW",
+      "wikipedia": "Newcastle United F.C."
+    },
+    {
+      "id": "nottingham-forest",
+      "name": "Nottingham Forest",
+      "initials": "NFO",
+      "wikipedia": "Nottingham Forest F.C."
+    },
+    {
+      "id": "sunderland",
+      "name": "Sunderland",
+      "initials": "SUN",
+      "wikipedia": "Sunderland A.F.C."
+    },
+    {
+      "id": "tottenham-hotspur",
+      "name": "Tottenham Hotspur",
+      "initials": "TOT",
+      "wikipedia": "Tottenham Hotspur F.C."
+    }
+  ],
+  "newspapers": []
+}

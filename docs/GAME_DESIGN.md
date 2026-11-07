@@ -91,8 +91,9 @@ Pour garder ce choix réversible, **les données sont séparées du jeu** :
   toucher au code.
 - Le format du pack est défini dans [ARCHITECTURE.md](ARCHITECTURE.md) (à écrire en phase 1).
 
-**Source des données réelles** : à décider (saisie manuelle, base communautaire, fournisseur sous
-licence…). Les attributs sur 20 de la section 4 doivent être fournis ou calculés pour chaque joueur.
+**Source des données réelles** : sources gratuites, détaillées dans
+[ARCHITECTURE.md](ARCHITECTURE.md#packs-réels-2026-27). Les attributs sur 20 de la section 4
+sont calculés pour chaque joueur, à partir de sa valeur, de son poste et de ses stats.
 
 ### MVP
 
@@ -539,8 +540,6 @@ qui bloquent le jeu.
   existant du même genre. À rediscuter avant toute publication.
 - **Licences** des vrais clubs, joueurs, blasons et photos : à régler avant toute publication sur
   les stores. Sans licence, prévoir un pack fictif pour la version publique.
-- **Source du pack de données réel** et méthode pour obtenir les attributs des joueurs.
-- **Championnat du MVP** : lequel ?
 - Comment fonctionne le contenu IA hors connexion sur la durée : génération rattrapée au retour du
   réseau, ou textes modèles définitifs ?
 - **Noms des applis sociales** du jeu (à la place de « Fil » et « Photos »).

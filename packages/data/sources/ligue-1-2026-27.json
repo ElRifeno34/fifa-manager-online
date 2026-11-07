@@ -1,0 +1,140 @@
+{
+  "pack": {
+    "id": "ligue-1-2026-27",
+    "name": "Ligue 1 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "ligue-1",
+    "name": "Ligue 1",
+    "country": "France"
+  },
+  "tmCompetition": "FR1",
+  "openfootballPath": "2026-27/fr.1.json",
+  "clubs": [
+    {
+      "id": "angers",
+      "name": "Angers",
+      "initials": "ANG",
+      "wikipedia": "Angers SCO"
+    },
+    {
+      "id": "auxerre",
+      "name": "Auxerre",
+      "initials": "AUX",
+      "wikipedia": "AJ Auxerre"
+    },
+    {
+      "id": "brest",
+      "name": "Brest",
+      "initials": "BRE",
+      "wikipedia": "Stade Brestois 29"
+    },
+    {
+      "id": "le-havre",
+      "name": "Le Havre",
+      "initials": "LEH",
+      "wikipedia": "Le Havre AC"
+    },
+    {
+      "id": "le-mans",
+      "name": "Le Mans",
+      "initials": "LMA",
+      "wikipedia": "Le Mans FC"
+    },
+    {
+      "id": "lens",
+      "name": "Lens",
+      "initials": "LEN",
+      "wikipedia": "RC Lens",
+      "primary": "#EC1C24",
+      "secondary": "#FFD100"
+    },
+    {
+      "id": "lille",
+      "name": "Lille",
+      "initials": "LIL",
+      "wikipedia": "Lille OSC"
+    },
+    {
+      "id": "lorient",
+      "name": "Lorient",
+      "initials": "LOR",
+      "wikipedia": "FC Lorient",
+      "primary": "#F58113",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "lyon",
+      "name": "Lyon",
+      "initials": "OL",
+      "wikipedia": "Olympique Lyonnais"
+    },
+    {
+      "id": "marseille",
+      "name": "Marseille",
+      "initials": "OM",
+      "wikipedia": "Olympique de Marseille"
+    },
+    {
+      "id": "monaco",
+      "name": "Monaco",
+      "initials": "ASM",
+      "wikipedia": "AS Monaco FC"
+    },
+    {
+      "id": "nice",
+      "name": "Nice",
+      "initials": "NIC",
+      "wikipedia": "OGC Nice"
+    },
+    {
+      "id": "paris-fc",
+      "name": "Paris FC",
+      "initials": "PFC",
+      "wikipedia": "Paris FC"
+    },
+    {
+      "id": "paris-saint-germain",
+      "name": "Paris Saint-Germain",
+      "initials": "PSG",
+      "wikipedia": "Paris Saint-Germain FC"
+    },
+    {
+      "id": "rennes",
+      "name": "Rennes",
+      "initials": "REN",
+      "wikipedia": "Stade Rennais FC"
+    },
+    {
+      "id": "strasbourg",
+      "name": "Strasbourg",
+      "initials": "STR",
+      "wikipedia": "RC Strasbourg Alsace"
+    },
+    {
+      "id": "toulouse",
+      "name": "Toulouse",
+      "initials": "TFC",
+      "wikipedia": "Toulouse FC"
+    },
+    {
+      "id": "troyes",
+      "name": "Troyes",
+      "initials": "TRO",
+      "wikipedia": "ES Troyes AC",
+      "primary": "#0A3D91",
+      "secondary": "#FFFFFF"
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "lequipe",
+      "name": "L'Équipe",
+      "city": "Paris",
+      "tone": "sérieux",
+      "favoriteClubIds": []
+    }
+  ]
+}

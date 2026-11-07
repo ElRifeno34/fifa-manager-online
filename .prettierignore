@@ -5,3 +5,5 @@ coverage
 package-lock.json
 docs/design/v0-hub-v2
 docs/design/v0-hub-v3
+data
+packages/data/sources

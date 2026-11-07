@@ -1,0 +1,92 @@
+{
+  "pack": {
+    "id": "superligaen-2026-27",
+    "name": "Superligaen 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "superligaen",
+    "name": "Superligaen",
+    "country": "Danemark"
+  },
+  "tmCompetition": "DK1",
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "agf",
+      "name": "AGF",
+      "initials": "AGF",
+      "wikipedia": "Aarhus Gymnastikforening"
+    },
+    {
+      "id": "brondby",
+      "name": "Brøndby",
+      "initials": "BRO",
+      "wikipedia": "Brøndby IF"
+    },
+    {
+      "id": "copenhagen",
+      "name": "Copenhagen",
+      "initials": "COP",
+      "wikipedia": "F.C. Copenhagen"
+    },
+    {
+      "id": "horsens",
+      "name": "Horsens",
+      "initials": "ACH",
+      "wikipedia": "AC Horsens"
+    },
+    {
+      "id": "lyngby",
+      "name": "Lyngby",
+      "initials": "LYN",
+      "wikipedia": "Lyngby Boldklub"
+    },
+    {
+      "id": "midtjylland",
+      "name": "Midtjylland",
+      "initials": "MID",
+      "wikipedia": "FC Midtjylland"
+    },
+    {
+      "id": "nordsj-lland",
+      "name": "Nordsjælland",
+      "initials": "NOR",
+      "wikipedia": "FC Nordsjælland"
+    },
+    {
+      "id": "ob",
+      "name": "OB",
+      "initials": "ODE",
+      "wikipedia": "Odense Boldklub",
+      "primary": "#0057B8",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "randers",
+      "name": "Randers",
+      "initials": "RAN",
+      "wikipedia": "Randers FC"
+    },
+    {
+      "id": "silkeborg",
+      "name": "Silkeborg",
+      "initials": "SIL",
+      "wikipedia": "Silkeborg IF"
+    },
+    {
+      "id": "sonderjyske",
+      "name": "Sønderjyske",
+      "initials": "SON",
+      "wikipedia": "Sønderjyske Fodbold"
+    },
+    {
+      "id": "viborg",
+      "name": "Viborg",
+      "initials": "VIB",
+      "wikipedia": "Viborg FF"
+    }
+  ],
+  "newspapers": []
+}

@@ -1,0 +1,34 @@
+{
+  "pack": { "id": "laliga-2026-27", "name": "LaLiga 2026-27", "season": "2026-27", "version": 1 },
+  "league": { "id": "laliga", "name": "LaLiga", "country": "Espagne" },
+  "tmCompetition": "ES1",
+  "openfootballPath": "2026-27/es.1.json",
+  "clubs": [
+    { "id": "alaves", "openfootball": "Deportivo Alavés", "wikipedia": "2026–27 Deportivo Alavés season", "name": "Deportivo Alavés", "initials": "ALA", "city": "Vitoria-Gasteiz", "primary": "#0761AF", "secondary": "#FFFFFF" },
+    { "id": "athletic", "openfootball": "Athletic Club", "wikipedia": "2026–27 Athletic Bilbao season", "name": "Athletic Club", "initials": "ATH", "city": "Bilbao", "primary": "#EE2523", "secondary": "#121A23" },
+    { "id": "atletico", "openfootball": "Club Atlético de Madrid", "wikipedia": "2026–27 Atlético Madrid season", "name": "Atlético de Madrid", "initials": "ATM", "city": "Madrid", "primary": "#CB3524", "secondary": "#272E61" },
+    { "id": "barcelone", "openfootball": "FC Barcelona", "wikipedia": "FC Barcelona", "name": "FC Barcelone", "initials": "FCB", "city": "Barcelone", "primary": "#A50044", "secondary": "#004D98" },
+    { "id": "betis", "openfootball": "Real Betis Balompié", "wikipedia": "2026–27 Real Betis season", "name": "Real Betis", "initials": "BET", "city": "Séville", "primary": "#00954C", "secondary": "#FFFFFF" },
+    { "id": "celta", "openfootball": "RC Celta de Vigo", "wikipedia": "2026–27 RC Celta de Vigo season", "name": "Celta de Vigo", "initials": "CEL", "city": "Vigo", "primary": "#8AC3EE", "secondary": "#E6142D" },
+    { "id": "deportivo", "openfootball": "RC Deportivo La Coruña", "wikipedia": "2026–27 Deportivo de A Coruña season", "name": "Deportivo La Corogne", "initials": "DEP", "city": "La Corogne", "primary": "#0057A8", "secondary": "#FFFFFF" },
+    { "id": "elche", "openfootball": "Elche CF", "wikipedia": "Elche CF", "name": "Elche CF", "initials": "ELC", "city": "Elche", "primary": "#05642C", "secondary": "#FFFFFF" },
+    { "id": "espanyol", "openfootball": "RCD Espanyol de Barcelona", "wikipedia": "2026–27 RCD Espanyol season", "name": "Espanyol", "initials": "ESP", "city": "Barcelone", "primary": "#007FC8", "secondary": "#FFFFFF" },
+    { "id": "getafe", "openfootball": "Getafe CF", "wikipedia": "2026–27 Getafe CF season", "name": "Getafe CF", "initials": "GET", "city": "Getafe", "primary": "#005999", "secondary": "#FFFFFF" },
+    { "id": "levante", "openfootball": "Levante UD", "wikipedia": "Levante UD", "name": "Levante UD", "initials": "LEV", "city": "Valence", "primary": "#B4053F", "secondary": "#004D98" },
+    { "id": "malaga", "openfootball": "Málaga CF", "wikipedia": "2026–27 Málaga CF season", "name": "Málaga CF", "initials": "MAL", "city": "Malaga", "primary": "#0090D4", "secondary": "#FFFFFF" },
+    { "id": "osasuna", "openfootball": "CA Osasuna", "wikipedia": "2026–27 CA Osasuna season", "name": "Osasuna", "initials": "OSA", "city": "Pampelune", "primary": "#D91A21", "secondary": "#0A346F" },
+    { "id": "racing", "openfootball": "Real Racing Club de Santander", "wikipedia": "2026–27 Racing de Santander season", "name": "Racing Santander", "initials": "RAC", "city": "Santander", "primary": "#00804A", "secondary": "#FFFFFF" },
+    { "id": "rayo", "openfootball": "Rayo Vallecano de Madrid", "wikipedia": "2026–27 Rayo Vallecano season", "name": "Rayo Vallecano", "initials": "RAY", "city": "Madrid", "primary": "#E53027", "secondary": "#FFFFFF" },
+    { "id": "real-madrid", "openfootball": "Real Madrid CF", "wikipedia": "Real Madrid CF", "name": "Real Madrid", "initials": "RM", "city": "Madrid", "primary": "#00529F", "secondary": "#FEBE10" },
+    { "id": "real-sociedad", "openfootball": "Real Sociedad de Fútbol", "wikipedia": "2026–27 Real Sociedad season", "name": "Real Sociedad", "initials": "RSO", "city": "Saint-Sébastien", "primary": "#0067B1", "secondary": "#FFFFFF" },
+    { "id": "seville", "openfootball": "Sevilla FC", "wikipedia": "2026–27 Sevilla FC season", "name": "Séville FC", "initials": "SEV", "city": "Séville", "primary": "#D4001F", "secondary": "#FFFFFF" },
+    { "id": "valence", "openfootball": "Valencia CF", "wikipedia": "2026–27 Valencia CF season", "name": "Valence CF", "initials": "VAL", "city": "Valence", "primary": "#EE3524", "secondary": "#121A23" },
+    { "id": "villarreal", "openfootball": "Villarreal CF", "wikipedia": "2026–27 Villarreal CF season", "name": "Villarreal", "initials": "VIL", "city": "Villarreal", "primary": "#F2C500", "secondary": "#005187" }
+  ],
+  "newspapers": [
+    { "id": "marca", "name": "Marca", "city": "Madrid", "tone": "populaire", "favoriteClubIds": ["real-madrid"] },
+    { "id": "as", "name": "AS", "city": "Madrid", "tone": "populaire", "favoriteClubIds": ["real-madrid", "atletico"] },
+    { "id": "mundo-deportivo", "name": "Mundo Deportivo", "city": "Barcelone", "tone": "sérieux", "favoriteClubIds": ["barcelone"] },
+    { "id": "sport", "name": "Sport", "city": "Barcelone", "tone": "tabloïd", "favoriteClubIds": ["barcelone"] }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "pack": {
+    "id": "primeira-liga-2026-27",
+    "name": "Primeira Liga 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "primeira-liga",
+    "name": "Primeira Liga",
+    "country": "Portugal"
+  },
+  "tmCompetition": "PO1",
+  "openfootballPath": "2026-27/pt.1.json",
+  "clubs": [
+    {
+      "id": "academico-de-viseu",
+      "name": "Académico de Viseu",
+      "initials": "AVF",
+      "wikipedia": "Académico de Viseu F.C."
+    },
+    {
+      "id": "alverca",
+      "name": "Alverca",
+      "initials": "ALV",
+      "wikipedia": "F.C. Alverca"
+    },
+    {
+      "id": "arouca",
+      "name": "Arouca",
+      "initials": "ARO",
+      "wikipedia": "F.C. Arouca"
+    },
+    {
+      "id": "benfica",
+      "name": "Benfica",
+      "initials": "BEN",
+      "wikipedia": "S.L. Benfica"
+    },
+    {
+      "id": "braga",
+      "name": "Braga",
+      "initials": "BRA",
+      "wikipedia": "S.C. Braga"
+    },
+    {
+      "id": "casa-pia",
+      "name": "Casa Pia",
+      "initials": "CPI",
+      "wikipedia": "Casa Pia A.C."
+    },
+    {
+      "id": "estoril-praia",
+      "name": "Estoril Praia",
+      "initials": "EST",
+      "wikipedia": "G.D. Estoril Praia"
+    },
+    {
+      "id": "estrela-da-amadora",
+      "name": "Estrela da Amadora",
+      "initials": "AMA",
+      "wikipedia": "C.F. Estrela da Amadora"
+    },
+    {
+      "id": "famalicao",
+      "name": "Famalicão",
+      "initials": "FAM",
+      "wikipedia": "F.C. Famalicão"
+    },
+    {
+      "id": "gil-vicente",
+      "name": "Gil Vicente",
+      "initials": "GIL",
+      "wikipedia": "Gil Vicente F.C."
+    },
+    {
+      "id": "maritimo",
+      "name": "Marítimo",
+      "initials": "MAR",
+      "wikipedia": "C.S. Marítimo"
+    },
+    {
+      "id": "moreirense",
+      "name": "Moreirense",
+      "initials": "MOR",
+      "wikipedia": "Moreirense F.C."
+    },
+    {
+      "id": "nacional",
+      "name": "Nacional",
+      "initials": "NAC",
+      "wikipedia": "C.D. Nacional"
+    },
+    {
+      "id": "porto",
+      "name": "Porto",
+      "initials": "POR",
+      "wikipedia": "FC Porto"
+    },
+    {
+      "id": "rio-ave",
+      "name": "Rio Ave",
+      "initials": "RAV",
+      "wikipedia": "Rio Ave F.C."
+    },
+    {
+      "id": "santa-clara",
+      "name": "Santa Clara",
+      "initials": "STC",
+      "wikipedia": "C.D. Santa Clara"
+    },
+    {
+      "id": "sporting-cp",
+      "name": "Sporting CP",
+      "initials": "SCP",
+      "wikipedia": "Sporting CP"
+    },
+    {
+      "id": "vitoria-de-guimaraes",
+      "name": "Vitória de Guimarães",
+      "initials": "VSC",
+      "wikipedia": "Vitória S.C."
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "a-bola",
+      "name": "A Bola",
+      "city": "Lisbonne",
+      "tone": "sérieux",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "record",
+      "name": "Record",
+      "city": "Lisbonne",
+      "tone": "populaire",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "o-jogo",
+      "name": "O Jogo",
+      "city": "Porto",
+      "tone": "populaire",
+      "favoriteClubIds": [
+        "porto"
+      ]
+    }
+  ]
+}

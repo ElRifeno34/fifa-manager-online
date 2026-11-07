@@ -11,3 +11,6 @@ coverage/
 npm-debug.log*
 .vercel
 .turbo
+
+# Generated data packs and raw sources: the repository is public
+/data/

@@ -1,0 +1,108 @@
+{
+  "pack": {
+    "id": "super-league-greece-2026-27",
+    "name": "Super League 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "super-league-greece",
+    "name": "Super League",
+    "country": "Grèce"
+  },
+  "tmCompetition": "GR1",
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "aek-athens",
+      "name": "AEK Athens",
+      "initials": "AEK",
+      "wikipedia": "AEK Athens F.C.",
+      "primary": "#FFD100",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "a-e-kifisia",
+      "name": "A.E. Kifisia",
+      "initials": "KIF",
+      "wikipedia": "A.E. Kifisia F.C."
+    },
+    {
+      "id": "aris",
+      "name": "Aris",
+      "initials": "ARIS",
+      "wikipedia": "Aris Thessaloniki F.C.",
+      "primary": "#FFD100",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "asteras-tripolis",
+      "name": "Asteras Tripolis",
+      "initials": "AST",
+      "wikipedia": "Asteras Tripolis F.C."
+    },
+    {
+      "id": "atromitos",
+      "name": "Atromitos",
+      "initials": "ATR",
+      "wikipedia": "Atromitos F.C."
+    },
+    {
+      "id": "iraklis",
+      "name": "Iraklis",
+      "initials": "IRA",
+      "wikipedia": "Iraklis F.C. (Thessaloniki)"
+    },
+    {
+      "id": "kalamata",
+      "name": "Kalamata",
+      "initials": "KAL",
+      "wikipedia": "Kalamata F.C."
+    },
+    {
+      "id": "levadiakos",
+      "name": "Levadiakos",
+      "initials": "LEV",
+      "wikipedia": "Levadiakos F.C."
+    },
+    {
+      "id": "ofi",
+      "name": "OFI",
+      "initials": "OFI",
+      "wikipedia": "OFI Crete F.C.",
+      "primary": "#121A23",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "olympiacos",
+      "name": "Olympiacos",
+      "initials": "OLY",
+      "wikipedia": "Olympiacos F.C."
+    },
+    {
+      "id": "panathinaikos",
+      "name": "Panathinaikos",
+      "initials": "PAO",
+      "wikipedia": "Panathinaikos F.C."
+    },
+    {
+      "id": "panetolikos",
+      "name": "Panetolikos",
+      "initials": "PNE",
+      "wikipedia": "Panetolikos F.C."
+    },
+    {
+      "id": "paok",
+      "name": "PAOK",
+      "initials": "PAOK",
+      "wikipedia": "PAOK FC"
+    },
+    {
+      "id": "volos",
+      "name": "Volos",
+      "initials": "VOL",
+      "wikipedia": "Volos F.C."
+    }
+  ],
+  "newspapers": []
+}

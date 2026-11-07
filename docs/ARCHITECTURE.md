@@ -7,13 +7,14 @@ apps/
   web/            Vite + React + Tailwind : l'UI du jeu, emballée en app mobile par Capacitor
 packages/
   engine/         Moteur de match en TypeScript pur
+  data/           Schéma des packs de données et scripts d'import
 docs/             Plan, game design, architecture
+data/             Sources brutes et packs générés (ignoré par git)
 ```
 
 À venir :
 
 - `packages/game` : logique de jeu (carrière, calendrier, compos, classement…), en TypeScript pur
-- `packages/data` : format des packs de données (schéma + validation) et pack de développement
 - `apps/web/ios`, `apps/web/android` : projets natifs générés par Capacitor
 - `apps/ai-relay` : petit serveur relais pour le contenu IA (cache la clé d'API)
 - `apps/server` : API + jobs planifiés pour la version online (phase 7)
@@ -65,10 +66,45 @@ Les clubs et joueurs (réels ou fictifs) viennent d'un **pack de données**, jam
 - Un pack = un fichier JSON versionné : métadonnées (nom, version, saison), championnats, clubs,
   joueurs avec leurs attributs, références vers les blasons et photos, et **médias** (journaux par
   pays avec leur ton et leurs clubs favoris).
-- Le schéma est défini et validé dans `packages/data` (à écrire en phase 1).
+- Le schéma est défini et validé dans `packages/data/src/schema.ts`.
 - Au lancement d'une partie, le pack est copié dans la sauvegarde : une carrière ne casse pas si le
   pack est mis à jour ensuite.
 - Le jeu peut charger un pack fourni avec l'app ou importé par le joueur.
+
+### Packs réels 2026-27
+
+Il y a un pack par championnat : LaLiga, Premier League, Ligue 1, Bundesliga, Serie A, Eredivisie,
+Primeira Liga, Pro League, Superligaen, Süper Lig et Super League grecque. Ils sont générés en
+local, à partir de sources gratuites :
+
+```bash
+npm run pack:fetch   # télécharge les sources dans data/raw (--refresh pour relire les effectifs)
+npm run pack:build   # écrit data/packs/<pack>.json et un rapport de couverture par championnat
+```
+
+Les deux commandes acceptent des identifiants de championnat, par exemple `npm run pack:build -- ligue-1`.
+
+| Donnée                                         | Source                                    |
+| ---------------------------------------------- | ----------------------------------------- |
+| Liste des clubs, initiales, journaux           | `packages/data/sources/<pack>.json`       |
+| Effectifs, numéros, nationalités               | Wikipédia en anglais (pages saison, club) |
+| Couleurs                                       | Infobox Wikipédia du club                 |
+| Lien entre une page et une fiche Transfermarkt | Wikidata (propriété P2446)                |
+| Naissance, pied, taille, poste, valeur         | transfermarkt-datasets (arrêté en 2026)   |
+| Matchs, buts, passes décisives 2025-26         | transfermarkt-datasets                    |
+| Calendrier                                     | openfootball, sinon généré                |
+
+- openfootball n'a pas de calendrier pour la Belgique, le Danemark, la Turquie et la Grèce : ces
+  packs ont un aller-retour généré, une journée par semaine. Les vraies dates et les play-offs
+  (Belgique, Danemark, Grèce) n'y figurent pas (`league.fixturesSource`).
+- Le niveau vient de la valeur marchande, corrigée par l'âge. Finition, passe et vision réagissent
+  aux stats réelles, la force à la taille, la vitesse et l'endurance à l'âge. Le reste est **estimé**
+  selon le poste : les sources gratuites n'ont ni tacles, ni duels, ni vitesse.
+- Transfermarkt couvre mal la deuxième division : les joueurs sans valeur prennent un niveau proche
+  de la médiane de leur club, surtout dans les clubs promus.
+- Le dépôt étant public, **les packs et les sources brutes ne sont pas versionnés**. Seuls le schéma,
+  les scripts et la configuration le sont.
+- Ces packs ne sont pas destinés à la publication (voir les licences dans [PLAN.md](PLAN.md)).
 
 ## Contenu IA
 

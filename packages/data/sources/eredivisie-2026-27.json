@@ -1,0 +1,130 @@
+{
+  "pack": {
+    "id": "eredivisie-2026-27",
+    "name": "Eredivisie 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "eredivisie",
+    "name": "Eredivisie",
+    "country": "Pays-Bas"
+  },
+  "tmCompetition": "NL1",
+  "openfootballPath": "2026-27/nl.1.json",
+  "clubs": [
+    {
+      "id": "ado-den-haag",
+      "name": "ADO Den Haag",
+      "initials": "ADO",
+      "wikipedia": "ADO Den Haag"
+    },
+    {
+      "id": "ajax",
+      "name": "Ajax",
+      "initials": "AJA",
+      "wikipedia": "AFC Ajax"
+    },
+    {
+      "id": "az",
+      "name": "AZ",
+      "initials": "AZ",
+      "wikipedia": "AZ Alkmaar"
+    },
+    {
+      "id": "cambuur",
+      "name": "Cambuur",
+      "initials": "CAM",
+      "wikipedia": "SC Cambuur"
+    },
+    {
+      "id": "excelsior",
+      "name": "Excelsior",
+      "initials": "EXC",
+      "wikipedia": "Excelsior Rotterdam"
+    },
+    {
+      "id": "feyenoord",
+      "name": "Feyenoord",
+      "initials": "FEY",
+      "wikipedia": "Feyenoord",
+      "primary": "#E30613",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "go-ahead-eagles",
+      "name": "Go Ahead Eagles",
+      "initials": "GAE",
+      "wikipedia": "Go Ahead Eagles"
+    },
+    {
+      "id": "groningen",
+      "name": "Groningen",
+      "initials": "GRO",
+      "wikipedia": "FC Groningen"
+    },
+    {
+      "id": "heerenveen",
+      "name": "Heerenveen",
+      "initials": "HEE",
+      "wikipedia": "SC Heerenveen"
+    },
+    {
+      "id": "nec",
+      "name": "NEC",
+      "initials": "NEC",
+      "wikipedia": "NEC Nijmegen"
+    },
+    {
+      "id": "psv-eindhoven",
+      "name": "PSV Eindhoven",
+      "initials": "PSV",
+      "wikipedia": "PSV Eindhoven"
+    },
+    {
+      "id": "sparta-rotterdam",
+      "name": "Sparta Rotterdam",
+      "initials": "SPA",
+      "wikipedia": "Sparta Rotterdam"
+    },
+    {
+      "id": "twente",
+      "name": "Twente",
+      "initials": "TWE",
+      "wikipedia": "FC Twente"
+    },
+    {
+      "id": "utrecht",
+      "name": "Utrecht",
+      "initials": "UTR",
+      "wikipedia": "FC Utrecht"
+    },
+    {
+      "id": "pec-zwolle",
+      "name": "PEC Zwolle",
+      "initials": "PEC",
+      "wikipedia": "PEC Zwolle"
+    },
+    {
+      "id": "fortuna-sittard",
+      "name": "Fortuna Sittard",
+      "initials": "FOR",
+      "wikipedia": "Fortuna Sittard"
+    },
+    {
+      "id": "telstar",
+      "name": "Telstar",
+      "initials": "TEL",
+      "wikipedia": "SC Telstar",
+      "primary": "#FFFFFF",
+      "secondary": "#0057B8"
+    },
+    {
+      "id": "willem-ii",
+      "name": "Willem II",
+      "initials": "WIL",
+      "wikipedia": "Willem II Tilburg"
+    }
+  ],
+  "newspapers": []
+}

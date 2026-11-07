@@ -1,0 +1,141 @@
+{
+  "pack": {
+    "id": "bundesliga-2026-27",
+    "name": "Bundesliga 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "bundesliga",
+    "name": "Bundesliga",
+    "country": "Allemagne"
+  },
+  "tmCompetition": "L1",
+  "openfootballPath": "2026-27/de.1.json",
+  "clubs": [
+    {
+      "id": "fc-augsburg",
+      "name": "FC Augsburg",
+      "initials": "AUG",
+      "wikipedia": "FC Augsburg"
+    },
+    {
+      "id": "union-berlin",
+      "name": "Union Berlin",
+      "initials": "UNB",
+      "wikipedia": "1. FC Union Berlin"
+    },
+    {
+      "id": "werder-bremen",
+      "name": "Werder Bremen",
+      "initials": "BRE",
+      "wikipedia": "SV Werder Bremen"
+    },
+    {
+      "id": "borussia-dortmund",
+      "name": "Borussia Dortmund",
+      "initials": "DOR",
+      "wikipedia": "Borussia Dortmund"
+    },
+    {
+      "id": "sv-elversberg",
+      "name": "SV Elversberg",
+      "initials": "ELV",
+      "wikipedia": "SV Elversberg"
+    },
+    {
+      "id": "eintracht-frankfurt",
+      "name": "Eintracht Frankfurt",
+      "initials": "FRA",
+      "wikipedia": "Eintracht Frankfurt"
+    },
+    {
+      "id": "sc-freiburg",
+      "name": "SC Freiburg",
+      "initials": "FRE",
+      "wikipedia": "SC Freiburg"
+    },
+    {
+      "id": "hamburger-sv",
+      "name": "Hamburger SV",
+      "initials": "HAM",
+      "wikipedia": "Hamburger SV"
+    },
+    {
+      "id": "tsg-hoffenheim",
+      "name": "TSG Hoffenheim",
+      "initials": "HOF",
+      "wikipedia": "TSG 1899 Hoffenheim"
+    },
+    {
+      "id": "1-fc-koln",
+      "name": "1. FC Köln",
+      "initials": "KÖL",
+      "wikipedia": "1. FC Köln"
+    },
+    {
+      "id": "rb-leipzig",
+      "name": "RB Leipzig",
+      "initials": "LEI",
+      "wikipedia": "RB Leipzig"
+    },
+    {
+      "id": "bayer-leverkusen",
+      "name": "Bayer Leverkusen",
+      "initials": "LEV",
+      "wikipedia": "Bayer 04 Leverkusen"
+    },
+    {
+      "id": "mainz-05",
+      "name": "Mainz 05",
+      "initials": "MAI",
+      "wikipedia": "1. FSV Mainz 05"
+    },
+    {
+      "id": "borussia-monchengladbach",
+      "name": "Borussia Mönchengladbach",
+      "initials": "MÖN",
+      "wikipedia": "Borussia Mönchengladbach"
+    },
+    {
+      "id": "bayern-munich",
+      "name": "Bayern Munich",
+      "initials": "MUN",
+      "wikipedia": "FC Bayern Munich"
+    },
+    {
+      "id": "sc-paderborn",
+      "name": "SC Paderborn",
+      "initials": "PAD",
+      "wikipedia": "SC Paderborn 07"
+    },
+    {
+      "id": "schalke-04",
+      "name": "Schalke 04",
+      "initials": "SCH",
+      "wikipedia": "FC Schalke 04"
+    },
+    {
+      "id": "vfb-stuttgart",
+      "name": "VfB Stuttgart",
+      "initials": "STU",
+      "wikipedia": "VfB Stuttgart"
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "kicker",
+      "name": "Kicker",
+      "city": "Nuremberg",
+      "tone": "analytique",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "bild",
+      "name": "Bild",
+      "city": "Berlin",
+      "tone": "tabloïd",
+      "favoriteClubIds": []
+    }
+  ]
+}

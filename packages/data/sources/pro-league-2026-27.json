@@ -1,0 +1,130 @@
+{
+  "pack": {
+    "id": "pro-league-2026-27",
+    "name": "Pro League 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "pro-league",
+    "name": "Pro League",
+    "country": "Belgique"
+  },
+  "tmCompetition": "BE1",
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "anderlecht",
+      "name": "Anderlecht",
+      "initials": "AND",
+      "wikipedia": "RSC Anderlecht"
+    },
+    {
+      "id": "antwerp",
+      "name": "Antwerp",
+      "initials": "ANT",
+      "wikipedia": "Royal Antwerp FC"
+    },
+    {
+      "id": "beveren",
+      "name": "Beveren",
+      "initials": "BEV",
+      "wikipedia": "SK Beveren",
+      "primary": "#FFDD00",
+      "secondary": "#0057B8"
+    },
+    {
+      "id": "cercle-brugge",
+      "name": "Cercle Brugge",
+      "initials": "CER",
+      "wikipedia": "Cercle Brugge KSV"
+    },
+    {
+      "id": "charleroi",
+      "name": "Charleroi",
+      "initials": "CHA",
+      "wikipedia": "Royal Charleroi SC"
+    },
+    {
+      "id": "club-brugge",
+      "name": "Club Brugge",
+      "initials": "CLU",
+      "wikipedia": "Club Brugge KV"
+    },
+    {
+      "id": "genk",
+      "name": "Genk",
+      "initials": "GNK",
+      "wikipedia": "KRC Genk"
+    },
+    {
+      "id": "gent",
+      "name": "Gent",
+      "initials": "GNT",
+      "wikipedia": "KAA Gent"
+    },
+    {
+      "id": "kortrijk",
+      "name": "Kortrijk",
+      "initials": "KOR",
+      "wikipedia": "KV Kortrijk"
+    },
+    {
+      "id": "la-louviere",
+      "name": "La Louvière",
+      "initials": "LAL",
+      "wikipedia": "RAAL La Louvière"
+    },
+    {
+      "id": "lommel",
+      "name": "Lommel",
+      "initials": "LOM",
+      "wikipedia": "Lommel SK"
+    },
+    {
+      "id": "mechelen",
+      "name": "Mechelen",
+      "initials": "MEC",
+      "wikipedia": "KV Mechelen"
+    },
+    {
+      "id": "oh-leuven",
+      "name": "OH Leuven",
+      "initials": "OHL",
+      "wikipedia": "Oud-Heverlee Leuven",
+      "primary": "#FFFFFF",
+      "secondary": "#00843D"
+    },
+    {
+      "id": "sint-truiden",
+      "name": "Sint-Truiden",
+      "initials": "STR",
+      "wikipedia": "Sint-Truidense VV"
+    },
+    {
+      "id": "standard-liege",
+      "name": "Standard Liège",
+      "initials": "STA",
+      "wikipedia": "Standard Liège"
+    },
+    {
+      "id": "union-sg",
+      "name": "Union SG",
+      "initials": "USG",
+      "wikipedia": "Royale Union Saint-Gilloise"
+    },
+    {
+      "id": "westerlo",
+      "name": "Westerlo",
+      "initials": "WES",
+      "wikipedia": "KVC Westerlo"
+    },
+    {
+      "id": "zulte-waregem",
+      "name": "Zulte Waregem",
+      "initials": "ZWA",
+      "wikipedia": "SV Zulte Waregem"
+    }
+  ],
+  "newspapers": []
+}

@@ -1,0 +1,172 @@
+{
+  "pack": {
+    "id": "serie-a-2026-27",
+    "name": "Serie A 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "serie-a",
+    "name": "Serie A",
+    "country": "Italie"
+  },
+  "tmCompetition": "IT1",
+  "openfootballPath": "2026-27/it.1.json",
+  "clubs": [
+    {
+      "id": "atalanta",
+      "name": "Atalanta",
+      "initials": "ATA",
+      "wikipedia": "Atalanta BC",
+      "primary": "#1E71B8",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "bologna",
+      "name": "Bologna",
+      "initials": "BOL",
+      "wikipedia": "Bologna FC 1909"
+    },
+    {
+      "id": "cagliari",
+      "name": "Cagliari",
+      "initials": "CAG",
+      "wikipedia": "Cagliari Calcio"
+    },
+    {
+      "id": "como",
+      "name": "Como",
+      "initials": "COM",
+      "wikipedia": "Como 1907"
+    },
+    {
+      "id": "fiorentina",
+      "name": "Fiorentina",
+      "initials": "FIO",
+      "wikipedia": "ACF Fiorentina"
+    },
+    {
+      "id": "frosinone",
+      "name": "Frosinone",
+      "initials": "FRO",
+      "wikipedia": "Frosinone Calcio"
+    },
+    {
+      "id": "genoa",
+      "name": "Genoa",
+      "initials": "GEN",
+      "wikipedia": "Genoa CFC"
+    },
+    {
+      "id": "inter-milan",
+      "name": "Inter Milan",
+      "initials": "INT",
+      "wikipedia": "Inter Milan",
+      "openfootball": "FC Internazionale Milano"
+    },
+    {
+      "id": "juventus",
+      "name": "Juventus",
+      "initials": "JUV",
+      "wikipedia": "Juventus FC",
+      "primary": "#121A23",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "lazio",
+      "name": "Lazio",
+      "initials": "LAZ",
+      "wikipedia": "SS Lazio"
+    },
+    {
+      "id": "lecce",
+      "name": "Lecce",
+      "initials": "LEC",
+      "wikipedia": "US Lecce"
+    },
+    {
+      "id": "ac-milan",
+      "name": "AC Milan",
+      "initials": "MIL",
+      "wikipedia": "AC Milan"
+    },
+    {
+      "id": "monza",
+      "name": "Monza",
+      "initials": "MON",
+      "wikipedia": "AC Monza"
+    },
+    {
+      "id": "napoli",
+      "name": "Napoli",
+      "initials": "NAP",
+      "wikipedia": "SSC Napoli",
+      "primary": "#12A0D7",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "parma",
+      "name": "Parma",
+      "initials": "PAR",
+      "wikipedia": "Parma Calcio 1913"
+    },
+    {
+      "id": "roma",
+      "name": "Roma",
+      "initials": "ROM",
+      "wikipedia": "AS Roma"
+    },
+    {
+      "id": "sassuolo",
+      "name": "Sassuolo",
+      "initials": "SAS",
+      "wikipedia": "US Sassuolo Calcio"
+    },
+    {
+      "id": "torino",
+      "name": "Torino",
+      "initials": "TOR",
+      "wikipedia": "Torino FC"
+    },
+    {
+      "id": "udinese",
+      "name": "Udinese",
+      "initials": "UDI",
+      "wikipedia": "Udinese Calcio",
+      "primary": "#121A23",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "venezia",
+      "name": "Venezia",
+      "initials": "VEN",
+      "wikipedia": "Venezia FC"
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "gazzetta",
+      "name": "La Gazzetta dello Sport",
+      "city": "Milan",
+      "tone": "sérieux",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "corriere-sport",
+      "name": "Corriere dello Sport",
+      "city": "Rome",
+      "tone": "populaire",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "tuttosport",
+      "name": "Tuttosport",
+      "city": "Turin",
+      "tone": "populaire",
+      "favoriteClubIds": [
+        "juventus",
+        "torino"
+      ]
+    }
+  ]
+}

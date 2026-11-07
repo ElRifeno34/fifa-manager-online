@@ -1,0 +1,140 @@
+{
+  "pack": {
+    "id": "super-lig-2026-27",
+    "name": "Süper Lig 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "super-lig",
+    "name": "Süper Lig",
+    "country": "Turquie"
+  },
+  "tmCompetition": "TR1",
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "alanyaspor",
+      "name": "Alanyaspor",
+      "initials": "ALA",
+      "wikipedia": "Alanyaspor",
+      "primary": "#F58113",
+      "secondary": "#009A44"
+    },
+    {
+      "id": "amedspor",
+      "name": "Amedspor",
+      "initials": "AME",
+      "wikipedia": "Amedspor"
+    },
+    {
+      "id": "basaksehir",
+      "name": "Başakşehir",
+      "initials": "BAŞ",
+      "wikipedia": "İstanbul Başakşehir F.K.",
+      "primary": "#F58113",
+      "secondary": "#0A2F5C"
+    },
+    {
+      "id": "besiktas",
+      "name": "Beşiktaş",
+      "initials": "BEŞ",
+      "wikipedia": "Beşiktaş J.K."
+    },
+    {
+      "id": "corum",
+      "name": "Çorum",
+      "initials": "ÇOR",
+      "wikipedia": "Çorum F.K."
+    },
+    {
+      "id": "erzurumspor",
+      "name": "Erzurumspor",
+      "initials": "ERZ",
+      "wikipedia": "Erzurumspor F.K."
+    },
+    {
+      "id": "eyupspor",
+      "name": "Eyüpspor",
+      "initials": "EYÜ",
+      "wikipedia": "Eyüpspor"
+    },
+    {
+      "id": "fenerbahce",
+      "name": "Fenerbahçe",
+      "initials": "FEN",
+      "wikipedia": "Fenerbahçe S.K. (football)",
+      "primary": "#FFED00",
+      "secondary": "#0A2F5C"
+    },
+    {
+      "id": "galatasaray",
+      "name": "Galatasaray",
+      "initials": "GAL",
+      "wikipedia": "Galatasaray S.K. (football)"
+    },
+    {
+      "id": "gaziantep",
+      "name": "Gaziantep",
+      "initials": "GAZ",
+      "wikipedia": "Gaziantep F.K.",
+      "primary": "#D71920",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "genclerbirligi",
+      "name": "Gençlerbirliği",
+      "initials": "GEN",
+      "wikipedia": "Gençlerbirliği"
+    },
+    {
+      "id": "goztepe",
+      "name": "Göztepe",
+      "initials": "GÖZ",
+      "wikipedia": "Göztepe S.K.",
+      "primary": "#FFD100",
+      "secondary": "#D71920"
+    },
+    {
+      "id": "kasimpasa",
+      "name": "Kasımpaşa",
+      "initials": "KAS",
+      "wikipedia": "Kasımpaşa S.K."
+    },
+    {
+      "id": "kocaelispor",
+      "name": "Kocaelispor",
+      "initials": "KOC",
+      "wikipedia": "Kocaelispor",
+      "primary": "#009A44",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "konyaspor",
+      "name": "Konyaspor",
+      "initials": "KON",
+      "wikipedia": "Konyaspor"
+    },
+    {
+      "id": "rizespor",
+      "name": "Rizespor",
+      "initials": "RİZ",
+      "wikipedia": "Çaykur Rizespor"
+    },
+    {
+      "id": "samsunspor",
+      "name": "Samsunspor",
+      "initials": "SAM",
+      "wikipedia": "Samsunspor",
+      "primary": "#D71920",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "trabzonspor",
+      "name": "Trabzonspor",
+      "initials": "TRA",
+      "wikipedia": "Trabzonspor"
+    }
+  ],
+  "newspapers": []
+}

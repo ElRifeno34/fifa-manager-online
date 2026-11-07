@@ -76,6 +76,8 @@ League (détails dans [GAME_DESIGN.md](GAME_DESIGN.md#10-direction-artistique)).
 - Vite + React : une seule base de code web pour mobile, navigateur et desktop.
 - Logique de jeu indépendante du stockage, pour réutiliser le même code en online.
 - **Vrais clubs et joueurs**, chargés depuis des **packs de données** séparés du code.
+- **Packs réels 2026-27 pour 11 championnats**, générés à partir de sources gratuites et non
+  versionnés (dépôt public).
 - **Simulation rapide** de plusieurs journées.
 - **Médias générés par IA** : unes et articles des **vrais journaux sportifs de chaque pays**, et
   **réseaux sociaux fictifs** inspirés de Twitter/X et Instagram. Via un relais serveur, avec
