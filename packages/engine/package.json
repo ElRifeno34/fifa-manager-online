@@ -8,9 +8,12 @@
   },
   "scripts": {
     "typecheck": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "calibrate": "node scripts/calibrate.ts",
+    "play": "node scripts/play.ts"
   },
   "devDependencies": {
+    "@types/node": "^24",
     "vitest": "^3"
   }
 }

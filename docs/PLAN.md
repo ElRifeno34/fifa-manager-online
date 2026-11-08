@@ -79,6 +79,9 @@ League (détails dans [GAME_DESIGN.md](GAME_DESIGN.md#10-direction-artistique)).
 - **Packs réels 2026-27 pour 20 championnats**, générés à partir de sources gratuites et non
   versionnés (dépôt public).
 - **Simulation rapide** de plusieurs journées.
+- **Moteur en TypeScript**, pas en C : le même code tourne dans l'app et, plus tard, sur le
+  serveur online, ce qui garantit des replays identiques. Une saison se simule en moins d'une
+  seconde sur ordinateur.
 - **Médias générés par IA** : unes et articles des **vrais journaux sportifs de chaque pays**, et
   **réseaux sociaux fictifs** inspirés de Twitter/X et Instagram. Via un relais serveur, avec
   textes modèles hors connexion.

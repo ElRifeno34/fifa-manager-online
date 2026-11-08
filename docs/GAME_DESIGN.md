@@ -287,8 +287,9 @@ Avec de vrais clubs, on vérifie aussi que le classement final ressemble à la r
 ## 8. IA des clubs (MVP)
 
 - Choisit chaque semaine la meilleure compo possible en tenant compte de la fatigue.
-- Choisit une formation adaptée à son effectif et une tactique selon sa réputation : les gros clubs
-  jouent la possession et le pressing haut, les petits plutôt bloc bas et jeu direct.
+- Choisit une formation adaptée à son effectif et une tactique selon son rang dans le championnat :
+  les favoris jouent la possession et le pressing haut, les plus faibles plutôt bloc bas et jeu
+  direct.
 - Plus tard : mercato de l'IA, adaptation tactique à l'adversaire.
 
 ---

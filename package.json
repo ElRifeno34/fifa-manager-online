@@ -9,6 +9,8 @@
     "dev": "npm run dev -w @fmo/web",
     "pack:fetch": "npm run pack:fetch -w @fmo/data --",
     "pack:build": "npm run pack:build -w @fmo/data",
+    "calibrate": "npm run calibrate -w @fmo/engine --",
+    "play": "npm run play -w @fmo/engine --",
     "build": "npm run build --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",

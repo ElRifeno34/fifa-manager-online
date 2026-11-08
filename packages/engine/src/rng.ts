@@ -35,3 +35,24 @@ export function createRng(seed: number): Rng {
     },
   };
 }
+
+/** Picks an index with probability proportional to its weight; weights must not all be zero. */
+export function weightedIndex(rng: Rng, weights: readonly number[]): number {
+  const total = weights.reduce((sum, w) => sum + w, 0);
+  let roll = rng.next() * total;
+  for (let i = 0; i < weights.length; i++) {
+    roll -= weights[i]!;
+    if (roll < 0) return i;
+  }
+  return weights.length - 1;
+}
+
+/** Stable 32-bit seed from several parts (FNV-1a), so each match of a season can be replayed alone. */
+export function deriveSeed(...parts: readonly (string | number)[]): number {
+  let hash = 0x811c9dc5;
+  for (const char of parts.join("|")) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash;
+}

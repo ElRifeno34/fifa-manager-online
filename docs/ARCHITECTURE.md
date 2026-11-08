@@ -156,3 +156,54 @@ Deux couches :
 
 La simulation rapide utilise le même moteur sans la couche chorégraphie : elle doit être assez
 rapide pour simuler une saison entière en quelques secondes sur un téléphone.
+
+### Implémentation (phase 2)
+
+Le moteur d'événements est en place dans `packages/engine`, sans interface :
+
+| Module         | Rôle                                                                               |
+| -------------- | ---------------------------------------------------------------------------------- |
+| `positions.ts` | Les 5 formations, la pénalité hors poste (−10 % poste voisin, −25 % poste éloigné) |
+| `lineup.ts`    | Compo de l'adjoint et de l'IA : meilleure formation, onze, banc, style de jeu      |
+| `match.ts`     | `simulateMatch(seed, home, away)` : événements, stats, notes, homme du match       |
+| `season.ts`    | Journées, fatigue et forme d'un match à l'autre, classement avec départages        |
+
+- **Un match est une suite de possessions.** Chacune passe par le milieu (relance contre
+  récupération), le dernier tiers (attaque contre défense) puis, éventuellement, un tir. Chaque
+  étape est un tirage pondéré par les attributs des joueurs concernés, leur poste, leur fatigue et
+  leur forme. Les types d'occasion sont la passe en profondeur, le centre, le dribble, la frappe de
+  loin, le contre, le corner, le coup franc et le penalty.
+- **Tactique :** chaque consigne a un coût et un bénéfice, et aucune n'est la meilleure partout.
+  Des tests vérifient les quatre interactions du game design : ligne haute contre attaquants
+  rapides, jeu direct contre bloc bas, pressing contre bons passeurs, pressing sans endurance.
+- **Fatigue :** elle monte pendant le match, plus vite en pressing haut et pour les joueurs peu
+  endurants. Il faut environ trois jours pour récupérer. L'adjoint fait jusqu'à cinq changements
+  et laisse au repos les joueurs fatigués.
+- **Situation de match :** en fin de match, une équipe qui mène gère et celle qui est menée pousse.
+- **IA des clubs :** son style dépend de son rang dans le championnat, pas de sa réputation
+  absolue : en deuxième division, les favoris jouent donc aussi la possession. Elle l'adapte à
+  l'adversaire, avec plus de prudence face à une équipe nettement plus forte.
+- **Écart de niveau :** son effet sature, pour qu'un gros écart pèse sans tout décider. Les très
+  gros écarts restent sans doute un peu trop marqués : le PSG bat l'OM plus de 8 fois sur 10 au
+  Parc, avec 26 tirs contre 7.
+- **Réglages :** les paramètres sont regroupés dans `TUNING` (`match.ts`). `npm run calibrate`
+  simule des saisons sur les packs réels et compare le résultat aux cibles de
+  [GAME_DESIGN.md](GAME_DESIGN.md#objectifs-de-calibration-à-vérifier-en-phase-2-sur-des-milliers-de-matchs).
+
+Résultat sur les 20 championnats (5 saisons chacun) :
+
+| Mesure                         | Cible              | Moteur             |
+| ------------------------------ | ------------------ | ------------------ |
+| Buts par match                 | 2,5 à 2,9          | 2,64               |
+| Domicile / nul / extérieur     | 45 % / 27 % / 28 % | 46 % / 27 % / 27 % |
+| Tirs par équipe                | 10 à 15            | 10 à 17            |
+| Victoire du favori (5+ points) | 65 à 75 %          | 65 %               |
+
+Une saison de 380 matchs prend 0,5 à 1 seconde sur ordinateur. Les gros clubs finissent en haut,
+avec des surprises : le PSG est toujours champion, le Bayern finit 2e en moyenne, et la Liga se
+joue entre le Real, le Barça et l'Atlético. Les meilleurs buteurs marquent 20 à 30 buts.
+
+`npm run play -- <championnat> [domicile extérieur]` joue un match ou une saison dans le terminal.
+
+Pas encore fait : la couche chorégraphie (phase 4), les blessures et les suspensions (phase 5),
+les changements tactiques en cours de match.
