@@ -83,7 +83,7 @@ export function classifyHeading(heading: string): SquadSection | null {
   if (/\bloans? in\b|staff|retired|former|records|transfers?\b/.test(h)) return null;
   if (/loan/.test(h)) return "loan-out";
   if (RESERVE_HEADING.test(h)) return "reserve";
-  if (/squad|first.team|players|under contract/.test(h)) return "first-team";
+  if (/squad|first.team|players|under contract|roster/.test(h)) return "first-team";
   return null;
 }
 

@@ -42,6 +42,7 @@ describe("classifyHeading", () => {
   it("recognises squad groups", () => {
     expect(classifyHeading("First-team squad")).toBe("first-team");
     expect(classifyHeading("Current squad")).toBe("first-team");
+    expect(classifyHeading("Current roster")).toBe("first-team");
     expect(classifyHeading("Other players under contract")).toBe("first-team");
     expect(classifyHeading("Reserve and Academy teams")).toBe("reserve");
     expect(classifyHeading("Out on loan")).toBe("loan-out");

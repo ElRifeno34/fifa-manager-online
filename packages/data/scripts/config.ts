@@ -22,9 +22,11 @@ export interface ClubConfig {
 export interface LeagueConfig {
   pack: { id: string; name: string; season: string; version: number };
   league: { id: string; name: string; country: string };
-  /** Competition id in transfermarkt-datasets. */
-  tmCompetition: string;
+  /** Competition id in transfermarkt-datasets, null for leagues it does not cover. */
+  tmCompetition: string | null;
   openfootballPath: string | null;
+  /** Season in Wikipedia titles, "2026" for leagues played over a calendar year. */
+  wikipediaSeason?: string;
   clubs: ClubConfig[];
   newspapers: Newspaper[];
 }

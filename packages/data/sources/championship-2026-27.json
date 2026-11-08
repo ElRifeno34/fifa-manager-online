@@ -1,0 +1,168 @@
+{
+  "pack": {
+    "id": "championship-2026-27",
+    "name": "Championship 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "championship",
+    "name": "Championship",
+    "country": "Angleterre"
+  },
+  "tmCompetition": null,
+  "openfootballPath": "2026-27/en.2.json",
+  "clubs": [
+    {
+      "id": "birmingham-city",
+      "name": "Birmingham City",
+      "initials": "BIR",
+      "wikipedia": "Birmingham City F.C."
+    },
+    {
+      "id": "blackburn-rovers",
+      "name": "Blackburn Rovers",
+      "initials": "BLB",
+      "wikipedia": "Blackburn Rovers F.C."
+    },
+    {
+      "id": "bolton-wanderers",
+      "name": "Bolton Wanderers",
+      "initials": "BOL",
+      "wikipedia": "Bolton Wanderers F.C."
+    },
+    {
+      "id": "bristol-city",
+      "name": "Bristol City",
+      "initials": "BRI",
+      "wikipedia": "Bristol City F.C.",
+      "primary": "#E21B23",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "burnley",
+      "name": "Burnley",
+      "initials": "BUR",
+      "wikipedia": "Burnley F.C.",
+      "primary": "#6C1D45",
+      "secondary": "#99D6EA"
+    },
+    {
+      "id": "cardiff-city",
+      "name": "Cardiff City",
+      "initials": "CAR",
+      "wikipedia": "Cardiff City F.C."
+    },
+    {
+      "id": "charlton-athletic",
+      "name": "Charlton Athletic",
+      "initials": "CHA",
+      "wikipedia": "Charlton Athletic F.C."
+    },
+    {
+      "id": "derby-county",
+      "name": "Derby County",
+      "initials": "DER",
+      "wikipedia": "Derby County F.C."
+    },
+    {
+      "id": "lincoln-city",
+      "name": "Lincoln City",
+      "initials": "LIN",
+      "wikipedia": "Lincoln City F.C."
+    },
+    {
+      "id": "norwich-city",
+      "name": "Norwich City",
+      "initials": "NOR",
+      "wikipedia": "Norwich City F.C."
+    },
+    {
+      "id": "middlesbrough",
+      "name": "Middlesbrough",
+      "initials": "MID",
+      "wikipedia": "Middlesbrough F.C."
+    },
+    {
+      "id": "millwall",
+      "name": "Millwall",
+      "initials": "MIL",
+      "wikipedia": "Millwall F.C."
+    },
+    {
+      "id": "portsmouth",
+      "name": "Portsmouth",
+      "initials": "POR",
+      "wikipedia": "Portsmouth F.C."
+    },
+    {
+      "id": "preston-north-end",
+      "name": "Preston North End",
+      "initials": "PNE",
+      "wikipedia": "Preston North End F.C."
+    },
+    {
+      "id": "queens-park-rangers",
+      "name": "Queens Park Rangers",
+      "initials": "QPR",
+      "wikipedia": "Queens Park Rangers F.C.",
+      "primary": "#1D5BA4",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "sheffield-united",
+      "name": "Sheffield United",
+      "initials": "SHU",
+      "wikipedia": "Sheffield United F.C."
+    },
+    {
+      "id": "southampton",
+      "name": "Southampton",
+      "initials": "SOU",
+      "wikipedia": "Southampton F.C."
+    },
+    {
+      "id": "stoke-city",
+      "name": "Stoke City",
+      "initials": "STO",
+      "wikipedia": "Stoke City F.C."
+    },
+    {
+      "id": "swansea-city",
+      "name": "Swansea City",
+      "initials": "SWA",
+      "wikipedia": "Swansea City A.F.C."
+    },
+    {
+      "id": "watford",
+      "name": "Watford",
+      "initials": "WAT",
+      "wikipedia": "Watford F.C."
+    },
+    {
+      "id": "west-bromwich-albion",
+      "name": "West Bromwich Albion",
+      "initials": "WBA",
+      "wikipedia": "West Bromwich Albion F.C."
+    },
+    {
+      "id": "west-ham-united",
+      "name": "West Ham United",
+      "initials": "WHU",
+      "wikipedia": "West Ham United F.C."
+    },
+    {
+      "id": "wolverhampton-wanderers",
+      "name": "Wolverhampton Wanderers",
+      "initials": "WOL",
+      "wikipedia": "Wolverhampton Wanderers F.C."
+    },
+    {
+      "id": "wrexham",
+      "name": "Wrexham",
+      "initials": "WRX",
+      "wikipedia": "Wrexham A.F.C."
+    }
+  ],
+  "newspapers": []
+}

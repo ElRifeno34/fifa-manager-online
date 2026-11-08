@@ -1,0 +1,148 @@
+{
+  "pack": {
+    "id": "ligue-2-2026-27",
+    "name": "Ligue 2 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "ligue-2",
+    "name": "Ligue 2",
+    "country": "France"
+  },
+  "tmCompetition": null,
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "annecy",
+      "name": "Annecy",
+      "initials": "ANN",
+      "wikipedia": "FC Annecy",
+      "primary": "#D71920",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "boulogne",
+      "name": "Boulogne",
+      "initials": "BOU",
+      "wikipedia": "US Boulogne",
+      "primary": "#D71920",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "clermont",
+      "name": "Clermont",
+      "initials": "CLE",
+      "wikipedia": "Clermont Foot 63",
+      "primary": "#9B1B30",
+      "secondary": "#0057B8"
+    },
+    {
+      "id": "dijon",
+      "name": "Dijon",
+      "initials": "DIJ",
+      "wikipedia": "Dijon FCO"
+    },
+    {
+      "id": "dunkerque",
+      "name": "Dunkerque",
+      "initials": "DUN",
+      "wikipedia": "USL Dunkerque"
+    },
+    {
+      "id": "grenoble",
+      "name": "Grenoble",
+      "initials": "GRE",
+      "wikipedia": "Grenoble Foot 38",
+      "primary": "#0057B8",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "guingamp",
+      "name": "Guingamp",
+      "initials": "GUI",
+      "wikipedia": "En Avant Guingamp"
+    },
+    {
+      "id": "laval",
+      "name": "Laval",
+      "initials": "LAV",
+      "wikipedia": "Stade Lavallois"
+    },
+    {
+      "id": "metz",
+      "name": "Metz",
+      "initials": "MET",
+      "wikipedia": "FC Metz",
+      "primary": "#7A1F2B",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "montpellier",
+      "name": "Montpellier",
+      "initials": "MON",
+      "wikipedia": "Montpellier HSC"
+    },
+    {
+      "id": "nancy",
+      "name": "Nancy",
+      "initials": "NCY",
+      "wikipedia": "AS Nancy Lorraine"
+    },
+    {
+      "id": "nantes",
+      "name": "Nantes",
+      "initials": "NTS",
+      "wikipedia": "FC Nantes"
+    },
+    {
+      "id": "pau",
+      "name": "Pau",
+      "initials": "PAU",
+      "wikipedia": "Pau FC",
+      "primary": "#FFD100",
+      "secondary": "#0A2F5C"
+    },
+    {
+      "id": "red-star",
+      "name": "Red Star",
+      "initials": "RED",
+      "wikipedia": "Red Star FC"
+    },
+    {
+      "id": "reims",
+      "name": "Reims",
+      "initials": "REI",
+      "wikipedia": "Stade de Reims"
+    },
+    {
+      "id": "rodez",
+      "name": "Rodez",
+      "initials": "ROD",
+      "wikipedia": "Rodez AF"
+    },
+    {
+      "id": "saint-etienne",
+      "name": "Saint-Étienne",
+      "initials": "STE",
+      "wikipedia": "AS Saint-Étienne"
+    },
+    {
+      "id": "sochaux",
+      "name": "Sochaux",
+      "initials": "SOC",
+      "wikipedia": "FC Sochaux",
+      "primary": "#FFD100",
+      "secondary": "#0B1031"
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "lequipe",
+      "name": "L'Équipe",
+      "city": "Paris",
+      "tone": "sérieux",
+      "favoriteClubIds": []
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "pack": {
+    "id": "saudi-pro-league-2026-27",
+    "name": "Saudi Pro League 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "saudi-pro-league",
+    "name": "Saudi Pro League",
+    "country": "Arabie saoudite"
+  },
+  "tmCompetition": "SA1",
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "abha",
+      "name": "Abha",
+      "initials": "ABH",
+      "wikipedia": "Abha Club",
+      "primary": "#00843D",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "al-ahli",
+      "name": "Al-Ahli",
+      "initials": "AHL",
+      "wikipedia": "Al-Ahli Saudi FC"
+    },
+    {
+      "id": "al-diriyah",
+      "name": "Al-Diriyah",
+      "initials": "DIR",
+      "wikipedia": "Al-Diriyah Club"
+    },
+    {
+      "id": "al-ettifaq",
+      "name": "Al-Ettifaq",
+      "initials": "ETT",
+      "wikipedia": "Al-Ettifaq Club"
+    },
+    {
+      "id": "al-faisaly",
+      "name": "Al-Faisaly",
+      "initials": "FAI",
+      "wikipedia": "Al-Faisaly FC"
+    },
+    {
+      "id": "al-fateh",
+      "name": "Al-Fateh",
+      "initials": "FAT",
+      "wikipedia": "Al Fateh SC",
+      "primary": "#0057B8",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "al-fayha",
+      "name": "Al-Fayha",
+      "initials": "FAY",
+      "wikipedia": "Al-Fayha Club",
+      "primary": "#F58113",
+      "secondary": "#0057B8"
+    },
+    {
+      "id": "al-hazem",
+      "name": "Al-Hazem",
+      "initials": "HAZ",
+      "wikipedia": "Al-Hazem FC",
+      "primary": "#FFD100",
+      "secondary": "#121A23"
+    },
+    {
+      "id": "al-hilal",
+      "name": "Al-Hilal",
+      "initials": "HIL",
+      "wikipedia": "Al-Hilal SFC"
+    },
+    {
+      "id": "al-ittihad",
+      "name": "Al-Ittihad",
+      "initials": "ITT",
+      "wikipedia": "Al-Ittihad Club (Jeddah)"
+    },
+    {
+      "id": "al-khaleej",
+      "name": "Al-Khaleej",
+      "initials": "KHJ",
+      "wikipedia": "Al-Khaleej FC"
+    },
+    {
+      "id": "al-kholood",
+      "name": "Al-Kholood",
+      "initials": "KHO",
+      "wikipedia": "Al-Kholood Club"
+    },
+    {
+      "id": "al-nassr",
+      "name": "Al-Nassr",
+      "initials": "NSR",
+      "wikipedia": "Al-Nassr FC"
+    },
+    {
+      "id": "al-qadsiah",
+      "name": "Al-Qadsiah",
+      "initials": "QAD",
+      "wikipedia": "Al Qadsiah FC"
+    },
+    {
+      "id": "al-riyadh",
+      "name": "Al-Riyadh",
+      "initials": "RIY",
+      "wikipedia": "Al-Riyadh SC"
+    },
+    {
+      "id": "al-shabab",
+      "name": "Al-Shabab",
+      "initials": "SHB",
+      "wikipedia": "Al Shabab Club"
+    },
+    {
+      "id": "al-taawoun",
+      "name": "Al-Taawoun",
+      "initials": "TWN",
+      "wikipedia": "Al Taawoun FC",
+      "primary": "#FFD100",
+      "secondary": "#0057B8"
+    },
+    {
+      "id": "neom",
+      "name": "Neom",
+      "initials": "NEO",
+      "wikipedia": "Neom SC"
+    }
+  ],
+  "newspapers": []
+}

@@ -1,0 +1,166 @@
+{
+  "pack": {
+    "id": "serie-b-2026-27",
+    "name": "Serie B 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "serie-b",
+    "name": "Serie B",
+    "country": "Italie"
+  },
+  "tmCompetition": null,
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "arezzo",
+      "name": "Arezzo",
+      "initials": "ARE",
+      "wikipedia": "SS Arezzo"
+    },
+    {
+      "id": "ascoli",
+      "name": "Ascoli",
+      "initials": "ASC",
+      "wikipedia": "Ascoli Calcio 1898 FC"
+    },
+    {
+      "id": "avellino",
+      "name": "Avellino",
+      "initials": "AVE",
+      "wikipedia": "US Avellino 1912"
+    },
+    {
+      "id": "benevento",
+      "name": "Benevento",
+      "initials": "BEN",
+      "wikipedia": "Benevento Calcio"
+    },
+    {
+      "id": "carrarese",
+      "name": "Carrarese",
+      "initials": "CAR",
+      "wikipedia": "Carrarese Calcio 1908"
+    },
+    {
+      "id": "catanzaro",
+      "name": "Catanzaro",
+      "initials": "CTZ",
+      "wikipedia": "US Catanzaro 1929"
+    },
+    {
+      "id": "cesena",
+      "name": "Cesena",
+      "initials": "CES",
+      "wikipedia": "Cesena FC"
+    },
+    {
+      "id": "cremonese",
+      "name": "Cremonese",
+      "initials": "CRE",
+      "wikipedia": "US Cremonese",
+      "primary": "#C8102E",
+      "secondary": "#A7A9AC"
+    },
+    {
+      "id": "empoli",
+      "name": "Empoli",
+      "initials": "EMP",
+      "wikipedia": "Empoli FC"
+    },
+    {
+      "id": "hellas-verona",
+      "name": "Hellas Verona",
+      "initials": "VER",
+      "wikipedia": "Hellas Verona FC"
+    },
+    {
+      "id": "juve-stabia",
+      "name": "Juve Stabia",
+      "initials": "JST",
+      "wikipedia": "SS Juve Stabia"
+    },
+    {
+      "id": "mantova",
+      "name": "Mantova",
+      "initials": "MAN",
+      "wikipedia": "Mantova 1911",
+      "primary": "#FFFFFF",
+      "secondary": "#D71920"
+    },
+    {
+      "id": "modena",
+      "name": "Modena",
+      "initials": "MOD",
+      "wikipedia": "Modena FC 2018"
+    },
+    {
+      "id": "padova",
+      "name": "Padova",
+      "initials": "PAD",
+      "wikipedia": "Calcio Padova"
+    },
+    {
+      "id": "palermo",
+      "name": "Palermo",
+      "initials": "PAL",
+      "wikipedia": "Palermo FC"
+    },
+    {
+      "id": "pisa",
+      "name": "Pisa",
+      "initials": "PIS",
+      "wikipedia": "Pisa SC"
+    },
+    {
+      "id": "sampdoria",
+      "name": "Sampdoria",
+      "initials": "SAM",
+      "wikipedia": "UC Sampdoria"
+    },
+    {
+      "id": "sudtirol",
+      "name": "Südtirol",
+      "initials": "SUD",
+      "wikipedia": "FC Südtirol"
+    },
+    {
+      "id": "vicenza",
+      "name": "Vicenza",
+      "initials": "VIC",
+      "wikipedia": "LR Vicenza",
+      "primary": "#D71920",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "virtus-entella",
+      "name": "Virtus Entella",
+      "initials": "ENT",
+      "wikipedia": "Virtus Entella"
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "gazzetta",
+      "name": "La Gazzetta dello Sport",
+      "city": "Milan",
+      "tone": "sérieux",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "corriere-sport",
+      "name": "Corriere dello Sport",
+      "city": "Rome",
+      "tone": "populaire",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "tuttosport",
+      "name": "Tuttosport",
+      "city": "Turin",
+      "tone": "populaire",
+      "favoriteClubIds": []
+    }
+  ]
+}

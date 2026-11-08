@@ -1,0 +1,143 @@
+{
+  "pack": {
+    "id": "brasileirao-2026-27",
+    "name": "Série A (Brésil) 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "brasileirao",
+    "name": "Série A (Brésil)",
+    "country": "Brésil"
+  },
+  "tmCompetition": "BRA1",
+  "openfootballPath": "2026/br.1.json",
+  "wikipediaSeason": "2026",
+  "clubs": [
+    {
+      "id": "athletico-paranaense",
+      "name": "Athletico Paranaense",
+      "initials": "CAP",
+      "wikipedia": "Club Athletico Paranaense"
+    },
+    {
+      "id": "atletico-mineiro",
+      "name": "Atlético Mineiro",
+      "initials": "CAM",
+      "wikipedia": "Clube Atlético Mineiro"
+    },
+    {
+      "id": "bahia",
+      "name": "Bahia",
+      "initials": "BAH",
+      "wikipedia": "Esporte Clube Bahia"
+    },
+    {
+      "id": "botafogo",
+      "name": "Botafogo",
+      "initials": "BOT",
+      "wikipedia": "Botafogo FR"
+    },
+    {
+      "id": "chapecoense",
+      "name": "Chapecoense",
+      "initials": "CHA",
+      "wikipedia": "Associação Chapecoense de Futebol"
+    },
+    {
+      "id": "corinthians",
+      "name": "Corinthians",
+      "initials": "COR",
+      "wikipedia": "SC Corinthians Paulista"
+    },
+    {
+      "id": "coritiba",
+      "name": "Coritiba",
+      "initials": "CTB",
+      "wikipedia": "Coritiba Foot Ball Club",
+      "primary": "#00544D",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "cruzeiro",
+      "name": "Cruzeiro",
+      "initials": "CRU",
+      "wikipedia": "Cruzeiro EC"
+    },
+    {
+      "id": "flamengo",
+      "name": "Flamengo",
+      "initials": "FLA",
+      "wikipedia": "CR Flamengo"
+    },
+    {
+      "id": "fluminense",
+      "name": "Fluminense",
+      "initials": "FLU",
+      "wikipedia": "Fluminense FC"
+    },
+    {
+      "id": "gremio",
+      "name": "Grêmio",
+      "initials": "GRE",
+      "wikipedia": "Grêmio FBPA"
+    },
+    {
+      "id": "internacional",
+      "name": "Internacional",
+      "initials": "INT",
+      "wikipedia": "SC Internacional"
+    },
+    {
+      "id": "mirassol",
+      "name": "Mirassol",
+      "initials": "MIR",
+      "wikipedia": "Mirassol Futebol Clube"
+    },
+    {
+      "id": "palmeiras",
+      "name": "Palmeiras",
+      "initials": "PAL",
+      "wikipedia": "SE Palmeiras"
+    },
+    {
+      "id": "red-bull-bragantino",
+      "name": "Red Bull Bragantino",
+      "initials": "RBB",
+      "wikipedia": "Red Bull Bragantino"
+    },
+    {
+      "id": "remo",
+      "name": "Remo",
+      "initials": "REM",
+      "wikipedia": "Clube do Remo"
+    },
+    {
+      "id": "santos",
+      "name": "Santos",
+      "initials": "SAN",
+      "wikipedia": "Santos FC"
+    },
+    {
+      "id": "sao-paulo",
+      "name": "São Paulo",
+      "initials": "SPA",
+      "wikipedia": "São Paulo FC"
+    },
+    {
+      "id": "vasco-da-gama",
+      "name": "Vasco da Gama",
+      "initials": "VAS",
+      "wikipedia": "CR Vasco da Gama",
+      "primary": "#121A23",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "vitoria",
+      "name": "Vitória",
+      "initials": "VIT",
+      "wikipedia": "Esporte Clube Vitória"
+    }
+  ],
+  "newspapers": []
+}

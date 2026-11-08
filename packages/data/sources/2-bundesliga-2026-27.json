@@ -1,0 +1,143 @@
+{
+  "pack": {
+    "id": "2-bundesliga-2026-27",
+    "name": "2. Bundesliga 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "2-bundesliga",
+    "name": "2. Bundesliga",
+    "country": "Allemagne"
+  },
+  "tmCompetition": null,
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "hertha-bsc",
+      "name": "Hertha BSC",
+      "initials": "BSC",
+      "wikipedia": "Hertha BSC"
+    },
+    {
+      "id": "arminia-bielefeld",
+      "name": "Arminia Bielefeld",
+      "initials": "BIE",
+      "wikipedia": "Arminia Bielefeld"
+    },
+    {
+      "id": "vfl-bochum",
+      "name": "VfL Bochum",
+      "initials": "BOC",
+      "wikipedia": "VfL Bochum"
+    },
+    {
+      "id": "eintracht-braunschweig",
+      "name": "Eintracht Braunschweig",
+      "initials": "BRA",
+      "wikipedia": "Eintracht Braunschweig"
+    },
+    {
+      "id": "energie-cottbus",
+      "name": "Energie Cottbus",
+      "initials": "COT",
+      "wikipedia": "FC Energie Cottbus"
+    },
+    {
+      "id": "darmstadt-98",
+      "name": "Darmstadt 98",
+      "initials": "DAR",
+      "wikipedia": "SV Darmstadt 98"
+    },
+    {
+      "id": "dynamo-dresden",
+      "name": "Dynamo Dresden",
+      "initials": "DRE",
+      "wikipedia": "Dynamo Dresden"
+    },
+    {
+      "id": "greuther-furth",
+      "name": "Greuther Fürth",
+      "initials": "FUR",
+      "wikipedia": "SpVgg Greuther Fürth"
+    },
+    {
+      "id": "hannover-96",
+      "name": "Hannover 96",
+      "initials": "HAN",
+      "wikipedia": "Hannover 96"
+    },
+    {
+      "id": "1-fc-heidenheim",
+      "name": "1. FC Heidenheim",
+      "initials": "HEI",
+      "wikipedia": "1. FC Heidenheim"
+    },
+    {
+      "id": "1-fc-kaiserslautern",
+      "name": "1. FC Kaiserslautern",
+      "initials": "KAI",
+      "wikipedia": "1. FC Kaiserslautern"
+    },
+    {
+      "id": "karlsruher-sc",
+      "name": "Karlsruher SC",
+      "initials": "KAR",
+      "wikipedia": "Karlsruher SC"
+    },
+    {
+      "id": "holstein-kiel",
+      "name": "Holstein Kiel",
+      "initials": "KIE",
+      "wikipedia": "Holstein Kiel"
+    },
+    {
+      "id": "1-fc-magdeburg",
+      "name": "1. FC Magdeburg",
+      "initials": "MAG",
+      "wikipedia": "1. FC Magdeburg"
+    },
+    {
+      "id": "1-fc-nurnberg",
+      "name": "1. FC Nürnberg",
+      "initials": "FCN",
+      "wikipedia": "1. FC Nürnberg"
+    },
+    {
+      "id": "vfl-osnabruck",
+      "name": "VfL Osnabrück",
+      "initials": "OSN",
+      "wikipedia": "VfL Osnabrück"
+    },
+    {
+      "id": "fc-st-pauli",
+      "name": "FC St. Pauli",
+      "initials": "STP",
+      "wikipedia": "FC St. Pauli",
+      "primary": "#65423A",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "vfl-wolfsburg",
+      "name": "VfL Wolfsburg",
+      "initials": "WOL",
+      "wikipedia": "VfL Wolfsburg"
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "kicker",
+      "name": "Kicker",
+      "city": "Nuremberg",
+      "tone": "analytique",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "bild",
+      "name": "Bild",
+      "city": "Berlin",
+      "tone": "tabloïd",
+      "favoriteClubIds": []
+    }
+  ]
+}

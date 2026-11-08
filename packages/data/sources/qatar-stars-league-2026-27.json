@@ -1,0 +1,90 @@
+{
+  "pack": {
+    "id": "qatar-stars-league-2026-27",
+    "name": "Qatar Stars League 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "qatar-stars-league",
+    "name": "Qatar Stars League",
+    "country": "Qatar"
+  },
+  "tmCompetition": null,
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "al-ahli-qa",
+      "name": "Al Ahli",
+      "initials": "AHL",
+      "wikipedia": "Al Ahli SC (Doha)"
+    },
+    {
+      "id": "al-arabi",
+      "name": "Al-Arabi",
+      "initials": "ARA",
+      "wikipedia": "Al-Arabi SC (Qatar)"
+    },
+    {
+      "id": "al-duhail",
+      "name": "Al Duhail",
+      "initials": "DUH",
+      "wikipedia": "Al Duhail SC"
+    },
+    {
+      "id": "al-gharafa",
+      "name": "Al-Gharafa",
+      "initials": "GHA",
+      "wikipedia": "Al-Gharafa SC"
+    },
+    {
+      "id": "al-rayyan",
+      "name": "Al-Rayyan",
+      "initials": "RAY",
+      "wikipedia": "Al-Rayyan SC"
+    },
+    {
+      "id": "al-sadd",
+      "name": "Al Sadd",
+      "initials": "SAD",
+      "wikipedia": "Al Sadd SC"
+    },
+    {
+      "id": "al-sailiya",
+      "name": "Al-Sailiya",
+      "initials": "SAI",
+      "wikipedia": "Al-Sailiya SC"
+    },
+    {
+      "id": "al-shahaniya",
+      "name": "Al Shahaniya",
+      "initials": "SHH",
+      "wikipedia": "Al Shahaniya SC"
+    },
+    {
+      "id": "al-shamal",
+      "name": "Al-Shamal",
+      "initials": "SHA",
+      "wikipedia": "Al-Shamal SC"
+    },
+    {
+      "id": "al-wakrah",
+      "name": "Al-Wakrah",
+      "initials": "WAK",
+      "wikipedia": "Al-Wakrah SC"
+    },
+    {
+      "id": "qatar-sc",
+      "name": "Qatar SC",
+      "initials": "QAT",
+      "wikipedia": "Qatar SC"
+    },
+    {
+      "id": "lusail",
+      "name": "Lusail",
+      "initials": "LUS",
+      "wikipedia": "Lusail SC"
+    }
+  ],
+  "newspapers": []
+}

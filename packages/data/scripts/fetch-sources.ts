@@ -109,9 +109,8 @@ async function readPages(titles: string[]): Promise<Map<string, Page>> {
   return pages;
 }
 
-const seasonPage = (club: ClubConfig) => `2026–27 ${club.wikipedia} season`;
-
-async function fetchSquads(leagueId: string, clubs: ClubConfig[]) {
+async function fetchSquads(leagueId: string, clubs: ClubConfig[], season = "2026–27") {
+  const seasonPage = (club: ClubConfig) => `${season} ${club.wikipedia} season`;
   const pathOf = (club: ClubConfig) => join(RAW, `wikipedia/${leagueId}/${club.id}.json`);
   const missing = clubs.filter((club) => refresh || !existsSync(pathOf(club)));
   for (const batch of chunks(missing, PAGES_PER_CALL)) {
@@ -119,8 +118,9 @@ async function fetchSquads(leagueId: string, clubs: ClubConfig[]) {
     for (const club of batch) {
       const season = pages.get(seasonPage(club));
       const main = pages.get(club.wikipedia);
+      /* First team only: some season pages list just their academy players. */
       const present = (page?: Page) =>
-        page ? parseSquad(page.wikitext).filter((p) => p.section !== "loan-out").length : 0;
+        page ? parseSquad(page.wikitext).filter((p) => p.section === "first-team").length : 0;
       const best = present(season) >= MIN_SQUAD ? season : main;
       if (!best) throw new Error(`No Wikipedia page for ${club.name}: ${club.wikipedia}`);
       const colors = main ? parseKitColors(main.wikitext) : null;
@@ -195,6 +195,6 @@ for (const config of loadLeagues()) {
   if (config.openfootballPath) {
     await download(`${OPENFOOTBALL}/${config.openfootballPath}`, join(RAW, `fixtures/${id}.json`));
   }
-  await fetchSquads(id, config.clubs);
+  await fetchSquads(id, config.clubs, config.wikipediaSeason);
   await fetchLinks(id, config.clubs);
 }

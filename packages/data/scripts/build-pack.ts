@@ -185,8 +185,15 @@ function buildLeague(config: LeagueConfig) {
         report.loanedOut++;
         continue;
       }
-      const { row, method } = findTransfermarkt(wiki);
-      const id = row ? `tm-${row.player_id}` : `wiki-${slug(wiki.name)}`;
+      let { row, method } = findTransfermarkt(wiki);
+      /* A name already taken is a namesake (Carlos Eduardo, Rafael…), not a transfer. */
+      if (method === "name" && players.has(`tm-${row!.player_id}`)) {
+        row = null;
+        method = "none";
+      }
+      /* Without a link, a name is no identity: two João Vitor are two players. */
+      let id = row ? `tm-${row.player_id}` : `wiki-${club.id}-${slug(wiki.name)}`;
+      for (let n = 2; !row && players.has(id); n++) id = `wiki-${club.id}-${slug(wiki.name)}-${n}`;
       const squad = wiki.section;
 
       const existing = players.get(id);

@@ -73,9 +73,14 @@ Les clubs et joueurs (réels ou fictifs) viennent d'un **pack de données**, jam
 
 ### Packs réels 2026-27
 
-Il y a un pack par championnat : LaLiga, Premier League, Ligue 1, Bundesliga, Serie A, Eredivisie,
-Primeira Liga, Pro League, Superligaen, Süper Lig et Super League grecque. Ils sont générés en
-local, à partir de sources gratuites :
+Il y a un pack par championnat, soit 20 au total :
+
+- **Premières divisions européennes :** LaLiga, Premier League, Ligue 1, Bundesliga, Serie A,
+  Eredivisie, Primeira Liga, Pro League, Superligaen, Süper Lig et Super League grecque.
+- **Deuxièmes divisions :** Championship, Ligue 2, 2. Bundesliga, Serie B et LaLiga Hypermotion.
+- **Hors d'Europe :** MLS, Série A brésilienne, Saudi Pro League et Qatar Stars League.
+
+Ils sont générés en local, à partir de sources gratuites :
 
 ```bash
 npm run pack:fetch   # télécharge les sources dans data/raw (--refresh pour relire les effectifs)
@@ -94,14 +99,20 @@ Les deux commandes acceptent des identifiants de championnat, par exemple `npm r
 | Matchs, buts, passes décisives 2025-26         | transfermarkt-datasets                    |
 | Calendrier                                     | openfootball, sinon généré                |
 
-- openfootball n'a pas de calendrier pour la Belgique, le Danemark, la Turquie et la Grèce : ces
-  packs ont un aller-retour généré, une journée par semaine. Les vraies dates et les play-offs
-  (Belgique, Danemark, Grèce) n'y figurent pas (`league.fixturesSource`).
+- openfootball n'a de calendrier que pour sept premières divisions européennes, le Championship et
+  le Brésil. Les autres packs ont un aller-retour généré, une journée par semaine
+  (`league.fixturesSource`). Les vraies dates, les play-offs et les conférences de la MLS n'y
+  figurent pas : la MLS générée compte 58 journées.
+- La MLS et le Brésil se jouent sur l'année civile : leurs effectifs viennent des pages « 2026 »
+  (`wikipediaSeason`) et le calendrier brésilien est celui de 2026.
+- La liste des clubs qataris est déduite de 2025-26, faute de page 2026-27 sur Wikipédia.
 - Le niveau vient de la valeur marchande, corrigée par l'âge. Finition, passe et vision réagissent
   aux stats réelles, la force à la taille, la vitesse et l'endurance à l'âge. Le reste est **estimé**
   selon le poste : les sources gratuites n'ont ni tacles, ni duels, ni vitesse.
-- Transfermarkt couvre mal la deuxième division : les joueurs sans valeur prennent un niveau proche
-  de la médiane de leur club, surtout dans les clubs promus.
+- transfermarkt-datasets ne suit ni les deuxièmes divisions ni le Qatar : seuls les joueurs passés
+  par un championnat suivi ont une valeur (40 à 60 %). Les autres prennent un niveau proche de la
+  médiane de leur club. Au Qatar, cette médiane vient surtout des joueurs étrangers et surestime
+  sans doute les joueurs locaux.
 - Le dépôt étant public, **les packs et les sources brutes ne sont pas versionnés**. Seuls le schéma,
   les scripts et la configuration le sont.
 - Ces packs ne sont pas destinés à la publication (voir les licences dans [PLAN.md](PLAN.md)).

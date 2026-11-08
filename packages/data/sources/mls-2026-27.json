@@ -1,0 +1,203 @@
+{
+  "pack": {
+    "id": "mls-2026-27",
+    "name": "MLS 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "mls",
+    "name": "MLS",
+    "country": "États-Unis"
+  },
+  "tmCompetition": "MLS1",
+  "openfootballPath": null,
+  "wikipediaSeason": "2026",
+  "clubs": [
+    {
+      "id": "atlanta-united-fc",
+      "name": "Atlanta United FC",
+      "initials": "ATL",
+      "wikipedia": "Atlanta United FC"
+    },
+    {
+      "id": "austin-fc",
+      "name": "Austin FC",
+      "initials": "AUS",
+      "wikipedia": "Austin FC"
+    },
+    {
+      "id": "chicago-fire-fc",
+      "name": "Chicago Fire FC",
+      "initials": "CHI",
+      "wikipedia": "Chicago Fire FC",
+      "primary": "#AF2626",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "fc-cincinnati",
+      "name": "FC Cincinnati",
+      "initials": "CIN",
+      "wikipedia": "FC Cincinnati"
+    },
+    {
+      "id": "columbus-crew",
+      "name": "Columbus Crew",
+      "initials": "CLB",
+      "wikipedia": "Columbus Crew"
+    },
+    {
+      "id": "charlotte-fc",
+      "name": "Charlotte FC",
+      "initials": "CLT",
+      "wikipedia": "Charlotte FC"
+    },
+    {
+      "id": "colorado-rapids",
+      "name": "Colorado Rapids",
+      "initials": "COL",
+      "wikipedia": "Colorado Rapids"
+    },
+    {
+      "id": "fc-dallas",
+      "name": "FC Dallas",
+      "initials": "DAL",
+      "wikipedia": "FC Dallas",
+      "primary": "#E81F3E",
+      "secondary": "#1164B4"
+    },
+    {
+      "id": "d-c-united",
+      "name": "D.C. United",
+      "initials": "DCU",
+      "wikipedia": "D.C. United"
+    },
+    {
+      "id": "houston-dynamo-fc",
+      "name": "Houston Dynamo FC",
+      "initials": "HOU",
+      "wikipedia": "Houston Dynamo FC"
+    },
+    {
+      "id": "la-galaxy",
+      "name": "LA Galaxy",
+      "initials": "LAG",
+      "wikipedia": "LA Galaxy"
+    },
+    {
+      "id": "los-angeles-fc",
+      "name": "Los Angeles FC",
+      "initials": "LAFC",
+      "wikipedia": "Los Angeles FC"
+    },
+    {
+      "id": "inter-miami-cf",
+      "name": "Inter Miami CF",
+      "initials": "MIA",
+      "wikipedia": "Inter Miami CF"
+    },
+    {
+      "id": "minnesota-united-fc",
+      "name": "Minnesota United FC",
+      "initials": "MIN",
+      "wikipedia": "Minnesota United FC"
+    },
+    {
+      "id": "cf-montreal",
+      "name": "CF Montréal",
+      "initials": "MTL",
+      "wikipedia": "CF Montréal"
+    },
+    {
+      "id": "new-england-revolution",
+      "name": "New England Revolution",
+      "initials": "NE",
+      "wikipedia": "New England Revolution"
+    },
+    {
+      "id": "nashville-sc",
+      "name": "Nashville SC",
+      "initials": "NSH",
+      "wikipedia": "Nashville SC"
+    },
+    {
+      "id": "new-york-city-fc",
+      "name": "New York City FC",
+      "initials": "NYC",
+      "wikipedia": "New York City FC"
+    },
+    {
+      "id": "new-york-red-bulls",
+      "name": "New York Red Bulls",
+      "initials": "RBNY",
+      "wikipedia": "New York Red Bulls"
+    },
+    {
+      "id": "orlando-city-sc",
+      "name": "Orlando City SC",
+      "initials": "ORL",
+      "wikipedia": "Orlando City SC"
+    },
+    {
+      "id": "philadelphia-union",
+      "name": "Philadelphia Union",
+      "initials": "PHI",
+      "wikipedia": "Philadelphia Union"
+    },
+    {
+      "id": "portland-timbers",
+      "name": "Portland Timbers",
+      "initials": "POR",
+      "wikipedia": "Portland Timbers"
+    },
+    {
+      "id": "real-salt-lake",
+      "name": "Real Salt Lake",
+      "initials": "RSL",
+      "wikipedia": "Real Salt Lake"
+    },
+    {
+      "id": "seattle-sounders-fc",
+      "name": "Seattle Sounders FC",
+      "initials": "SEA",
+      "wikipedia": "Seattle Sounders FC"
+    },
+    {
+      "id": "san-diego-fc",
+      "name": "San Diego FC",
+      "initials": "SDC",
+      "wikipedia": "San Diego FC"
+    },
+    {
+      "id": "san-jose-earthquakes",
+      "name": "San Jose Earthquakes",
+      "initials": "SJO",
+      "wikipedia": "San Jose Earthquakes"
+    },
+    {
+      "id": "sporting-kansas-city",
+      "name": "Sporting Kansas City",
+      "initials": "SKC",
+      "wikipedia": "Sporting Kansas City"
+    },
+    {
+      "id": "st-louis-city-sc",
+      "name": "St. Louis City SC",
+      "initials": "STL",
+      "wikipedia": "St. Louis City SC"
+    },
+    {
+      "id": "toronto-fc",
+      "name": "Toronto FC",
+      "initials": "TOR",
+      "wikipedia": "Toronto FC"
+    },
+    {
+      "id": "vancouver-whitecaps-fc",
+      "name": "Vancouver Whitecaps FC",
+      "initials": "VAN",
+      "wikipedia": "Vancouver Whitecaps FC"
+    }
+  ],
+  "newspapers": []
+}

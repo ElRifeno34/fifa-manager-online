@@ -1,0 +1,183 @@
+{
+  "pack": {
+    "id": "laliga-hypermotion-2026-27",
+    "name": "LaLiga Hypermotion 2026-27",
+    "season": "2026-27",
+    "version": 1
+  },
+  "league": {
+    "id": "laliga-hypermotion",
+    "name": "LaLiga Hypermotion",
+    "country": "Espagne"
+  },
+  "tmCompetition": null,
+  "openfootballPath": null,
+  "clubs": [
+    {
+      "id": "albacete",
+      "name": "Albacete",
+      "initials": "ALB",
+      "wikipedia": "Albacete Balompié"
+    },
+    {
+      "id": "almeria",
+      "name": "Almería",
+      "initials": "ALM",
+      "wikipedia": "UD Almería"
+    },
+    {
+      "id": "andorra",
+      "name": "Andorra",
+      "initials": "AND",
+      "wikipedia": "FC Andorra"
+    },
+    {
+      "id": "burgos",
+      "name": "Burgos",
+      "initials": "BUR",
+      "wikipedia": "Burgos CF"
+    },
+    {
+      "id": "cadiz",
+      "name": "Cádiz",
+      "initials": "CAD",
+      "wikipedia": "Cádiz CF"
+    },
+    {
+      "id": "castellon",
+      "name": "Castellón",
+      "initials": "CAS",
+      "wikipedia": "CD Castellón"
+    },
+    {
+      "id": "celta-fortuna",
+      "name": "Celta Fortuna",
+      "initials": "CEL",
+      "wikipedia": "RC Celta Fortuna",
+      "primary": "#8AC3EE",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "ceuta",
+      "name": "Ceuta",
+      "initials": "CEU",
+      "wikipedia": "AD Ceuta FC"
+    },
+    {
+      "id": "cordoba",
+      "name": "Córdoba",
+      "initials": "COR",
+      "wikipedia": "Córdoba CF"
+    },
+    {
+      "id": "eibar",
+      "name": "Eibar",
+      "initials": "EIB",
+      "wikipedia": "SD Eibar"
+    },
+    {
+      "id": "eldense",
+      "name": "Eldense",
+      "initials": "ELD",
+      "wikipedia": "CD Eldense"
+    },
+    {
+      "id": "girona",
+      "name": "Girona",
+      "initials": "GIR",
+      "wikipedia": "Girona FC"
+    },
+    {
+      "id": "granada",
+      "name": "Granada",
+      "initials": "GRA",
+      "wikipedia": "Granada CF"
+    },
+    {
+      "id": "las-palmas",
+      "name": "Las Palmas",
+      "initials": "LPA",
+      "wikipedia": "UD Las Palmas"
+    },
+    {
+      "id": "leganes",
+      "name": "Leganés",
+      "initials": "LEG",
+      "wikipedia": "CD Leganés"
+    },
+    {
+      "id": "mallorca",
+      "name": "Mallorca",
+      "initials": "MLL",
+      "wikipedia": "RCD Mallorca"
+    },
+    {
+      "id": "oviedo",
+      "name": "Oviedo",
+      "initials": "OVI",
+      "wikipedia": "Real Oviedo"
+    },
+    {
+      "id": "real-sociedad-b",
+      "name": "Real Sociedad B",
+      "initials": "RSO",
+      "wikipedia": "Real Sociedad B"
+    },
+    {
+      "id": "sabadell",
+      "name": "Sabadell",
+      "initials": "SAB",
+      "wikipedia": "CE Sabadell FC"
+    },
+    {
+      "id": "sporting-gijon",
+      "name": "Sporting Gijón",
+      "initials": "SPO",
+      "wikipedia": "Sporting de Gijón",
+      "primary": "#D71920",
+      "secondary": "#FFFFFF"
+    },
+    {
+      "id": "tenerife",
+      "name": "Tenerife",
+      "initials": "TEN",
+      "wikipedia": "CD Tenerife"
+    },
+    {
+      "id": "valladolid",
+      "name": "Valladolid",
+      "initials": "VAL",
+      "wikipedia": "Real Valladolid"
+    }
+  ],
+  "newspapers": [
+    {
+      "id": "marca",
+      "name": "Marca",
+      "city": "Madrid",
+      "tone": "populaire",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "as",
+      "name": "AS",
+      "city": "Madrid",
+      "tone": "populaire",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "mundo-deportivo",
+      "name": "Mundo Deportivo",
+      "city": "Barcelone",
+      "tone": "sérieux",
+      "favoriteClubIds": []
+    },
+    {
+      "id": "sport",
+      "name": "Sport",
+      "city": "Barcelone",
+      "tone": "tabloïd",
+      "favoriteClubIds": []
+    }
+  ]
+}
