@@ -1,6 +1,6 @@
 /**
  * Simulates whole seasons on the real packs (data/packs, built by pack:build) and compares the
- * output with the calibration targets of docs/GAME_DESIGN.md.
+ * season-level output (titles, points, positions); `npm run benchmark` compares with reality.
  * Usage: calibrate [league ids] [--seasons N]
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -138,5 +138,6 @@ console.log(
   `\nAll: goals ${avg(total.goals, total.matches)} | home ${pct(total.home, total.matches)} ` +
     `draw ${pct(total.draw, total.matches)} away ${pct(total.matches - total.home - total.draw, total.matches)} | ` +
     `favourite wins ${pct(total.favouriteWins, total.favourites)}\n` +
-    `Targets: goals 2.5-2.9 | home ~45% draw ~27% away ~28% | shots 10-15 per team | favourite 65-75%`,
+    `Real 2026-27 (football-data.co.uk, 18 leagues): goals 3.00 | home 45% draw 25% away 30% | ` +
+    `shots 13.8 per team. Match by match against the odds: npm run benchmark`,
 );

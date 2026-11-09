@@ -10,7 +10,10 @@
     "typecheck": "tsc",
     "test": "vitest run",
     "calibrate": "node scripts/calibrate.ts",
-    "play": "node scripts/play.ts"
+    "play": "node scripts/play.ts",
+    "benchmark": "node scripts/benchmark.ts",
+    "tune": "node scripts/tune.ts",
+    "tune:clubs": "node scripts/tune-clubs.ts"
   },
   "devDependencies": {
     "@types/node": "^24",

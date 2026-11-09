@@ -20,7 +20,10 @@ import type {
   TeamStats,
 } from "./types.ts";
 
-/** Knobs set by calibration (`npm run calibrate`), see docs/ARCHITECTURE.md. */
+/**
+ * Engine parameters, fitted to the real 2026-27 season (football-data.co.uk) by `npm run tune`;
+ * `npm run benchmark` measures the gap. See docs/ARCHITECTURE.md.
+ */
 export const TUNING = {
   possessionSeconds: { possession: 47, balanced: 45, direct: 43 } as Record<Style, number>,
   /** Length factor of a possession lost in midfield, in the final third, or ending in a shot. */
@@ -28,19 +31,25 @@ export const TUNING = {
   passesPerPossession: { possession: 7, balanced: 5, direct: 3.5 } as Record<Style, number>,
   /** Logit of getting through midfield, and of turning the final third into a chance. */
   midBase: 0,
-  finalBase: -1.25,
+  finalBase: -1.263,
   /** Logit points per attribute point of difference between the two units. */
-  slope: 0.42,
+  slope: 0.36,
   /** Beyond about this many attribute points, a wider gap barely matters more. */
   gapCap: 1.8,
   /** Home side plays with slightly better attributes. */
-  homeBoost: 0.045,
-  foulPerPossession: 0.17,
-  yellowPerFoul: 0.13,
-  redPerFoul: 0.004,
-  saveShare: 0.32,
+  homeBoost: 0.034,
+  foulPerPossession: 0.183,
+  yellowPerFoul: 0.159,
+  redPerFoul: 0.0016,
+  saveShare: 0.252,
+  /** Multiplies every open-play and set-piece chance quality (penalties apart). */
+  xgScale: 1.243,
+  /** Share of attributes gained (or lost) per unit of familiarity above (or below) 0.7. */
+  familiarityEffect: 0.08,
+  /** Multiplies the chance of winning a corner. */
+  cornerRate: 0.792,
   /** Logit shift from the score late in the match (see gameState). */
-  gameState: 0.35,
+  gameState: 0.194,
   /** Attribute level of an average finisher and keeper in shot quality. */
   shotReference: 14.5,
   /** Weight of the shooter's and the keeper's level in the chance of scoring. */
@@ -221,6 +230,8 @@ export function simulateMatch(input: {
       l.fit *
       (1 - (l.fatigue / 100) * T.fatigueEffect) *
       (1 + l.form * 0.04) *
+      (1 + (t.sheet.levelAdjustment ?? 0)) *
+      (1 + ((t.sheet.familiarity ?? 0.7) - 0.7) * T.familiarityEffect) *
       (t.home ? 1 + T.homeBoost : 1)
     );
   }
@@ -417,7 +428,10 @@ export function simulateMatch(input: {
     if (rng.chance(T.redPerFoul)) {
       emit("red", defending.side, attacking.side, progress, { playerId: fouler.player.id });
       sendOff(fouler);
-    } else if (rng.chance(T.yellowPerFoul * pressing)) {
+    } else if (
+      /* A booked player goes into challenges more carefully. */
+      rng.chance(T.yellowPerFoul * pressing * (fouler.yellow === 1 ? 0.4 : 1))
+    ) {
       fouler.yellow++;
       defending.stats.yellowCards++;
       fouler.delta -= 0.4;
@@ -538,7 +552,7 @@ export function simulateMatch(input: {
     const reflexes = keeper ? attr(keeper, "reflexes") : 3;
     const placing = keeper ? attr(keeper, "gkPositioning") : 3;
 
-    let quality = T.xg[type];
+    let quality = T.xg[type] * (type === "penalty" ? 1 : T.xgScale);
     if (type === "cross" || type === "corner") {
       quality *= clamp(1 + (attr(shooter, "strength") - defenceProfile.aerial) * 0.04, 0.6, 1.5);
     }
@@ -591,11 +605,11 @@ export function simulateMatch(input: {
         keeper.delta += 0.25;
         emit("save", defending.side, attacking.side, 98, { playerId: keeper.player.id, at, y: 50 });
       }
-      if (rng.chance(0.3)) corner(attacking, defending, defenceProfile, at);
+      if (rng.chance(0.3 * T.cornerRate)) corner(attacking, defending, defenceProfile, at);
       return false;
     }
     shooter.delta -= 0.05;
-    if (rng.chance(0.15)) corner(attacking, defending, defenceProfile, at);
+    if (rng.chance(0.15 * T.cornerRate)) corner(attacking, defending, defenceProfile, at);
     return false;
   }
 
@@ -734,7 +748,7 @@ export function simulateMatch(input: {
     if (counter) logit += 0.5;
     logit += gameState(attacking, defending);
     if (!rng.chance(logistic(logit))) {
-      if (rng.chance(0.12)) {
+      if (rng.chance(0.12 * T.cornerRate)) {
         corner(attacking, defending, d, 0.8);
         return { next: defending.side, counter: false };
       }

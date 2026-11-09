@@ -67,6 +67,16 @@ export interface TeamSheet {
   bench: EnginePlayer[];
   /** By player id; players missing from it are fresh and in neutral form. */
   condition?: Readonly<Record<string, PlayerCondition>>;
+  /**
+   * Collective strength that the players' level does not explain (coach, form, cohesion), as a
+   * share of every attribute: 0.05 plays 5 % above the squad's level. Fitted on betting odds.
+   */
+  levelAdjustment?: number;
+  /**
+   * How well the team knows its formation and instructions, 0 to 1: trained tactics are played
+   * better, a system changed every week a little worse. Missing means 0.7, a settled side.
+   */
+  familiarity?: number;
 }
 
 export type Side = "home" | "away";

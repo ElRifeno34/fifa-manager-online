@@ -90,6 +90,11 @@ export const clubSchema = z.strictObject({
   primary: hexColor,
   secondary: hexColor,
   reputation: z.number().int().min(1).max(5),
+  /**
+   * Collective strength not explained by the players' level (coach, form), as a share of every
+   * attribute. Fitted on the season's betting odds by the engine (npm run tune:clubs).
+   */
+  levelAdjustment: z.number().min(-0.3).max(0.3).optional(),
 });
 
 export const fixtureSchema = z.strictObject({

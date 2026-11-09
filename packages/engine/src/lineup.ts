@@ -122,6 +122,7 @@ export function autoTeamSheet(options: {
   condition?: Conditions;
   /** Imposed tactics, e.g. the player's own; the formation is then kept too. */
   tactics?: Tactics;
+  levelAdjustment?: number;
 }): TeamSheet {
   const condition = options.condition ?? {};
   const formations = options.tactics ? [options.tactics.formation] : FORMATION_NAMES;
@@ -139,5 +140,6 @@ export function autoTeamSheet(options: {
     starters: best!.lineup.starters,
     bench: best!.lineup.bench,
     condition,
+    ...(options.levelAdjustment ? { levelAdjustment: options.levelAdjustment } : {}),
   };
 }

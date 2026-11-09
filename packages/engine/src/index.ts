@@ -15,7 +15,9 @@ export { simulateMatch, TUNING } from "./match.ts";
 export {
   conditionsOn,
   createSeason,
+  formFromRatings,
   playRound,
+  recoveredFatigue,
   rounds,
   seasonTable,
   simulateSeason,

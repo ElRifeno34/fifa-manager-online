@@ -43,24 +43,29 @@ avec la même base de code.
 
 ## 2. Boucle de jeu
 
+Le jeu avance **jour après jour** dans un calendrier : matchs, séances d'entraînement, fenêtres de
+transferts, réunions de la direction et fins de contrat sont des événements datés. Tout ce qui
+demande une décision arrive dans la **boîte de réception**.
+
 ```
  ┌──────────────► Avant-match ──► Match ──► Après-match ──┐
- │                (compo,         (2D,      (notes, stats,│
- │                 tactique)       résultat  classement)  │
- │                                 ou sim                 │
- │                                 rapide)                ▼
- └──────────── Entre deux journées (repos, forme) ◄───────┘
+ │                (compo,         (résultat, (notes, stats,│
+ │                 tactique)       stats,     classement,  │
+ │                                 sim rapide) presse)     ▼
+ └──── Semaine : entraînement, discussions, transferts ◄───┘
                          │ (fin de saison)
                          ▼
-          Bilan, vieillissement, jeunes, nouvelle saison
+   Bilan avec la direction, montées et descentes, progression,
+   jeunes, contrats, mercato d'été, nouvelle saison
 ```
 
-| Moment            | Actions du joueur                                                    | Durée visée |
-| ----------------- | -------------------------------------------------------------------- | ----------- |
-| **Avant-match**   | Consulter l'adversaire, compo, formation, tactique, gérer la fatigue | 2 à 5 min   |
-| **Match**         | Regarder en 2D (×1, ×2, ×4) ou passer au résultat                    | 0 à 4 min   |
-| **Après-match**   | Lire le résultat, les notes, les stats, le classement                | 1 min       |
-| **Fin de saison** | Bilan des objectifs, progression des joueurs, nouveaux jeunes        | 3 min       |
+| Moment            | Actions du joueur                                                             | Durée visée |
+| ----------------- | ----------------------------------------------------------------------------- | ----------- |
+| **Semaine**       | Plan d'entraînement, boîte de réception, discussions, offres de transfert     | 2 à 5 min   |
+| **Avant-match**   | Consulter l'adversaire, conseils de l'adjoint, compo, tactique, fatigue       | 2 à 5 min   |
+| **Match**         | Suivre les temps forts en texte, ou passer au résultat (la 2D vient ensuite)  | 0 à 2 min   |
+| **Après-match**   | Résultat, notes, stats, classement, presse                                    | 1 min       |
+| **Fin de saison** | Bilan avec la direction, montées et descentes, progression, contrats, mercato | 5 min       |
 
 ### Simulation rapide
 
@@ -68,8 +73,9 @@ avec la même base de code.
   une date, ou jusqu'à la fin de la saison.
 - Pendant la simulation rapide, l'**adjoint** gère la compo (meilleure équipe selon la fatigue) avec
   la tactique choisie par le joueur.
-- La simulation **s'arrête automatiquement** sur les événements importants : (plus tard) blessure
-  d'un titulaire, offre de transfert, fin de mercato.
+- La simulation **s'arrête automatiquement** sur les événements importants : blessure d'un
+  titulaire, offre de transfert, demande d'un joueur, convocation par la direction, fin de mercato.
+- Pendant la simulation rapide, l'adjoint applique le dernier plan d'entraînement.
 - Le résultat est **identique** à celui qu'on aurait obtenu en jouant normalement avec la même compo
   (même moteur, même graine).
 
@@ -95,10 +101,14 @@ Pour garder ce choix réversible, **les données sont séparées du jeu** :
 [ARCHITECTURE.md](ARCHITECTURE.md#packs-réels-2026-27). Les attributs sur 20 de la section 4
 sont calculés pour chaque joueur, à partir de sa valeur, de son poste et de ses stats.
 
-### MVP
+### V1
 
-- **1 championnat réel**, matchs aller-retour. Le nombre de clubs et de journées vient du pack
-  (par exemple 18 clubs = 34 journées).
+- **Les 20 championnats des packs sont jouables.** Les cinq paires D1/D2 sont reliées par des
+  **montées et descentes** : Premier League et Championship, Ligue 1 et Ligue 2, Bundesliga et 2. Bundesliga, Serie A et Serie B, LaLiga et LaLiga Hypermotion. Une carrière peut donc durer
+  plusieurs saisons, commencer en deuxième division ou y descendre.
+- V1 : **3 montées et 3 descentes** par paire, sans barrages ni play-offs. Les autres championnats
+  se jouent seuls, sans relégation.
+- Matchs aller-retour ; le nombre de clubs et de journées vient du pack.
 - Victoire 3 pts, nul 1 pt, défaite 0. Départage : différence de buts, puis buts marqués, puis
   confrontations directes.
 - Avantage du terrain : léger bonus pour l'équipe à domicile.
@@ -107,9 +117,8 @@ sont calculés pour chaque joueur, à partir de sa valeur, de son poste et de se
 
 ### Plus tard
 
-- Plusieurs divisions avec montées et descentes.
-- Une coupe nationale à élimination directe.
-- Plusieurs championnats.
+- Barrages et play-offs, coupe nationale à élimination directe.
+- Coupes d'Europe.
 
 ---
 
@@ -177,17 +186,20 @@ estimation en étoiles, plus précise pour ses propres joueurs que pour ceux des
 
 ### État du joueur
 
-| État        | MVP | Effet                                                                                                            |
-| ----------- | --- | ---------------------------------------------------------------------------------------------------------------- |
-| **Fatigue** | Oui | 0 à 100 %. Monte en jouant, baisse au repos. Fatigué = moins performant, plus de risque de blessure (plus tard). |
-| **Forme**   | Oui | Tendance sur les derniers matchs (notes). Petit bonus ou malus.                                                  |
-| Moral       | Non | Temps de jeu, résultats, contrat.                                                                                |
-| Blessure    | Non | Indisponible N journées.                                                                                         |
-| Cartons     | Non | Suspension après un rouge ou une accumulation de jaunes.                                                         |
+| État             | V1  | Effet                                                                                                                    |
+| ---------------- | --- | ------------------------------------------------------------------------------------------------------------------------ |
+| **Fatigue**      | Oui | 0 à 100 %. Monte en jouant et à l'entraînement, baisse au repos. Fatigué = moins performant, plus de risque de blessure. |
+| **Forme**        | Oui | Tendance sur les derniers matchs (notes). Petit bonus ou malus.                                                          |
+| **Moral**        | Oui | Temps de jeu, résultats, contrat, discussions. Agit sur la performance et l'envie de rester.                             |
+| **Blessure**     | Oui | Indisponible N jours ; le risque monte avec la fatigue et l'intensité de l'entraînement.                                 |
+| **Cartons**      | Oui | Suspension après un rouge ou une accumulation de jaunes.                                                                 |
+| **Contrat**      | Oui | Salaire, date de fin. Un joueur en fin de contrat peut partir libre.                                                     |
+| **Personnalité** | Oui | Cachée : ambition, loyauté, tempérament, professionnalisme. Elle colore ses réponses et ses réactions.                   |
 
 ### Progression
 
-- En fin de saison, chaque joueur évolue selon son **âge**, son **potentiel** et son **temps de jeu**.
+- Chaque joueur évolue selon son **âge**, son **potentiel**, son **temps de jeu** et son
+  **entraînement** : un peu chaque semaine, et un bilan en fin de saison.
 - Courbe par défaut : progression jusqu'à ~24 ans, plateau de 25 à 29 ans, déclin après 30 ans
   (d'abord la vitesse et l'endurance, le mental baisse en dernier).
 - Retraite possible à partir de 33 ans.
@@ -197,11 +209,11 @@ estimation en étoiles, plus précise pour ses propres joueurs que pour ceux des
 
 ## 5. Tactique
 
-### Formations (MVP)
+### Formations (V1)
 
 4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2.
 
-### Consignes d'équipe (MVP) — 3 curseurs
+### Consignes d'équipe (V1) — 3 curseurs
 
 | Curseur             | Options                         | Effet                                                                                                                             |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
@@ -274,23 +286,82 @@ Avec de vrais clubs, on vérifie aussi que le classement final ressemble à la r
 
 ---
 
-## 7. Saison et objectifs
+## 7. Carrière : saison, entraînement, transferts, discussions
 
-- En début de saison, la direction fixe un **objectif** selon la réputation du club : maintien,
-  milieu de tableau, qualification européenne, titre.
-- En fin de saison, un **bilan** : objectif atteint ou non, meilleurs joueurs, stats.
-- MVP : l'objectif est indicatif. Plus tard : jauge de **confiance de la direction**, avec
-  possibilité d'être licencié et de reprendre un autre club.
+### 7.1 Saison et direction
+
+- En début de saison, la direction (le CA) fixe un **objectif** selon la réputation du club et sa
+  division : maintien, milieu de tableau, montée, qualification européenne, titre.
+- Une **jauge de confiance** de la direction monte et descend avec les résultats, l'objectif, les
+  finances et les réponses du joueur en réunion. Trop basse : **licenciement**, et le joueur peut
+  reprendre un autre club qui lui fait une offre.
+- En fin de saison, un **bilan** avec la direction : objectif atteint ou non, budget de la saison
+  suivante, meilleurs joueurs, stats.
+
+### 7.2 Entraînement
+
+- Un **plan par semaine** : intensité (légère, normale, forte) et thème (physique, technique,
+  tactique, coups de pied arrêtés, récupération).
+- Un **axe individuel** par joueur (un groupe d'attributs à travailler).
+- Effets : progression des attributs vers le potentiel (plus forte chez les jeunes), fatigue et
+  risque de blessure selon l'intensité, et **familiarité tactique** : une équipe qui travaille sa
+  formation et ses consignes les joue mieux, une tactique changée sans cesse coûte un peu.
+- L'adjoint propose un plan et peut l'appliquer seul.
+
+### 7.3 Transferts et contrats
+
+- Deux **fenêtres** : l'été et janvier. Les joueurs libres peuvent signer à tout moment.
+- **Négociation avec contre-offres**, en deux temps et jusqu'à trois tours chacun :
+  1. Avec le club vendeur : indemnité de transfert.
+  2. Avec le joueur : salaire et durée du contrat.
+- Le prix demandé dépend de la valeur du joueur, de son âge, de la durée de son contrat et de son
+  importance pour son club. Le joueur accepte selon la réputation du club, le salaire, le temps de
+  jeu promis et sa personnalité.
+- **Prolongations** : les contrats se renégocient ; un joueur qui n'obtient rien peut partir libre.
+- L'**IA des clubs** achète selon ses besoins par poste et son budget, et fait des offres pour les
+  joueurs du joueur.
+- Plus tard : prêts, clauses, bonus et pourcentages à la revente.
+
+### 7.4 Finances
+
+- Un **budget transferts** et une **masse salariale**, fixés par la direction chaque saison.
+- Revenus simples : droits TV et billetterie selon la division et la réputation, ventes de
+  joueurs. Dépenses : salaires, achats.
+- Les packs n'ont pas de vrais budgets : ils sont déduits de la réputation du club et de la valeur
+  de son effectif.
+
+### 7.5 Discussions
+
+Le joueur parle avec trois interlocuteurs, par des **choix de réponses**. Chaque réponse a des
+effets décidés par les règles du jeu (moral, confiance, promesses) ; le texte ne fait que les
+raconter.
+
+| Interlocuteur | Sujets                                                                                                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Joueurs**   | Temps de jeu, contrat, félicitations ou reproches, demande de départ, intérêt d'un club                                         |
+| **Adjoint**   | Conseils tirés des données : fatigue, faiblesses de l'adversaire, plan d'entraînement, jeunes qui progressent, joueurs à vendre |
+| **Direction** | Objectifs, demandes de budget, bilan, avertissements, licenciement                                                              |
+
+- Les **promesses** (« tu joueras plus », « on te prolonge ») sont suivies : les tenir ou non agit
+  sur le moral et la confiance.
+- **Personnalités libres** : les vrais joueurs ont une personnalité et des répliques inventées,
+  **limitées au monde du jeu** (leur carrière dans la partie, le club, les coéquipiers). Rien sur
+  leur vie réelle, leurs vraies déclarations ou de vraies polémiques, et aucun propos haineux ou
+  diffamatoire.
+- V1 : des textes modèles variés. Plus tard, l'IA pourra reformuler les répliques, sans changer
+  leurs effets.
 
 ---
 
-## 8. IA des clubs (MVP)
+## 8. IA des clubs (v1)
 
 - Choisit chaque semaine la meilleure compo possible en tenant compte de la fatigue.
 - Choisit une formation adaptée à son effectif et une tactique selon son rang dans le championnat :
   les favoris jouent la possession et le pressing haut, les plus faibles plutôt bloc bas et jeu
   direct.
-- Plus tard : mercato de l'IA, adaptation tactique à l'adversaire.
+- Adapte son style à l'adversaire : plus prudente face à une équipe nettement plus forte.
+- **Mercato** : achète, vend et prolonge selon ses besoins par poste et son budget.
+- Entraîne et fait tourner son effectif selon la fatigue.
 
 ---
 
@@ -321,7 +392,7 @@ d'arbitrage.
 
 **Ce que publie la presse**
 
-| Contenu                                                     | Moment                    | MVP       |
+| Contenu                                                     | Moment                    | V1        |
 | ----------------------------------------------------------- | ------------------------- | --------- |
 | **La une** de chaque journal après chaque journée           | Hub, écran Presse         | Oui       |
 | Compte rendu de ton match                                   | Après-match, écran Presse | Oui       |
@@ -339,7 +410,7 @@ typographie neutre : **pas de vrai logo** (voir les règles plus bas).
 Deux applications **fictives** dans le jeu, inspirées de Twitter/X et Instagram, avec leurs propres
 noms et logos (à inventer, on ne reprend ni les noms ni les logos réels) :
 
-| Appli                       | Inspiration | Contenu                                                                                        | MVP       |
+| Appli                       | Inspiration | Contenu                                                                                        | V1        |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------------- | --------- |
 | **Fil** (nom provisoire)    | Twitter/X   | Messages courts : réactions, débats, hashtags tendance, likes et partages                      | Oui       |
 | **Photos** (nom provisoire) | Instagram   | Visuels générés par le jeu : score final, homme du match, but de la journée, nouveau transfert | Plus tard |
@@ -364,7 +435,7 @@ joueur) : pas besoin de vraies photos, et ça fonctionne hors connexion.
 
 ### 9.3 Autres contenus IA
 
-| Contenu                      | Moment                | MVP       |
+| Contenu                      | Moment                | V1        |
 | ---------------------------- | --------------------- | --------- |
 | Commentaires des temps forts | Match 2D              | Plus tard |
 | Rapports de recruteur        | Fiche joueur, mercato | Plus tard |
@@ -390,7 +461,9 @@ joueur) : pas besoin de vraies photos, et ça fonctionne hors connexion.
 - Pas de contenu IA qui invente des faits sur de vraies personnes en dehors du jeu (blessures
   réelles, vie privée…). Les textes parlent uniquement de ce qui se passe dans la partie.
 - **Critiques, polémiques et rumeurs** viennent uniquement de comptes **fictifs** (journalistes,
-  supporters). On ne fait pas dire à un vrai joueur ou entraîneur des propos qu'il n'a pas tenus.
+  supporters). Dans la presse et le fil, on ne fait pas dire à un vrai joueur ou entraîneur des
+  propos qu'il n'a pas tenus. Exception : les **discussions** du jeu (section 7.5), où les vrais
+  joueurs ont des répliques inventées, limitées au monde du jeu.
 - Les **journaux réels** sont listés dans le pack de données, comme les clubs : on peut les remplacer
   par des journaux fictifs sans toucher au code. Pas de vrais logos ; un article affiché sous le nom
   d'un vrai journal reste un texte du jeu, présenté comme tel.
@@ -464,32 +537,33 @@ match, page de journal, message du fil.
 
 Interface **mobile paysage**, pensée pour le **tactile**.
 
-| #   | Écran                   | Contenu principal                                                                          | MVP |
-| --- | ----------------------- | ------------------------------------------------------------------------------------------ | --- |
-| 1   | Menu principal          | Nouvelle partie, charger, paramètres                                                       | Oui |
-| 2   | Nouvelle partie         | Choix du championnat et du club (réputation, effectif, objectif)                           | Oui |
-| 3   | Sauvegardes             | Liste des emplacements, export/import de fichier                                           | Oui |
-| 4   | **Hub du club**         | Tuiles : prochain match, forme, classement résumé, **à la une**, tendances du fil, alertes | Oui |
-| 5   | Effectif                | Tableau triable et filtrable (poste, note, âge, fatigue, forme)                            | Oui |
-| 6   | Fiche joueur            | Attributs, note par poste, stats de la saison, potentiel estimé                            | Oui |
-| 7   | **Compo et tactique**   | Terrain où l'on glisse les joueurs, remplaçants, formation, 3 curseurs                     | Oui |
-| 8   | Avant-match             | Comparaison avec l'adversaire : forme, style, joueurs clés                                 | Oui |
-| 9   | **Match 2D**            | Visionneuse (voir section 6)                                                               | Oui |
-| 10  | Après-match             | Score, stats, notes, homme du match, résumé (IA ou modèle)                                 | Oui |
-| 11  | Calendrier et résultats | Toutes les journées, résultats des autres matchs                                           | Oui |
-| 12  | Classement              | Tableau complet, forme, meilleurs buteurs                                                  | Oui |
-| 13  | Simulation rapide       | Choix jusqu'où simuler, progression, résumé des résultats                                  | Oui |
-| 14  | Fin de saison           | Bilan, progression des joueurs, nouveaux jeunes                                            | Oui |
-| 15  | **Presse**              | Kiosque : unes des journaux du pays, puis articles (section 9.1)                           | Oui |
-| 16  | **Fil** (réseau social) | Fil de messages, hashtags tendance, likes et partages (section 9.2)                        | Oui |
-| 17  | Photos (réseau social)  | Grille de visuels générés par le jeu (section 9.2)                                         | Non |
-| 18  | Transferts (mercato)    | Recherche, offres, contrats                                                                | Non |
-| 19  | Finances                | Budget, salaires, revenus                                                                  | Non |
-| 20  | Entraînement            | Programme de la semaine, charge, progression ciblée                                        | Non |
-| 21  | Carrière coach          | Profil de l'entraîneur : réputation, palmarès, contrat, offres d'autres clubs              | Non |
+| #   | Écran                   | Contenu principal                                                                    | V1  |
+| --- | ----------------------- | ------------------------------------------------------------------------------------ | --- |
+| 1   | Menu principal          | Nouvelle partie, charger, paramètres                                                 | Oui |
+| 2   | Nouvelle partie         | Choix du pays, de la division et du club (réputation, effectif, objectif, budget)    | Oui |
+| 3   | Sauvegardes             | Liste des emplacements, export/import de fichier                                     | Oui |
+| 4   | **Hub du club**         | Prochain match, forme, classement, boîte de réception, à la une, confiance, alertes  | Oui |
+| 5   | Effectif                | Tableau triable et filtrable (poste, note, âge, fatigue, forme, moral, contrat)      | Oui |
+| 6   | Fiche joueur            | Attributs, note par poste, stats de la saison, potentiel estimé                      | Oui |
+| 7   | **Compo et tactique**   | Terrain où l'on glisse les joueurs, remplaçants, formation, 3 curseurs               | Oui |
+| 8   | Avant-match             | Comparaison avec l'adversaire : forme, style, joueurs clés                           | Oui |
+| 9   | **Match**               | V1 : temps forts en texte et stats en direct ; visionneuse 2D en phase 4 (section 6) | Oui |
+| 10  | Après-match             | Score, stats, notes, homme du match, résumé (IA ou modèle)                           | Oui |
+| 11  | Calendrier et résultats | Toutes les journées, résultats des autres matchs                                     | Oui |
+| 12  | Classement              | Tableau complet, forme, meilleurs buteurs                                            | Oui |
+| 13  | Simulation rapide       | Choix jusqu'où simuler, progression, résumé des résultats                            | Oui |
+| 14  | Fin de saison           | Bilan, progression des joueurs, nouveaux jeunes                                      | Oui |
+| 15  | **Presse**              | Kiosque : unes des journaux du pays, puis articles (section 9.1)                     | Oui |
+| 16  | **Fil** (réseau social) | Fil de messages, hashtags tendance, likes et partages (section 9.2)                  | Oui |
+| 17  | Photos (réseau social)  | Grille de visuels générés par le jeu (section 9.2)                                   | Non |
+| 18  | **Transferts**          | Recherche, liste de suivi, offres et contre-offres, contrats, prolongations          | Oui |
+| 19  | Finances                | Budget transferts, masse salariale, revenus et dépenses                              | Oui |
+| 20  | **Entraînement**        | Plan de la semaine, intensité, thème, axes individuels, familiarité tactique         | Oui |
+| 21  | Carrière coach          | Profil de l'entraîneur : réputation, palmarès, contrat, offres d'autres clubs        | Oui |
+| 22  | **Discussions**         | Boîte de réception, conversations avec les joueurs, l'adjoint et la direction        | Oui |
 
 Le menu du hub prévoit déjà les entrées Entraînement, Transferts et Carrière coach (DA v2, voir
-[design/HUB_V2.md](design/HUB_V2.md)) ; leurs écrans arrivent en phase 5.
+[design/HUB_V2.md](design/HUB_V2.md)) ; leurs écrans font partie de la v1.
 
 Si une version desktop arrive, on ajoutera les raccourcis clavier (`Espace` pour continuer, `Échap`
 pour revenir…).
@@ -513,27 +587,28 @@ qui bloquent le jeu.
 
 ## 13. Périmètre et questions ouvertes
 
-### MVP (fin de la phase 3) — « une saison complète jouable en solo sur mobile »
+### V1 (fin de la phase 3) — « une carrière de plusieurs saisons, jouable en solo »
 
-- Création d'une partie : choix d'un club dans un championnat réel (pack de données).
-- Compo, formation et 3 consignes tactiques.
-- Simulation de match avec résultat, stats, notes, temps forts en texte.
-- Simulation rapide de plusieurs journées.
-- Calendrier, classement, meilleurs buteurs.
-- Fatigue et forme.
-- **Presse** (unes et articles des vrais journaux du pays) et **fil social** après chaque journée,
-  écrits par IA quand le réseau est disponible, textes modèles sinon.
-- Fin de saison : progression, vieillissement, jeunes, nouvelle saison.
+- Création d'une partie : n'importe quel club des 20 championnats des packs.
+- Plusieurs saisons, avec montées et descentes entre D1 et D2 dans cinq pays.
+- Compo, formation et 3 consignes tactiques ; match en texte et stats, simulation rapide.
+- **Entraînement** hebdomadaire, progression, familiarité tactique.
+- **Transferts** avec contre-offres, contrats et prolongations, mercato de l'IA, finances.
+- **Discussions** avec les joueurs, l'adjoint et la direction ; moral, promesses, confiance,
+  licenciement et offres d'autres clubs.
+- Fatigue, forme, moral, blessures, suspensions.
+- Calendrier, classement, meilleurs buteurs ; presse et fil social en textes modèles.
+- Fin de saison : bilan, montées et descentes, progression, vieillissement, jeunes, contrats.
 - Sauvegarde locale, plusieurs emplacements, export/import.
 
 ### Ensuite
 
-| Phase | Ajouts                                                                                                                 |
-| ----- | ---------------------------------------------------------------------------------------------------------------------- |
-| 4     | Visionneuse 2D                                                                                                         |
-| 5     | Blessures, cartons, moral, transferts, contrats, finances, coupe, divisions, changements en direct, plus de contenu IA |
-| 6     | Publication sur les stores (iOS, Android), puis desktop éventuel                                                       |
-| 7     | Version online entre amis                                                                                              |
+| Phase | Ajouts                                                                                                       |
+| ----- | ------------------------------------------------------------------------------------------------------------ |
+| 4     | Visionneuse 2D                                                                                               |
+| 5     | Coupes, barrages, prêts et clauses, changements en direct, contenu IA (presse, fil, discussions reformulées) |
+| 6     | Publication sur les stores (iOS, Android), puis desktop éventuel                                             |
+| 7     | Version online entre amis                                                                                    |
 
 ### Questions ouvertes
 

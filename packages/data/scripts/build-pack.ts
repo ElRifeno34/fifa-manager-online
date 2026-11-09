@@ -25,6 +25,16 @@ const STATS_SEASON = { label: "2025-26", from: "2025-07-01", to: "2026-06-30" };
 const SEASON_START = "2026-08-15";
 const FALLBACK_COLORS: KitColors = { primary: "#5A6472", secondary: "#FFFFFF" };
 
+/** Local choices kept out of git: data/exclusions.json, e.g. { "nationalities": ["XXX"] }. */
+const EXCLUSIONS_PATH = join(ROOT, "data/exclusions.json");
+const excludedNationalities = new Set<string>(
+  existsSync(EXCLUSIONS_PATH)
+    ? ((JSON.parse(readFileSync(EXCLUSIONS_PATH, "utf8")).nationalities ?? []) as string[]).map(
+        (n) => n.toUpperCase(),
+      )
+    : [],
+);
+
 const readJson = (path: string) => JSON.parse(readFileSync(join(RAW, path), "utf8"));
 
 type Row = Record<string, string>;
@@ -158,6 +168,7 @@ function buildLeague(config: LeagueConfig) {
   const players = new Map<string, Player>();
   const report = {
     loanedOut: 0,
+    excluded: [] as string[],
     duplicates: [] as string[],
     byMethod: { wikidata: 0, name: 0, none: 0 },
     unmatched: [] as string[],
@@ -183,6 +194,10 @@ function buildLeague(config: LeagueConfig) {
     for (const wiki of parseSquad(page.wikitext)) {
       if (wiki.section === "loan-out") {
         report.loanedOut++;
+        continue;
+      }
+      if (excludedNationalities.has(wiki.nationality)) {
+        report.excluded.push(`${club.id}: ${wiki.name}`);
         continue;
       }
       let { row, method } = findTransfermarkt(wiki);
@@ -277,6 +292,11 @@ function buildLeague(config: LeagueConfig) {
     return best.length ? best.reduce((sum, overall) => sum + overall, 0) / best.length : 0;
   };
 
+  /* Club adjustments fitted on the odds by the engine, kept across rebuilds. */
+  const fitPath = join(ROOT, `data/fit/${config.pack.id}.json`);
+  const fit: Record<string, number> = existsSync(fitPath)
+    ? JSON.parse(readFileSync(fitPath, "utf8"))
+    : {};
   const clubs: Club[] = config.clubs.map((c) => ({
     id: c.id,
     name: c.name,
@@ -284,6 +304,7 @@ function buildLeague(config: LeagueConfig) {
     city: c.city ?? null,
     ...colors.get(c.id)!,
     reputation: clubReputation(bestEleven(c.id)),
+    ...(fit[c.id] ? { levelAdjustment: fit[c.id] } : {}),
   }));
 
   const pack = packSchema.parse({

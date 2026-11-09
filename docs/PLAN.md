@@ -34,10 +34,10 @@ Liens :
 | ----------------------- | -------------------------------------------------------------------------------------------------- | -------------------------- |
 | **0. Fondations**       | Monorepo, CI, Capacitor, DA + design system Figma, maquettes                                       | Base technique + maquettes |
 | **1. Données**          | Format des packs, pack de développement réel, écrans effectif et fiche joueur                      | Effectifs réels chargés    |
-| **2. Moteur headless**  | Simulation par événements, tests, calibration statistique                                          | Scores réalistes en CLI    |
-| **3. Carrière offline** | Nouvelle partie, calendrier, compo/tactique, classement, simulation rapide, sauvegardes, résumé IA | **MVP jouable en solo**    |
+| **2. Moteur headless**  | Simulation par événements, tests, ajustement sur la saison réelle 2026-27                          | Scores réalistes en CLI    |
+| **3. Carrière v1**      | Saisons et montées-descentes, entraînement, transferts, finances, discussions, écrans, sauvegardes | **V1 jouable en solo**     |
 | **4. Visualisation 2D** | Couche chorégraphie, rendu PixiJS, replay                                                          | Les matchs se regardent    |
-| **5. Profondeur**       | Transferts, blessures, finances, coupe, tactique en direct, plus de contenu IA                     | Saison complète            |
+| **5. Profondeur**       | Coupes, barrages, prêts et clauses, tactique en direct, contenu IA                                 | Monde plus riche           |
 | **6. Publication**      | Licences ou pack fictif, tests sur appareils, stores iOS/Android, desktop éventuel                 | App sur les stores         |
 | **7. Online**           | Serveur, base de données, comptes, ligues privées entre amis, journées planifiées                  | **Multijoueur entre amis** |
 | **8. Produit**          | Ligues publiques, scalabilité, anti-triche, monétisation sans pay-to-win                           | Passage à l'échelle        |
@@ -47,14 +47,31 @@ Liens :
 UI **mobile paysage**, tactile, **sobre et pro**, inspirée de FIFA 16 Carrière et PES 2021 Master
 League (détails dans [GAME_DESIGN.md](GAME_DESIGN.md#10-direction-artistique)).
 
-| Moment        | Travail UI                                                                          |
-| ------------- | ----------------------------------------------------------------------------------- |
-| Phase 0       | Design system Figma, maquettes des 4 écrans clés (hub, effectif, compo, match 2D)   |
-| Phase 1       | Écrans effectif + fiche joueur                                                      |
-| Phase 2       | Maquettes des autres écrans du MVP (le moteur n'a pas d'UI)                         |
-| Phase 3       | Menu, sauvegardes, hub, calendrier, classement, **compo**, simulation rapide        |
-| Phase 4       | Visionneuse de match 2D                                                             |
-| Avant phase 6 | Finition : animations, accessibilité, états vides et de chargement, tests appareils |
+| Moment        | Travail UI                                                                           |
+| ------------- | ------------------------------------------------------------------------------------ |
+| Phase 0       | Design system Figma, maquettes des 4 écrans clés (hub, effectif, compo, match 2D)    |
+| Phase 1       | Écrans effectif + fiche joueur                                                       |
+| Phase 2       | Maquettes des autres écrans de la v1 (le moteur n'a pas d'UI)                        |
+| Phase 3       | Menu, sauvegardes, hub, **compo**, entraînement, transferts, discussions, classement |
+| Phase 4       | Visionneuse de match 2D                                                              |
+| Avant phase 6 | Finition : animations, accessibilité, états vides et de chargement, tests appareils  |
+
+## Phase 3 en détail (v1)
+
+Un nouveau package `packages/career`, sans interface, porte la logique de carrière : déterministe,
+sauvegardable, simulable en accéléré comme le moteur. L'app ne fait qu'afficher et transmettre les
+décisions.
+
+1. **Noyau de carrière** (fait) : état de la partie, calendrier au jour près, boîte de
+   réception, sauvegarde, boucle de saison, fin de saison, montées et descentes entre D1 et D2.
+2. **Vie de l'effectif** (fait) : moral, personnalité, contrats, finances, blessures, suspensions.
+3. **Entraînement** (fait) : plan hebdomadaire, progression, familiarité tactique (entrée du
+   moteur).
+4. **Transferts** (fait) : marché, négociation avec contre-offres, prolongations, mercato de l'IA.
+5. **Discussions** (fait) : joueurs, adjoint, direction ; promesses, confiance, licenciement.
+6. **Équilibrage** : 10 saisons simulées pour vérifier l'économie, les effectifs et les niveaux.
+7. **Écrans** sur la DA, commencés dès l'étape 1 : nouvelle partie, hub, effectif, compo,
+   entraînement, transferts, discussions, match en texte, classement, fin de saison.
 
 ## Phase 0 en détail
 
@@ -79,6 +96,10 @@ League (détails dans [GAME_DESIGN.md](GAME_DESIGN.md#10-direction-artistique)).
 - **Packs réels 2026-27 pour 20 championnats**, générés à partir de sources gratuites et non
   versionnés (dépôt public).
 - **Simulation rapide** de plusieurs journées.
+- **V1 élargie** : transferts, entraînement et discussions (joueurs, adjoint, direction) font
+  partie de la première version, avec montées et descentes entre D1 et D2 dans cinq pays et une
+  négociation avec contre-offres. La visionneuse 2D vient juste après (phase 4).
+- **Personnalités libres** pour les vrais joueurs dans les discussions, limitées au monde du jeu.
 - **Moteur en TypeScript**, pas en C : le même code tourne dans l'app et, plus tard, sur le
   serveur online, ce qui garantit des replays identiques. Une saison se simule en moins d'une
   seconde sur ordinateur.

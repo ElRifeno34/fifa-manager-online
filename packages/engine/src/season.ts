@@ -9,6 +9,8 @@ import type { EnginePlayer, MatchResult, PlayerCondition, TeamSheet } from "./ty
 
 export interface SeasonClub {
   id: string;
+  /** See TeamSheet.levelAdjustment. */
+  levelAdjustment?: number;
 }
 
 export interface SeasonPlayer extends EnginePlayer {
@@ -74,7 +76,13 @@ export function createSeason(input: {
   for (const [clubId, squad] of squads) {
     if (squad.length < 11) throw new Error(`${clubId}: only ${squad.length} players`);
   }
-  const strength = new Map([...squads].map(([clubId, squad]) => [clubId, squadStrength(squad)]));
+  const adjustment = new Map(input.clubs.map((c) => [c.id, c.levelAdjustment ?? 0]));
+  const strength = new Map(
+    [...squads].map(([clubId, squad]) => [
+      clubId,
+      squadStrength(squad) * (1 + adjustment.get(clubId)!),
+    ]),
+  );
   return {
     seed: input.seed,
     clubs: input.clubs,
@@ -107,6 +115,24 @@ export const rounds = (season: Season) => [...new Set(season.fixtures.map((f) =>
 
 const DAY = 86_400_000;
 
+/** Fatigue left on `date` after resting since `since`: about three days for a full match. */
+export function recoveredFatigue(
+  fatigue: number,
+  since: string | null,
+  date: string,
+  stamina: number,
+): number {
+  const days = since ? Math.max(0, (Date.parse(date) - Date.parse(since)) / DAY) : 0;
+  return Math.max(0, Math.round(fatigue - days * (6 + 0.3 * stamina)));
+}
+
+/** Form from the last five ratings: -1 (poor run) to 1 (great run). */
+export function formFromRatings(ratings: readonly number[]): number {
+  const recent = ratings.slice(-5);
+  const average = recent.length ? recent.reduce((s, r) => s + r, 0) / recent.length : 6.5;
+  return Math.max(-1, Math.min(1, average - 6.5));
+}
+
 /** Fatigue and form of a club's players on a given date, rest since their last match included. */
 export function conditionsOn(
   season: Season,
@@ -116,14 +142,9 @@ export function conditionsOn(
   const out: Record<string, PlayerCondition> = {};
   for (const player of season.squads.get(clubId) ?? []) {
     const state = season.players.get(player.id)!;
-    const days = state.date ? Math.max(0, (Date.parse(date) - Date.parse(state.date)) / DAY) : 0;
-    /* About three days to recover from a full match, a little less with good stamina. */
-    const recovery = days * (6 + 0.3 * player.attributes.stamina);
-    const recent = state.ratings.slice(-5);
-    const average = recent.length ? recent.reduce((s, r) => s + r, 0) / recent.length : 6.5;
     out[player.id] = {
-      fatigue: Math.max(0, Math.round(state.fatigue - recovery)),
-      form: Math.max(-1, Math.min(1, (average - 6.5) / 1)),
+      fatigue: recoveredFatigue(state.fatigue, state.date, date, player.attributes.stamina),
+      form: formFromRatings(state.ratings),
     };
   }
   return out;
@@ -142,8 +163,9 @@ export function playRound(
   for (const fixture of season.fixtures.filter((f) => f.round === round)) {
     const sheetFor = (clubId: string, opponentId: string): TeamSheet => {
       const condition = conditionsOn(season, clubId, fixture.date);
+      const levelAdjustment = season.clubs.find((c) => c.id === clubId)?.levelAdjustment ?? 0;
       const chosen = sheets[clubId];
-      if (chosen) return { ...chosen, condition };
+      if (chosen) return { ...chosen, condition, levelAdjustment };
       return autoTeamSheet({
         clubId,
         squad: season.squads.get(clubId)!,
@@ -153,6 +175,7 @@ export function playRound(
           season.strength.get(opponentId)!,
         ),
         condition,
+        levelAdjustment,
       });
     };
     const home = sheetFor(fixture.homeClubId, fixture.awayClubId);

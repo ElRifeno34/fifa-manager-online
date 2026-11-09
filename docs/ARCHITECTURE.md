@@ -7,6 +7,7 @@ apps/
   web/            Vite + React + Tailwind : l'UI du jeu, emballée en app mobile par Capacitor
 packages/
   engine/         Moteur de match en TypeScript pur
+  career/         Logique de carrière : calendrier, saisons, montées-descentes, sauvegarde
   data/           Schéma des packs de données et scripts d'import
 docs/             Plan, game design, architecture
 data/             Sources brutes et packs générés (ignoré par git)
@@ -14,7 +15,6 @@ data/             Sources brutes et packs générés (ignoré par git)
 
 À venir :
 
-- `packages/game` : logique de jeu (carrière, calendrier, compos, classement…), en TypeScript pur
 - `apps/web/ios`, `apps/web/android` : projets natifs générés par Capacitor
 - `apps/ai-relay` : petit serveur relais pour le contenu IA (cache la clé d'API)
 - `apps/server` : API + jobs planifiés pour la version online (phase 7)
@@ -44,7 +44,7 @@ La logique de jeu ne sait pas où vivent les données. Elle dépend d'une interf
 ```
           UI (apps/web)
                │
-        packages/game  ──►  interface de stockage
+       packages/career ──►  interface de stockage
                │                  │
         packages/engine     ┌─────┴───────────┬────────────────┐
                             │                 │                │
@@ -52,11 +52,11 @@ La logique de jeu ne sait pas où vivent les données. Elle dépend d'une interf
                          offline          offline        (online, serveur)
 ```
 
-- **Offline** : `packages/game` tourne dans l'app avec un adaptateur local.
-- **Online** : le même `packages/game` tourne sur le serveur avec un adaptateur base de données ; l'UI
+- **Offline** : `packages/career` tourne dans l'app avec un adaptateur local.
+- **Online** : le même `packages/career` tourne sur le serveur avec un adaptateur base de données ; l'UI
   passe par l'API.
 
-Conséquence : `packages/game` et `packages/engine` n'importent jamais rien de React, du DOM, de
+Conséquence : `packages/career` et `packages/engine` n'importent jamais rien de React, du DOM, de
 Capacitor, du réseau ou d'une base de données.
 
 ## Packs de données
@@ -113,6 +113,9 @@ Les deux commandes acceptent des identifiants de championnat, par exemple `npm r
   par un championnat suivi ont une valeur (40 à 60 %). Les autres prennent un niveau proche de la
   médiane de leur club. Au Qatar, cette médiane vient surtout des joueurs étrangers et surestime
   sans doute les joueurs locaux.
+- Un fichier local `data/exclusions.json` (non versionné) peut écarter des joueurs par nationalité
+  à la construction des packs : `{ "nationalities": ["XXX"] }`. Les joueurs écartés sont listés dans
+  le rapport du pack.
 - Le dépôt étant public, **les packs et les sources brutes ne sont pas versionnés**. Seuls le schéma,
   les scripts et la configuration le sont.
 - Ces packs ne sont pas destinés à la publication (voir les licences dans [PLAN.md](PLAN.md)).
@@ -183,27 +186,170 @@ Le moteur d'événements est en place dans `packages/engine`, sans interface :
 - **IA des clubs :** son style dépend de son rang dans le championnat, pas de sa réputation
   absolue : en deuxième division, les favoris jouent donc aussi la possession. Elle l'adapte à
   l'adversaire, avec plus de prudence face à une équipe nettement plus forte.
-- **Écart de niveau :** son effet sature, pour qu'un gros écart pèse sans tout décider. Les très
-  gros écarts restent sans doute un peu trop marqués : le PSG bat l'OM plus de 8 fois sur 10 au
-  Parc, avec 26 tirs contre 7.
-- **Réglages :** les paramètres sont regroupés dans `TUNING` (`match.ts`). `npm run calibrate`
-  simule des saisons sur les packs réels et compare le résultat aux cibles de
-  [GAME_DESIGN.md](GAME_DESIGN.md#objectifs-de-calibration-à-vérifier-en-phase-2-sur-des-milliers-de-matchs).
+- **Écart de niveau :** son effet sature, pour qu'un gros écart pèse sans tout décider.
+- **Réglages ajustés sur la réalité :** les paramètres (`TUNING` dans `match.ts`) sont ajustés sur
+  la saison réelle 2026-27 de [football-data.co.uk](https://football-data.co.uk) : résultats, tirs,
+  corners, fautes, cartons, expected goals et cotes de clôture de 18 championnats (l'Arabie
+  saoudite et le Qatar n'y sont pas).
 
-Résultat sur les 20 championnats (5 saisons chacun) :
+| Commande             | Rôle                                                                      |
+| -------------------- | ------------------------------------------------------------------------- |
+| `npm run benchmark`  | Rejoue chaque match réel de 2026-27, compare avec la réalité et les cotes |
+| `npm run tune`       | Ajuste les paramètres sur ces données et affiche les valeurs à reporter   |
+| `npm run tune:clubs` | Ajuste le niveau collectif de chaque club sur les cotes de 2026-27        |
+| `npm run calibrate`  | Simule des saisons entières : titres, points, classements                 |
 
-| Mesure                         | Cible              | Moteur             |
-| ------------------------------ | ------------------ | ------------------ |
-| Buts par match                 | 2,5 à 2,9          | 2,64               |
-| Domicile / nul / extérieur     | 45 % / 27 % / 28 % | 46 % / 27 % / 27 % |
-| Tirs par équipe                | 10 à 15            | 10 à 17            |
-| Victoire du favori (5+ points) | 65 à 75 %          | 65 %               |
+Résultat sur 2 382 matchs réels de 2026-27 (40 simulations chacun) :
+
+| Mesure                                    | Réalité          | Moteur           |
+| ----------------------------------------- | ---------------- | ---------------- |
+| Buts par équipe et par match              | 1,50             | 1,50             |
+| Tirs / tirs cadrés par équipe             | 13,8 / 4,6       | 13,8 / 4,5       |
+| Corners / fautes / jaunes par équipe      | 4,9 / 12,3 / 2,0 | 4,9 / 12,3 / 2,0 |
+| Nuls                                      | 25 %             | 25 %             |
+| Favori donné à 30-45 % par les cotes      | 30-45 %          | 40 %             |
+| Favori donné à 65-75 % par les cotes      | 65-75 %          | 69 %             |
+| Favori donné à plus de 75 % par les cotes | plus de 75 %     | 78 %             |
+| Score de Brier (plus bas = mieux)         | 0,590 (cotes)    | 0,604            |
+
+**Niveau collectif des clubs.** La valeur marchande des joueurs ne dit pas tout : entraîneur,
+forme, cohésion. `npm run tune:clubs` donne à chaque club un ajustement (`levelAdjustment`, en
+pourcentage de tous les attributs, borné à ±25 %) pour que le moteur lui donne autant de points que
+les cotes de ses matchs de 2026-27. L'ajustement est centré par championnat : le niveau d'un
+championnat reste celui de ses joueurs. Il est stocké dans `data/fit/<pack>.json`, que
+`pack:build` réapplique. L'Arabie saoudite et le Qatar, sans cotes, n'en ont pas.
+
+La tendance est nette : la valeur marchande exagère les écarts. Les promus et les petits budgets
+montent (Paderborn, Castellón, Le Mans, Lincoln), les clubs riches descendent (Ajax, Porto,
+Galatasaray, PSG).
+
+Avec ces ajustements, l'écart moyen aux cotes passe d'environ 11 à 6 points par match, ce qui est
+proche du bruit de 40 simulations. Le score de Brier passe de 0,630 à 0,604, contre 0,590 pour les
+cotes. Ce gain est mesuré sur les matchs qui ont servi à l'ajustement, il est donc un peu flatteur.
+L'ajustement est à relancer au fil de la saison.
+
+Les données de football-data.co.uk sont gratuites pour un **usage privé uniquement**, pas pour un
+produit commercial. Elles restent dans `data/raw`, qui n'est pas versionné. Si le jeu est un jour
+vendu, cet ajustement devra être vérifié ou refait avec une autre source.
 
 Une saison de 380 matchs prend 0,5 à 1 seconde sur ordinateur. Les gros clubs finissent en haut,
-avec des surprises : le PSG est toujours champion, le Bayern finit 2e en moyenne, et la Liga se
-joue entre le Real, le Barça et l'Atlético. Les meilleurs buteurs marquent 20 à 30 buts.
+avec des surprises. Les meilleurs buteurs marquent 20 à 35 buts.
 
 `npm run play -- <championnat> [domicile extérieur]` joue un match ou une saison dans le terminal.
 
-Pas encore fait : la couche chorégraphie (phase 4), les blessures et les suspensions (phase 5),
-les changements tactiques en cours de match.
+Pas encore fait : les blessures, les suspensions, le moral et la familiarité tactique (carrière
+v1, phase 3), la couche chorégraphie (phase 4), les changements tactiques en cours de match
+(phase 5).
+
+## Carrière (phase 3)
+
+`packages/career` porte la logique de carrière, sans interface. Comme le moteur, elle est
+déterministe : la même graine et les mêmes décisions redonnent la même carrière.
+
+- **Un seul objet d'état** (`CareerState`, dans `types.ts`), en JSON pur : date du jour, saison,
+  clubs, joueurs (attributs, fatigue, forme, stats de la saison, historique), calendrier de la
+  saison, boîte de réception, tables des saisons passées. `saveCareer` et `loadCareer` le sauvent
+  et le relisent, avec un numéro de version. Une sauvegarde pèse environ 1 à 1,5 Mo.
+- **Le monde d'une carrière** : le championnat du club et, s'il fait partie d'une paire D1/D2, la
+  division liée (`worldOf`). Les cinq paires échangent 3 clubs chaque saison.
+- **La boucle** :
+  - `advance` fait avancer le calendrier jour par jour et joue les journées des autres. Il s'arrête
+    le matin du prochain match du joueur, ou en fin de saison.
+  - `playToday` joue les matchs du jour avec la compo choisie par le joueur, ou celle de l'adjoint
+    avec la tactique du joueur. Il renvoie le match complet pour l'écran d'après-match.
+  - `simulateToSeasonEnd` sert à la simulation rapide.
+- **Fin de saison** (`season-end.ts`) :
+  - tables finales, montées et descentes ;
+  - progression vers le potentiel (plus forte pour les jeunes qui jouent), stagnation de 24 à 29
+    ans, déclin après 30 ans (vitesse et endurance d'abord) ;
+  - retraites dès 33-34 ans, 2 à 4 jeunes générés par club ;
+  - nouveau calendrier (aller-retour, une journée par semaine), messages de bilan.
+- **Vie de l'effectif** :
+  - **Personnalité** cachée (ambition, loyauté, tempérament, professionnalisme), tirée une fois
+    pour toutes à partir de l'identifiant du joueur.
+  - **Moral** (0 à 100) : il bouge après chaque match selon le résultat et le temps de jeu attendu.
+    Le rôle de chacun vient du meilleur onze par poste : un deuxième gardien est remplaçant, pas
+    titulaire frustré. Le moral s'ajoute à la forme dans le moteur.
+  - **Contrats** (salaire, dernière saison) et **valeur** de marché recalculée chaque été selon le
+    niveau et l'âge.
+  - **Finances** : revenus déduits de la valeur de l'effectif et de la division, masse salariale
+    d'environ 60 % des revenus, frais de fonctionnement d'environ 33 %. Les comptes sont réglés
+    chaque semaine. Une relégation baisse les salaires de 30 %.
+  - **Blessures** (plus fréquentes avec la fatigue, de quelques jours à plusieurs mois) et
+    **suspensions** (rouge, ou 5 jaunes) : ces joueurs sont écartés des compos.
+  - **Fin de contrat** : les clubs de l'IA prolongent les joueurs dont ils ont besoin, les autres
+    partent libres. Au club du joueur, seuls partent ceux qu'il n'a pas prolongés lui-même ; l'adjoint
+    les liste à l'ouverture du mercato d'hiver.
+- **Entraînement** (`training.ts`) : une séance par semaine, en milieu de semaine.
+  - Le plan (intensité légère, normale ou forte ; thème physique, technique, tactique, coups de
+    pied arrêtés ou récupération) vient du joueur, ou de l'adjoint s'il le laisse faire. Les autres
+    clubs suivent le même conseil : récupération pour un effectif fatigué, séance légère la veille
+    d'un match, tactique quand le système est mal connu, forte intensité seulement avec une semaine
+    libre.
+  - Effets : progression vers le potentiel (forte avant 21 ans, nulle après 27), renforcée sur le
+    thème et sur l'axe individuel du joueur ; fatigue et risque de blessure selon l'intensité.
+  - **Familiarité tactique** (0 à 100 par formation et par jeu de consignes) : elle monte à
+    l'entraînement et en match, et baisse lentement pour les systèmes délaissés. Le moteur la
+    traduit en ±quelques % sur les attributs (`familiarity`, 0,7 par défaut).
+  - L'été n'ajoute plus que ce que le temps de jeu apporte : l'entraînement fait l'essentiel de la
+    progression. Sur 8 saisons simulées, le niveau moyen reste stable (Ligue 1 vers 75, Ligue 2
+    vers 61).
+- **Transferts** (`transfers.ts`, `market.ts`) :
+  - Deux fenêtres : l'été (jusqu'à deux semaines après la reprise) et un mois en milieu de saison.
+    Les joueurs libres signent à tout moment.
+  - **Prix demandé** : la valeur du joueur, multipliée par son importance dans son club (de 0,8
+    pour un remplaçant à 1,6 pour un joueur clé), et réduite quand son contrat se termine.
+  - **Salaire demandé** : le prix du marché selon sa valeur (environ 250 k€ par semaine à 100 M€),
+    plus élevé s'il est ambitieux ou si le club est moins prestigieux que le sien, plus bas s'il est
+    fidèle et prolonge, ou si on lui promet d'être titulaire.
+  - **Négociation** : d'abord l'indemnité avec le club, puis le contrat avec le joueur, trois tours
+    au plus chacun. Une offre trop basse est contrée par le prix demandé, une offre proche fait
+    couper la poire en deux, et au troisième refus les discussions sont rompues pour 30 jours. La
+    direction bloque ce qui dépasse le budget transferts ou la masse salariale.
+  - **IA des clubs** : chaque semaine de mercato, un club achète là où il manque de joueurs, ou
+    tente d'améliorer son titulaire le plus faible, dans ses budgets (trois recrues au plus par
+    fenêtre). Elle fait des offres pour les joueurs du joueur comme pour les autres ; il peut
+    accepter, refuser ou demander plus.
+  - Le joueur peut aussi prolonger ses joueurs, libérer un joueur contre une indemnité (la moitié
+    des salaires restants) et chercher sur le marché par poste, âge, niveau et valeur.
+- **Effectifs trop grands** : au-delà de 30 joueurs, un club de l'IA libère les moins utiles.
+- **Discussions** (`talk.ts`, `player-talk.ts`, `board.ts`, `assistant.ts`, `conversations.ts`) :
+  une conversation a des répliques et des choix de réponse ; `reply` applique la réponse, dont les
+  effets sont décidés par les règles. `advance` s'arrête tant qu'une conversation attend une
+  réponse ; en simulation rapide, l'adjoint répond à la place du joueur avec la réponse la plus
+  neutre.
+  - **Joueurs** : au plus un par semaine vient parler. Ce sont soit un remplaçant frustré (temps de
+    jeu), soit un titulaire en fin de contrat (une fois par saison), soit un joueur malheureux et
+    ambitieux qui veut partir (une fois par saison). D'autres conversations naissent ailleurs :
+    après une offre refusée d'un club plus prestigieux, ou quand l'entraîneur félicite ou critique
+    un joueur (jugé sur sa forme récente). Le ton dépend du tempérament ; les répliques restent
+    dans le monde du jeu.
+  - **Promesses** (temps de jeu promis en discussion ou à la signature) : elles sont jugées après
+    huit matchs. Tenues, elles remontent le moral ; trahies, elles le font chuter. À la deuxième
+    trahison, le joueur demande à partir. Un joueur placé sur la liste des transferts coûte 15 %
+    de moins, et les autres clubs le regardent en premier.
+  - **Direction** : objectif de la saison selon le rang de l'effectif dans le championnat (titre,
+    top 4, première moitié, milieu de tableau, maintien, montée). On peut l'accepter, viser plus
+    haut ou demander plus de budget. La confiance suit tous les mois le classement par rapport à
+    l'objectif, et les comptes. Sous 35, la direction avertit ; sous 15 en cours de saison, ou
+    sous 25 en fin de saison, l'entraîneur est licencié et choisit parmi les offres de clubs moins
+    prestigieux. Une saison très au-dessus de l'objectif peut attirer un club plus prestigieux.
+  - **Adjoint** : conseils d'avant-match dans la boîte de réception (adversaire, fatigue,
+    indisponibles). À la demande, il propose aussi un plan d'entraînement, signale les jeunes à
+    suivre, les joueurs à vendre et les contrats qui se terminent, et peut gérer l'entraînement. L'ajustement collectif des clubs (ajusté sur les cotes 2026-27) est divisé
+    par deux à chaque saison, car la forme ne dure pas.
+
+`npm run career -- <championnat> <club> [--seasons N]` joue des saisons entières dans le terminal,
+l'adjoint dirigeant le club. Une saison de deux divisions (612 matchs) prend environ une seconde.
+
+À surveiller pendant l'équilibrage (étape 6) :
+
+- L'argent ne quitte jamais les deux divisions : sur 8 saisons, la trésorerie médiane de Ligue 1
+  passe encore de 15 à 110 M€, et les indemnités montent (jusqu'à 170 M€). Il manque des ventes à
+  l'étranger et des revenus liés au classement. Rien n'empêche non plus un club de rester dans le
+  rouge.
+- 50 à 120 transferts par saison pour 36 clubs, dont peu de joueurs libres : sans doute moins que
+  dans la réalité, prêts compris.
+- Les joueurs libres (200 à 300) et les retraités restent dans la sauvegarde.
+- Les discussions : environ 4 demandes de temps de jeu par saison dans un club du milieu de
+  tableau, davantage dans un club en difficulté, où les demandes de départ se multiplient.

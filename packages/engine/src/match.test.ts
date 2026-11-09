@@ -65,6 +65,33 @@ describe("simulateMatch", () => {
     expect(wins / results.length).toBeGreaterThan(0.7);
   });
 
+  it("lifts a club whose collective plays above its squad", () => {
+    const points = (levelAdjustment: number) =>
+      sum(
+        series(
+          300,
+          () => ({ ...sheet("h", even), levelAdjustment }),
+          () => sheet("a", rival),
+        ),
+        (r) => (r.score.home > r.score.away ? 3 : r.score.home === r.score.away ? 1 : 0),
+      );
+    expect(points(0.08)).toBeGreaterThan(points(0) * 1.15);
+    expect(points(-0.08)).toBeLessThan(points(0) * 0.85);
+  });
+
+  it("plays a well-drilled system better than a new one", () => {
+    const points = (familiarity: number) =>
+      sum(
+        series(
+          300,
+          () => ({ ...sheet("h", even), familiarity }),
+          () => sheet("a", rival),
+        ),
+        (r) => (r.score.home > r.score.away ? 3 : r.score.home === r.score.away ? 1 : 0),
+      );
+    expect(points(1)).toBeGreaterThan(points(0.2));
+  });
+
   it("gives a small edge to the home side", () => {
     const results = series(
       600,
@@ -86,8 +113,13 @@ describe("simulateMatch", () => {
     const sentOff = results.find((r) => r.players.some((p) => p.redCard));
     expect(sentOff).toBeDefined();
     const red = sentOff!.players.find((p) => p.redCard)!;
-    expect(red.minutes).toBeLessThan(91);
-    expect(sentOff!.events.some((e) => e.type === "red" && e.playerId === red.playerId)).toBe(true);
+    const at = sentOff!.events.findIndex((e) => e.type === "red" && e.playerId === red.playerId);
+    expect(at).toBeGreaterThan(-1);
+    /* Once sent off, the player takes no further part in the play. */
+    const later = sentOff!.events.slice(at + 1).filter((e) => e.type !== "substitution");
+    expect(later.some((e) => e.playerId === red.playerId || e.otherPlayerId === red.playerId)).toBe(
+      false,
+    );
   });
 
   it("rejects a team without eleven starters", () => {

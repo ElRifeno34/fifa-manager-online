@@ -1,0 +1,22 @@
+{
+  "name": "@fmo/career",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "test": "vitest run",
+    "career": "node scripts/career.ts"
+  },
+  "dependencies": {
+    "@fmo/data": "*",
+    "@fmo/engine": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "vitest": "^3"
+  }
+}
