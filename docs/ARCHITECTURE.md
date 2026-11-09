@@ -187,30 +187,33 @@ Le moteur d'événements est en place dans `packages/engine`, sans interface :
   absolue : en deuxième division, les favoris jouent donc aussi la possession. Elle l'adapte à
   l'adversaire, avec plus de prudence face à une équipe nettement plus forte.
 - **Écart de niveau :** son effet sature, pour qu'un gros écart pèse sans tout décider.
-- **Réglages ajustés sur la réalité :** les paramètres (`TUNING` dans `match.ts`) sont ajustés sur
-  la saison réelle 2026-27 de [football-data.co.uk](https://football-data.co.uk) : résultats, tirs,
-  corners, fautes, cartons, expected goals et cotes de clôture de 18 championnats (l'Arabie
-  saoudite et le Qatar n'y sont pas).
+- **Réglages ajustés sur la réalité** ([football-data.co.uk](https://football-data.co.uk), 18
+  championnats ; l'Arabie saoudite et le Qatar n'y sont pas) :
+  - le **niveau** des buts, tirs, corners, fautes et cartons (`TUNING` dans `match.ts`) vient de la
+    dernière saison complète, 2025-26 : les premières journées de 2026-27 sont trop peu nombreuses
+    et inhabituellement prolifiques (environ 3 buts par match, contre 2,7 sur une saison entière) ;
+  - la **force de chaque club** vient des cotes de clôture de 2026-27 (voir plus bas). Le jeu
+    commence bien en 2026-27, avec les effectifs de 2026-27.
 
-| Commande             | Rôle                                                                      |
-| -------------------- | ------------------------------------------------------------------------- |
-| `npm run benchmark`  | Rejoue chaque match réel de 2026-27, compare avec la réalité et les cotes |
-| `npm run tune`       | Ajuste les paramètres sur ces données et affiche les valeurs à reporter   |
-| `npm run tune:clubs` | Ajuste le niveau collectif de chaque club sur les cotes de 2026-27        |
-| `npm run calibrate`  | Simule des saisons entières : titres, points, classements                 |
+| Commande             | Rôle                                                                        |
+| -------------------- | --------------------------------------------------------------------------- |
+| `npm run benchmark`  | Rejoue chaque match réel de 2026-27, compare avec 2025-26 et avec les cotes |
+| `npm run tune`       | Ajuste les paramètres sur ces données et affiche les valeurs à reporter     |
+| `npm run tune:clubs` | Ajuste le niveau collectif de chaque club sur les cotes de 2026-27          |
+| `npm run calibrate`  | Simule des saisons entières : titres, points, classements                   |
 
-Résultat sur 2 382 matchs réels de 2026-27 (40 simulations chacun) :
+Résultat (2 382 matchs de 2026-27 rejoués, comparés à la saison 2025-26 et aux cotes de 2026-27) :
 
-| Mesure                                    | Réalité          | Moteur           |
-| ----------------------------------------- | ---------------- | ---------------- |
-| Buts par équipe et par match              | 1,50             | 1,50             |
-| Tirs / tirs cadrés par équipe             | 13,8 / 4,6       | 13,8 / 4,5       |
-| Corners / fautes / jaunes par équipe      | 4,9 / 12,3 / 2,0 | 4,9 / 12,3 / 2,0 |
-| Nuls                                      | 25 %             | 25 %             |
-| Favori donné à 30-45 % par les cotes      | 30-45 %          | 40 %             |
-| Favori donné à 65-75 % par les cotes      | 65-75 %          | 69 %             |
-| Favori donné à plus de 75 % par les cotes | plus de 75 %     | 78 %             |
-| Score de Brier (plus bas = mieux)         | 0,590 (cotes)    | 0,604            |
+| Mesure                                  | Réalité          | Moteur           |
+| --------------------------------------- | ---------------- | ---------------- |
+| Buts par équipe et par match (2025-26)  | 1,38             | 1,39             |
+| Tirs / tirs cadrés par équipe           | 12,7 / 4,3       | 12,7 / 4,3       |
+| Corners / fautes / jaunes par équipe    | 4,8 / 12,5 / 2,1 | 4,8 / 12,5 / 2,1 |
+| Nuls                                    | 26 %             | 27 %             |
+| Score de Brier contre les cotes 2026-27 | 0,590 (cotes)    | 0,614            |
+
+En carrière, la première saison donne 2,7 à 2,9 buts par match selon le championnat, et les
+meilleurs buteurs marquent 20 à 34 buts.
 
 **Niveau collectif des clubs.** La valeur marchande des joueurs ne dit pas tout : entraîneur,
 forme, cohésion. `npm run tune:clubs` donne à chaque club un ajustement (`levelAdjustment`, en
@@ -262,6 +265,8 @@ déterministe : la même graine et les mêmes décisions redonnent la même carr
   - tables finales, montées et descentes ;
   - progression vers le potentiel (plus forte pour les jeunes qui jouent), stagnation de 24 à 29
     ans, déclin après 30 ans (vitesse et endurance d'abord) ;
+  - les gardiens suivent la même courbe avec trois ans de décalage (pic vers 32 ans, retraite plus
+    tardive) : sans ce décalage, leur niveau baissait chaque saison et les buts montaient ;
   - retraites dès 33-34 ans, 2 à 4 jeunes générés par club ;
   - nouveau calendrier (aller-retour, une journée par semaine), messages de bilan.
 - **Vie de l'effectif** :
@@ -294,6 +299,15 @@ déterministe : la même graine et les mêmes décisions redonnent la même carr
   - L'été n'ajoute plus que ce que le temps de jeu apporte : l'entraînement fait l'essentiel de la
     progression. Sur 8 saisons simulées, le niveau moyen reste stable (Ligue 1 vers 75, Ligue 2
     vers 61).
+- **Niveau collectif des clubs** (`strength.ts`) : l'ajustement tiré des cotes a deux parts.
+  - Une part **structurelle**, permanente : la valeur marchande exagère les écarts. Un club joue
+    environ 0,56 % sous son effectif par point d'écart de son meilleur onze au-dessus de la moyenne
+    de son championnat, et autant au-dessus quand il est en dessous (régression sur 346 clubs,
+    corrélation -0,62). Elle est recalculée à chaque fin de saison et après chaque semaine de
+    mercato, y compris pour les championnats sans cotes.
+  - Une part de **forme** (le reste de l'ajustement), divisée par deux chaque saison.
+  - Diviser tout l'ajustement par deux, comme au début, rendait aux gros clubs leur avantage
+    excessif : les buts montaient à 3,3-3,6 par match dès la deuxième saison.
 - **Transferts** (`transfers.ts`, `market.ts`) :
   - Deux fenêtres : l'été (jusqu'à deux semaines après la reprise) et un mois en milieu de saison.
     Les joueurs libres signent à tout moment.
@@ -339,6 +353,11 @@ déterministe : la même graine et les mêmes décisions redonnent la même carr
     suivre, les joueurs à vendre et les contrats qui se terminent, et peut gérer l'entraînement. L'ajustement collectif des clubs (ajusté sur les cotes 2026-27) est divisé
     par deux à chaque saison, car la forme ne dure pas.
 
+`npm run manager -- <championnat> <club>` lance une **partie interactive dans le terminal** :
+avancer jour par jour, lire la boîte de réception, répondre aux discussions, choisir la tactique et
+l'entraînement, négocier des transferts, sauvegarder (`data/saves/`, non versionné) et reprendre
+avec `--load`. C'est un banc d'essai en attendant les écrans de l'app.
+
 `npm run career -- <championnat> <club> [--seasons N]` joue des saisons entières dans le terminal,
 l'adjoint dirigeant le club. Une saison de deux divisions (612 matchs) prend environ une seconde.
 
@@ -351,5 +370,8 @@ l'adjoint dirigeant le club. Une saison de deux divisions (612 matchs) prend env
 - 50 à 120 transferts par saison pour 36 clubs, dont peu de joueurs libres : sans doute moins que
   dans la réalité, prêts compris.
 - Les joueurs libres (200 à 300) et les retraités restent dans la sauvegarde.
+- Les buts montent encore un peu au fil des saisons en Premier League (de 2,9 à 3,2 en 4 saisons),
+  pas en Ligue 1. Piste : les écarts entre clubs se resserrent, l'IA choisit moins souvent une
+  tactique prudente et les matchs s'ouvrent.
 - Les discussions : environ 4 demandes de temps de jeu par saison dans un club du milieu de
   tableau, davantage dans un club en difficulté, où les demandes de départ se multiplient.

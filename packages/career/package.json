@@ -9,7 +9,8 @@
   "scripts": {
     "typecheck": "tsc",
     "test": "vitest run",
-    "career": "node scripts/career.ts"
+    "career": "node scripts/career.ts",
+    "manager": "node scripts/manager.ts"
   },
   "dependencies": {
     "@fmo/data": "*",

@@ -21,31 +21,38 @@ const RAW = join(ROOT, "data/raw/football-data");
 const SITE = "https://football-data.co.uk";
 
 /** Where each pack's league lives on football-data.co.uk. Saudi Arabia and Qatar are not covered. */
-const SOURCES: Record<string, { files: string[]; current: string; extra?: true }> = {
-  "premier-league": { files: ["2627/E0"], current: "2627" },
-  championship: { files: ["2627/E1"], current: "2627" },
-  bundesliga: { files: ["2627/D1"], current: "2627" },
-  "2-bundesliga": { files: ["2627/D2"], current: "2627" },
-  "serie-a": { files: ["2627/I1"], current: "2627" },
-  "serie-b": { files: ["2627/I2"], current: "2627" },
-  laliga: { files: ["2627/SP1"], current: "2627" },
-  "laliga-hypermotion": { files: ["2627/SP2"], current: "2627" },
-  "ligue-1": { files: ["2627/F1"], current: "2627" },
-  "ligue-2": { files: ["2627/F2"], current: "2627" },
-  eredivisie: { files: ["2627/N1"], current: "2627" },
-  "pro-league": { files: ["2627/B1"], current: "2627" },
-  "primeira-liga": { files: ["2627/P1"], current: "2627" },
-  "super-lig": { files: ["2627/T1"], current: "2627" },
-  "super-league-greece": { files: ["2627/G1"], current: "2627" },
-  superligaen: { files: ["DNK"], current: "2026/2027", extra: true },
-  brasileirao: { files: ["BRA"], current: "2026", extra: true },
-  mls: { files: ["USA"], current: "2026", extra: true },
+/**
+ * `current` is the season whose odds set each club's strength (2026-27); `reference` is the last
+ * full season, whose goals and statistics set the engine's level: the first rounds of a season are
+ * too few and often unusually high-scoring.
+ */
+const SOURCES: Record<
+  string,
+  { files: string[]; current: string; reference: string; extra?: true }
+> = {
+  "premier-league": { files: ["2526/E0", "2627/E0"], current: "2627", reference: "2526" },
+  championship: { files: ["2526/E1", "2627/E1"], current: "2627", reference: "2526" },
+  bundesliga: { files: ["2526/D1", "2627/D1"], current: "2627", reference: "2526" },
+  "2-bundesliga": { files: ["2526/D2", "2627/D2"], current: "2627", reference: "2526" },
+  "serie-a": { files: ["2526/I1", "2627/I1"], current: "2627", reference: "2526" },
+  "serie-b": { files: ["2526/I2", "2627/I2"], current: "2627", reference: "2526" },
+  laliga: { files: ["2526/SP1", "2627/SP1"], current: "2627", reference: "2526" },
+  "laliga-hypermotion": { files: ["2526/SP2", "2627/SP2"], current: "2627", reference: "2526" },
+  "ligue-1": { files: ["2526/F1", "2627/F1"], current: "2627", reference: "2526" },
+  "ligue-2": { files: ["2526/F2", "2627/F2"], current: "2627", reference: "2526" },
+  eredivisie: { files: ["2526/N1", "2627/N1"], current: "2627", reference: "2526" },
+  "pro-league": { files: ["2526/B1", "2627/B1"], current: "2627", reference: "2526" },
+  "primeira-liga": { files: ["2526/P1", "2627/P1"], current: "2627", reference: "2526" },
+  "super-lig": { files: ["2526/T1", "2627/T1"], current: "2627", reference: "2526" },
+  "super-league-greece": { files: ["2526/G1", "2627/G1"], current: "2627", reference: "2526" },
+  superligaen: { files: ["DNK"], current: "2026/2027", reference: "2025/2026", extra: true },
+  brasileirao: { files: ["BRA"], current: "2026", reference: "2025", extra: true },
+  mls: { files: ["USA"], current: "2026", reference: "2025", extra: true },
 };
-/** Only the 2026-27 season (2026 for leagues played over a calendar year), as in the packs. */
 const EXTRA_SEASONS: Record<string, string[]> = {
-  superligaen: ["2026/2027"],
-  brasileirao: ["2026"],
-  mls: ["2026"],
+  superligaen: ["2025/2026", "2026/2027"],
+  brasileirao: ["2025", "2026"],
+  mls: ["2025", "2026"],
 };
 
 /** football-data.co.uk names that word matching cannot guess. */
@@ -179,7 +186,7 @@ export async function loadReality(leagueId: string) {
         : parsed),
     );
   }
-  return { matches, current: source.current };
+  return { matches, current: source.current, reference: source.reference };
 }
 
 export interface Club {

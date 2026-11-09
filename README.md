@@ -28,6 +28,7 @@ npm run dev        # lance l'app web sur http://localhost:5173
 | `npm run tune`       | Ajuste le moteur sur la saison réelle                   |
 | `npm run tune:clubs` | Ajuste le niveau des clubs sur les cotes                |
 | `npm run career`     | Joue une carrière de plusieurs saisons dans le terminal |
+| `npm run manager`    | Partie interactive dans le terminal                     |
 | `npm run build`      | Build de tous les packages                              |
 | `npm run lint`       | ESLint                                                  |
 | `npm run typecheck`  | Vérification TypeScript                                 |

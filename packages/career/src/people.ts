@@ -1,4 +1,11 @@
 /** Players as people: personality, market value, contracts and morale. */
+
+/**
+ * Age on the football clock: keepers develop, peak and decline about three years later than
+ * outfield players, and play on longer.
+ */
+export const careerAge = (p: { position: string }, age: number) =>
+  p.position === "GB" ? age - 3 : age;
 import { autoTeamSheet, createRng, deriveSeed, type Rng } from "@fmo/engine";
 import { toEngine } from "./state.ts";
 import { ageOn, seasonLabel } from "./calendar.ts";

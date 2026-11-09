@@ -15,6 +15,7 @@
     "tune": "npm run tune -w @fmo/engine --",
     "tune:clubs": "npm run tune:clubs -w @fmo/engine --",
     "career": "npm run career -w @fmo/career --",
+    "manager": "npm run manager -w @fmo/career --",
     "build": "npm run build --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",

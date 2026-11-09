@@ -15,7 +15,7 @@ import {
   type CareerState,
 } from "./index.ts";
 import { autoTeamSheet } from "@fmo/engine";
-import { career, makePack, POSITIONS } from "./test-world.ts";
+import { career, LINKS, makePack, POSITIONS } from "./test-world.ts";
 
 describe("createCareer", () => {
   it("builds the world from the packs", () => {
@@ -95,6 +95,7 @@ describe("end of season", () => {
   it("promotes and relegates, ages the players and opens a new calendar", () => {
     const state = career();
     const before = structuredClone(state.players);
+    const form = state.clubs.a!.formAdjustment;
     simulateToSeasonEnd(state);
     expect(state.season.label).toBe("2027-28");
     const [top, second] = state.history;
@@ -121,7 +122,7 @@ describe("end of season", () => {
     }
     expect(Object.values(state.players).some((p) => p.generated)).toBe(true);
     expect(state.players["a-0"]!.history[0]).toMatchObject({ season: "2026-27", clubId: "a" });
-    expect(state.clubs.a!.levelAdjustment).toBe(0.05);
+    expect(state.clubs.a!.formAdjustment).toBeCloseTo(form / 2, 2);
     expect(state.inbox.some((m) => m.kind === "season")).toBe(true);
   });
 
@@ -155,5 +156,41 @@ describe("determinism and saves", () => {
     expect(loaded.season.index).toBe(1);
     expect(() => loadCareer(JSON.stringify({ format: "other" }))).toThrow();
     expect(() => loadCareer(JSON.stringify({ ...state, version: 99 }))).toThrow();
+  });
+});
+
+describe("club level", () => {
+  it("tones down strong squads and lifts weak ones, form apart", () => {
+    const second = makePack("second", ["e", "f", "g", "h"], 60);
+    delete second.clubs[0]!.levelAdjustment;
+    const state = createCareer({
+      packs: [makePack("top", ["a", "b", "c", "d"], 70), second],
+      clubId: "a",
+      managerName: "Test",
+      seed: 5,
+      links: LINKS,
+    });
+    /* The second division has no fit: only the structural part applies. */
+    expect(state.clubs.h!.levelAdjustment).toBeLessThan(0);
+    expect(state.clubs.e!.levelAdjustment).toBeGreaterThan(0);
+    /* In the top division the fitted values are kept, split into structure and form. */
+    expect(state.clubs.a!.levelAdjustment).toBeCloseTo(0.1, 3);
+    expect(state.clubs.a!.formAdjustment).not.toBe(0);
+    const top = ["a", "b", "c", "d"].map((id) => state.clubs[id]!);
+    expect(top.reduce((s, c) => s + c.levelAdjustment - c.formAdjustment, 0)).toBeCloseTo(0, 2);
+  });
+});
+
+describe("season 2026-27", () => {
+  it("starts every career in summer 2026, even for a league played over a calendar year", () => {
+    const pack = makePack("calendar", ["a", "b", "c", "d"], 70);
+    pack.fixtures = pack.fixtures.map((f) => ({
+      ...f,
+      date: f.date.replace("2026-08", "2026-02"),
+    }));
+    const state = createCareer({ packs: [pack], clubId: "a", managerName: "T", seed: 1 });
+    expect(state.season.label).toBe("2026-27");
+    expect(state.fixtures.every((f) => f.date >= "2026-08-15")).toBe(true);
+    expect(state.date >= "2026-07-01").toBe(true);
   });
 });

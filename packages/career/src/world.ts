@@ -1,9 +1,10 @@
-import type { Pack } from "@fmo/data";
+import { generateRoundRobin, type Pack } from "@fmo/data";
 import { addDays, seasonLabel } from "./calendar.ts";
 import { openFinance, seasonRevenue, signSquad } from "./finance.ts";
 import { initialMorale, personalityFor } from "./people.ts";
 import { indexSquads, newSeasonStats, post } from "./state.ts";
 import { newBoard, seasonMeeting } from "./board.ts";
+import { splitLevelAdjustments } from "./strength.ts";
 import { newFamiliarity, settleClubSystems } from "./training.ts";
 import {
   CAREER_FORMAT,
@@ -29,6 +30,22 @@ export function worldOf(leagueId: string, links: readonly LeagueLink[] = LEAGUE_
   return link ? [link.upper, link.lower] : [leagueId];
 }
 
+/** Every career starts in the 2026-27 season: from summer 2026. */
+export const SEASON_OPENS = "2026-07-01";
+const GENERATED_START = "2026-08-15";
+
+/**
+ * A pack's calendar, or a generated one when its real calendar starts before the 2026-27 season
+ * (leagues played over a calendar year, such as Brazil's 2026 season).
+ */
+function calendarOf(pack: Pack) {
+  if (pack.fixtures.every((f) => f.date >= SEASON_OPENS)) return pack.fixtures;
+  return generateRoundRobin(
+    pack.clubs.map((c) => c.id),
+    GENERATED_START,
+  ).map((f) => ({ ...f, time: null }));
+}
+
 /** Players without a birth date are taken as 26 when the career starts. */
 const ASSUMED_AGE = 26;
 
@@ -47,7 +64,8 @@ export function createCareer(options: {
   if (!options.packs.some((p) => p.clubs.some((c) => c.id === options.clubId))) {
     throw new Error(`No club ${options.clubId} in the packs`);
   }
-  const firstMatch = options.packs.flatMap((p) => p.fixtures.map((f) => f.date)).sort()[0]!;
+  const calendars = new Map(options.packs.map((p) => [p.league.id, calendarOf(p)]));
+  const firstMatch = [...calendars.values()].flatMap((c) => c.map((f) => f.date)).sort()[0]!;
   const start = addDays(firstMatch, -14);
   const assumedBirth = `${Number(start.slice(0, 4)) - ASSUMED_AGE}${start.slice(4)}`;
 
@@ -104,6 +122,7 @@ export function createCareer(options: {
         secondary: c.secondary,
         reputation: c.reputation,
         levelAdjustment: c.levelAdjustment ?? 0,
+        formAdjustment: 0,
         leagueId: pack.league.id,
         finance: openFinance(0),
         familiarity: newFamiliarity(),
@@ -143,7 +162,7 @@ export function createCareer(options: {
       };
       state.players[p.id] = player;
     }
-    const fixtures: CareerFixture[] = [...pack.fixtures]
+    const fixtures: CareerFixture[] = [...calendars.get(pack.league.id)!]
       .sort((a, b) => a.date.localeCompare(b.date) || a.round - b.round)
       .map((f) => ({
         id: state.nextId++,
@@ -161,6 +180,7 @@ export function createCareer(options: {
 
   /* Money and contracts follow from the squads: revenue from their value, wages from revenue. */
   const squads = indexSquads(state);
+  splitLevelAdjustments(state, squads);
   for (const c of Object.values(state.clubs)) {
     const squad = squads.get(c.id) ?? [];
     c.finance = openFinance(seasonRevenue(state, c, squad));

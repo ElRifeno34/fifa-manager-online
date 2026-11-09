@@ -13,6 +13,7 @@ import {
   type Tactics,
 } from "@fmo/engine";
 import { addDays, ageOn, daysBetween } from "./calendar.ts";
+import { careerAge } from "./people.ts";
 import { conditionOf, post, toEngine } from "./state.ts";
 import type {
   CareerClub,
@@ -155,7 +156,7 @@ function session(state: CareerState, club: CareerClub, squad: CareerPlayer[], pl
 function grow(p: CareerPlayer, date: string, plan: TrainingPlan, intensity: number) {
   const room = p.potential - p.overall;
   if (room <= 0) return;
-  const rate = seasonRate(ageOn(p.birthDate, date));
+  const rate = seasonRate(careerAge(p, ageOn(p.birthDate, date)));
   if (rate === 0) return;
   const gain =
     (room * rate * intensity * (0.7 + p.personality.professionalism / 33)) / WEEKS_PER_SEASON;
@@ -165,7 +166,15 @@ function grow(p: CareerPlayer, date: string, plan: TrainingPlan, intensity: numb
   const keeper = p.position === "GB";
   for (const key of Object.keys(p.attributes) as (keyof Attributes)[]) {
     if (!keeper && OUTFIELD_ONLY.includes(key)) continue;
-    const weight = (themed.includes(key) ? 1.5 : 0.8) * (focused.includes(key) ? 2 : 1);
+    /* Keepers have their own sessions: their goalkeeping grows at the pace of a theme. */
+    const base = keeper
+      ? OUTFIELD_ONLY.includes(key)
+        ? 1.5
+        : 0.5
+      : themed.includes(key)
+        ? 1.5
+        : 0.8;
+    const weight = base * (focused.includes(key) ? 2 : 1);
     p.attributes[key] = Math.min(20, p.attributes[key] + (gain / 5) * weight);
   }
 }

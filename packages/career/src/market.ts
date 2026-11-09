@@ -8,6 +8,7 @@ import { addDays, ageOn, daysBetween } from "./calendar.ts";
 import { weeklyWages } from "./finance.ts";
 import { contractYears, rolesOf, seasonsAfter, valueOf, type Role } from "./people.ts";
 import { post } from "./state.ts";
+import { refreshLevelAdjustments } from "./strength.ts";
 import {
   askingPrice,
   isWindowOpen,
@@ -67,6 +68,8 @@ export function marketWeeks(state: CareerState, squads: Map<string, CareerPlayer
         roles.clear();
       }
     }
+    /* Signings change the squads, and so the clubs' collective level. */
+    refreshLevelAdjustments(state, squads);
   }
 }
 

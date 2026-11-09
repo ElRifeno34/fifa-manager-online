@@ -9,6 +9,7 @@ import { poolFor } from "./names.ts";
 import { leagueTable } from "./play.ts";
 import { budgets, RELEGATION_WAGE_CUT, seasonRevenue, WAGE_FLOOR } from "./finance.ts";
 import {
+  careerAge,
   contractYears,
   estimateValue,
   initialMorale,
@@ -18,6 +19,7 @@ import {
 } from "./people.ts";
 import { clubsOf, indexSquads, newSeasonStats, post, squadOf, toEngine } from "./state.ts";
 import { seasonMeeting, seasonReview } from "./board.ts";
+import { refreshLevelAdjustments, round3 } from "./strength.ts";
 import { settleClubSystems } from "./training.ts";
 import type { Attributes } from "@fmo/engine";
 import type { CareerPlayer, CareerState, SeasonRecord } from "./types.ts";
@@ -26,8 +28,8 @@ import type { CareerPlayer, CareerState, SeasonRecord } from "./types.ts";
 const MIN_SQUAD = 20;
 /** Above this, a club lets its least useful players go (they leave the game until transfers). */
 const MAX_SQUAD = 30;
-/** Share of a club's collective adjustment kept from one season to the next: form fades. */
-const ADJUSTMENT_KEPT = 0.5;
+/** Share of a club's form kept from one season to the next. */
+const FORM_KEPT = 0.5;
 
 export function endSeason(state: CareerState) {
   const rng = createRng(deriveSeed(state.seed, "season-end", state.season.label));
@@ -49,8 +51,9 @@ export function endSeason(state: CareerState) {
   const contracts = renewContracts(state, start, rng);
   const youth = intake(state, start, rng);
   const released = release(state, start);
+  /* Form fades; the structural part follows the new squads and divisions (see strength.ts). */
   for (const club of Object.values(state.clubs)) {
-    club.levelAdjustment = Number((club.levelAdjustment * ADJUSTMENT_KEPT).toFixed(3));
+    club.formAdjustment = round3(club.formAdjustment * FORM_KEPT);
   }
 
   state.season = { label: seasonLabel(start), index: state.season.index + 1, start };
@@ -81,6 +84,7 @@ export function endSeason(state: CareerState) {
   }
   /* New budgets: revenue follows the squad's value and the division the club now plays in. */
   const squads = indexSquads(state);
+  refreshLevelAdjustments(state, squads);
   for (const club of Object.values(state.clubs)) {
     const f = club.finance;
     f.revenue = seasonRevenue(state, club, squads.get(club.id) ?? []);
@@ -195,7 +199,7 @@ function develop(state: CareerState, start: string, rng: Rng) {
   const rounds = new Map(state.leagues.map((l) => [l.id, (clubsOf(state, l.id).length - 1) * 2]));
   for (const p of Object.values(state.players)) {
     if (!p.clubId) continue;
-    const age = ageOn(p.birthDate, start);
+    const age = careerAge(p, ageOn(p.birthDate, start));
     const last = p.history.at(-1);
     const share = last ? Math.min(1, last.minutes / ((rounds.get(last.leagueId) ?? 34) * 90)) : 0;
     const noise = (rng.next() * 2 - 1) * 1.5;
@@ -225,7 +229,7 @@ function retire(state: CareerState, start: string, rng: Rng): CareerPlayer[] {
   const retired: CareerPlayer[] = [];
   for (const p of Object.values(state.players)) {
     if (p.retired) continue;
-    const age = ageOn(p.birthDate, start);
+    const age = careerAge(p, ageOn(p.birthDate, start));
     /* Free agents nobody signed stop sooner. */
     const chance = !p.clubId
       ? age >= 29

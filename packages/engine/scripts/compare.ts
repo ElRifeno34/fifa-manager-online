@@ -84,6 +84,7 @@ export async function compare(leagueId: string, sims: number): Promise<Compariso
   if (!reality) return null;
   const pack = loadPack(leagueId);
   const played = reality.matches.filter((m) => m.season === reality.current);
+  const reference = reality.matches.filter((m) => m.season === reality.reference);
   const { map } = matchTeams([...new Set(played.flatMap((m) => [m.home, m.away]))], pack.clubs);
 
   const engineScores: Score[] = [];
@@ -144,7 +145,8 @@ export async function compare(leagueId: string, sims: number): Promise<Compariso
   const n = Math.max(fixtures, 1);
   return {
     league: pack.league.name,
-    real: profile(played),
+    /* Level of goals and statistics: the last full season. */
+    real: profile(reference.length ? reference : played),
     engine: profile(engineScores),
     fixtures,
     oddsGap: { home: gaps.home / n, draw: gaps.draw / n, away: gaps.away / n },

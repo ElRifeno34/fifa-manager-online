@@ -5,7 +5,7 @@ import type { Newspaper } from "@fmo/data";
 import type { Attributes, Position, Tactics } from "@fmo/engine";
 
 export const CAREER_FORMAT = "fmo-career";
-export const CAREER_VERSION = 5;
+export const CAREER_VERSION = 6;
 
 export interface PlayerSeason {
   apps: number;
@@ -235,7 +235,10 @@ export interface CareerClub {
   primary: string;
   secondary: string;
   reputation: number;
+  /** Collective level the engine applies: structure (see strength.ts) plus form. */
   levelAdjustment: number;
+  /** Part of the level that comes from the club's form; it halves every season. */
+  formAdjustment: number;
   leagueId: string;
   finance: ClubFinance;
   familiarity: Familiarity;

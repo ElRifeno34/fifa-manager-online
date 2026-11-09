@@ -21,7 +21,8 @@ import type {
 } from "./types.ts";
 
 /**
- * Engine parameters, fitted to the real 2026-27 season (football-data.co.uk) by `npm run tune`;
+ * Engine parameters, fitted by `npm run tune` on football-data.co.uk: rates on the full 2025-26
+ * season, club strengths on the 2026-27 odds;
  * `npm run benchmark` measures the gap. See docs/ARCHITECTURE.md.
  */
 export const TUNING = {
@@ -31,25 +32,25 @@ export const TUNING = {
   passesPerPossession: { possession: 7, balanced: 5, direct: 3.5 } as Record<Style, number>,
   /** Logit of getting through midfield, and of turning the final third into a chance. */
   midBase: 0,
-  finalBase: -1.263,
+  finalBase: -1.414,
   /** Logit points per attribute point of difference between the two units. */
   slope: 0.36,
   /** Beyond about this many attribute points, a wider gap barely matters more. */
   gapCap: 1.8,
   /** Home side plays with slightly better attributes. */
-  homeBoost: 0.034,
-  foulPerPossession: 0.183,
-  yellowPerFoul: 0.159,
-  redPerFoul: 0.0016,
-  saveShare: 0.252,
+  homeBoost: 0.036,
+  foulPerPossession: 0.184,
+  yellowPerFoul: 0.168,
+  redPerFoul: 0.0021,
+  saveShare: 0.259,
   /** Multiplies every open-play and set-piece chance quality (penalties apart). */
-  xgScale: 1.243,
+  xgScale: 1.237,
   /** Share of attributes gained (or lost) per unit of familiarity above (or below) 0.7. */
   familiarityEffect: 0.08,
   /** Multiplies the chance of winning a corner. */
-  cornerRate: 0.792,
+  cornerRate: 0.794,
   /** Logit shift from the score late in the match (see gameState). */
-  gameState: 0.194,
+  gameState: 0.202,
   /** Attribute level of an average finisher and keeper in shot quality. */
   shotReference: 14.5,
   /** Weight of the shooter's and the keeper's level in the chance of scoring. */
