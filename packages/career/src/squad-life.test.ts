@@ -46,7 +46,8 @@ describe("contracts and money", () => {
     const before = club.finance.balance;
     moveTo(state, addDays(state.date, 21));
     expect(club.finance.wages).toBe(weeklyWages(squadOf(state, "a")) * 3);
-    expect(club.finance.income).toBe(Math.round(club.finance.revenue / 52) * 3);
+    /* 10 % of revenue is held back for the end-of-season prize money. */
+    expect(club.finance.income).toBe(Math.round((club.finance.revenue * 0.9) / 52) * 3);
     expect(club.finance.balance).not.toBe(before);
   });
 

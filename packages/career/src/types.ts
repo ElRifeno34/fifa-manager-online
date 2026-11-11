@@ -5,7 +5,9 @@ import type { Newspaper } from "@fmo/data";
 import type { Attributes, Position, Tactics } from "@fmo/engine";
 
 export const CAREER_FORMAT = "fmo-career";
-export const CAREER_VERSION = 6;
+export const CAREER_VERSION = 7;
+/** Destination of players sold to clubs outside the game. */
+export const ABROAD = "abroad";
 
 export interface PlayerSeason {
   apps: number;
@@ -83,7 +85,10 @@ export interface CareerPlayer {
   marketValueEur: number | null;
   /** Null for free agents and retired players. */
   clubId: string | null;
+  /** Out of the game for good: retired, or sold abroad. */
   retired: boolean;
+  /** Sold to a club outside the game. */
+  abroad?: boolean;
   /** Free agents and retired players have none. */
   contract: Contract | null;
   personality: Personality;

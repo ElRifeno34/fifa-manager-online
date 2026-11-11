@@ -6,12 +6,16 @@ import { createRng, deriveSeed } from "@fmo/engine";
 import { ageOn, daysBetween, addDays } from "./calendar.ts";
 import { contractYears, seasonsAfter, shareWages, valueOf } from "./people.ts";
 import { post } from "./state.ts";
-import type { CareerClub, CareerPlayer, CareerState, ClubFinance } from "./types.ts";
+import type { CareerClub, CareerPlayer, CareerState, ClubFinance, SeasonRecord } from "./types.ts";
 
 /** Share of revenue a club spends on wages. */
 const WAGE_SHARE = 0.6;
 /** Running costs besides wages (staff, facilities, travel), as a share of revenue. */
 const OPERATING_SHARE = 0.37;
+/** Share of revenue paid as prize money at the end of the season, by final position. */
+const PRIZE_SHARE = 0.1;
+/** Cash the board keeps; half of anything above it goes into facilities each summer. */
+const RESERVE_SHARE = 0.4;
 /** Wage cut written into contracts when a club goes down. */
 export const RELEGATION_WAGE_CUT = 0.3;
 /** Revenue every club of a division gets whatever its squad (TV rights, mostly). */
@@ -30,7 +34,8 @@ export function seasonRevenue(state: CareerState, club: CareerClub, squad: Caree
 export function budgets(revenue: number, balance: number) {
   return {
     wageBudget: Math.round((revenue * WAGE_SHARE) / 52),
-    transferBudget: Math.max(0, Math.round(revenue * 0.1 + balance * 0.5)),
+    /* A club in debt cannot buy until it is back in the black. */
+    transferBudget: balance < 0 ? 0 : Math.round(revenue * 0.1 + balance * 0.5),
   };
 }
 
@@ -59,7 +64,8 @@ export function settleWeeks(state: CareerState, squads: Map<string, CareerPlayer
     state.payday = addDays(state.payday, 7);
     for (const club of Object.values(state.clubs)) {
       const f = club.finance;
-      const income = Math.round(f.revenue / 52);
+      /* The rest of the revenue comes as prize money at the end of the season. */
+      const income = Math.round((f.revenue * (1 - PRIZE_SHARE)) / 52);
       const wages = weeklyWages(squads.get(club.id) ?? []);
       const costs = Math.round((f.revenue * OPERATING_SHARE) / 52);
       f.income += income;
@@ -69,6 +75,52 @@ export function settleWeeks(state: CareerState, squads: Map<string, CareerPlayer
     const mine = state.clubs[state.manager.clubId]!.finance;
     if (mine.balance < 0 && mine.balance + mine.revenue / 52 > 0) {
       post(state, "finance", "Compte dans le rouge", "La trésorerie du club est passée sous zéro.");
+    }
+  }
+}
+
+/**
+ * Prize money: each league shares 10 % of its clubs' revenue by final position, the champion
+ * taking about twice the average share and the last club very little.
+ */
+export function payPrizes(state: CareerState, records: SeasonRecord[]) {
+  for (const record of records) {
+    const clubs = record.table.map((l) => state.clubs[l.clubId]!);
+    const pool = clubs.reduce((s, c) => s + c.finance.revenue, 0) * PRIZE_SHARE;
+    const n = clubs.length;
+    const weights = clubs.map((_, rank) => n - rank);
+    const total = weights.reduce((s, w) => s + w, 0);
+    clubs.forEach((c, rank) => {
+      const prize = Math.round((pool * weights[rank]!) / total);
+      c.finance.balance += prize;
+      c.finance.income += prize;
+      if (c.id === state.manager.clubId) {
+        post(
+          state,
+          "finance",
+          "Prime de classement",
+          `Le club touche ${Math.round(prize / 1e5) / 10} M€ pour sa ${rank + 1}e place.`,
+        );
+      }
+    });
+  }
+}
+
+/** The board puts half of the cash above its reserve into facilities: money leaves the game. */
+export function investSurplus(state: CareerState) {
+  for (const club of Object.values(state.clubs)) {
+    const f = club.finance;
+    const excess = f.balance - f.revenue * RESERVE_SHARE;
+    if (excess <= 0) continue;
+    const invested = Math.round(excess / 2);
+    f.balance -= invested;
+    if (club.id === state.manager.clubId) {
+      post(
+        state,
+        "finance",
+        "Investissements",
+        `La direction investit ${Math.round(invested / 1e5) / 10} M€ dans les infrastructures.`,
+      );
     }
   }
 }

@@ -361,17 +361,39 @@ avec `--load`. C'est un banc d'essai en attendant les écrans de l'app.
 `npm run career -- <championnat> <club> [--seasons N]` joue des saisons entières dans le terminal,
 l'adjoint dirigeant le club. Une saison de deux divisions (612 matchs) prend environ une seconde.
 
-À surveiller pendant l'équilibrage (étape 6) :
+### Équilibrage (étape 6)
 
-- L'argent ne quitte jamais les deux divisions : sur 8 saisons, la trésorerie médiane de Ligue 1
-  passe encore de 15 à 110 M€, et les indemnités montent (jusqu'à 170 M€). Il manque des ventes à
-  l'étranger et des revenus liés au classement. Rien n'empêche non plus un club de rester dans le
-  rouge.
-- 50 à 120 transferts par saison pour 36 clubs, dont peu de joueurs libres : sans doute moins que
-  dans la réalité, prêts compris.
-- Les joueurs libres (200 à 300) et les retraités restent dans la sauvegarde.
-- Les buts montent encore un peu au fil des saisons en Premier League (de 2,9 à 3,2 en 4 saisons),
-  pas en Ligue 1. Piste : les écarts entre clubs se resserrent, l'IA choisit moins souvent une
-  tactique prudente et les matchs s'ouvrent.
+Les réglages de long terme, vérifiés sur 6 à 8 saisons simulées en Ligue 1 et en Premier League :
+
+- **Argent** :
+  - 10 % des revenus sont versés en **primes de classement** en fin de saison (le champion touche
+    environ deux fois la part moyenne).
+  - Au-delà d'une réserve de 40 % des revenus, la direction **investit** la moitié du surplus dans
+    les infrastructures : cet argent sort du jeu.
+  - Un club **dans le rouge** n'a plus de budget transferts, et un club de l'IA endetté met en vente
+    ses meilleurs joueurs qui ne sont pas des cadres.
+  - Résultat en Ligue 1 : la trésorerie médiane se stabilise vers 55 M€ (contre 123 M€ sans ces
+    règles après 8 saisons), le club le plus riche vers 150 M€.
+- **Marché** :
+  - Les clubs de l'IA recrutent plus souvent (quatre recrues au plus par fenêtre).
+  - **Ventes à l'étranger** : un club étranger achète parfois un joueur. L'argent entre, le joueur
+    quitte le jeu.
+  - **Recrues étrangères** : environ un tiers des recrues de l'IA viennent de championnats hors du
+    jeu, générées au niveau recherché. Le talent entre, l'argent sort.
+  - Résultat : environ 90 transferts par saison en Ligue 1 et Ligue 2, et un niveau moyen stable
+    (73 à 75 en Ligue 1 sur 6 saisons).
+- **Buts** : 2,6 à 3,0 par match saison après saison, sans dérive. La dérive venait des effectifs :
+  l'adjoint alternait entraînement technique et physique sans jamais faire de tactique, si bien que
+  la relance et l'attaque progressaient plus vite que la défense. Il fait maintenant tourner les
+  trois thèmes. Les jeunes du centre ont aussi un potentiel un peu moins généreux.
+- **Blessures** : environ 6,5 % des joueurs blessés à un instant donné (proche des 7-8 % réels).
+- **MLS** : au-delà de 24 clubs, un championnat se joue en une seule phase équilibrée (29 matchs
+  pour la MLS, 15 ou 14 à domicile), sans conférences ni play-offs.
+- **Robustesse** : des matchs que le calendrier a sautés sont joués à la journée suivante, si bien
+  qu'une saison se termine toujours.
+
+À surveiller :
+
+- Les joueurs libres (150 à 350) et les retraités restent dans la sauvegarde.
 - Les discussions : environ 4 demandes de temps de jeu par saison dans un club du milieu de
   tableau, davantage dans un club en difficulté, où les demandes de départ se multiplient.

@@ -626,3 +626,5 @@ const POOLS: Record<string, Pool> = {
 const FALLBACK = POOLS.France!;
 
 export const poolFor = (country: string): Pool => POOLS[country] ?? FALLBACK;
+
+export const COUNTRIES = Object.keys(POOLS);

@@ -39,11 +39,31 @@ const GENERATED_START = "2026-08-15";
  * (leagues played over a calendar year, such as Brazil's 2026 season).
  */
 function calendarOf(pack: Pack) {
-  if (pack.fixtures.every((f) => f.date >= SEASON_OPENS)) return pack.fixtures;
-  return generateRoundRobin(
+  const big = pack.clubs.length > SINGLE_ROUND_ABOVE;
+  if (!big && pack.fixtures.every((f) => f.date >= SEASON_OPENS)) return pack.fixtures;
+  return leagueCalendar(
     pack.clubs.map((c) => c.id),
     GENERATED_START,
   ).map((f) => ({ ...f, time: null }));
+}
+
+/** Above this many clubs, a league plays each opponent once: MLS's 30 clubs play 29 matches. */
+const SINGLE_ROUND_ABOVE = 24;
+
+/** A league's season: home and away, or a single round for very large leagues. */
+export function leagueCalendar(clubIds: readonly string[], start: string) {
+  const fixtures = generateRoundRobin(clubIds, start);
+  if (clubIds.length <= SINGLE_ROUND_ABOVE) return fixtures;
+  /* A single round: the club with fewer home games so far plays at home, to share them out. */
+  const home = new Map(clubIds.map((id) => [id, 0]));
+  return fixtures
+    .filter((f) => f.round < clubIds.length)
+    .map((f) => {
+      const swap = home.get(f.homeClubId)! > home.get(f.awayClubId)!;
+      const fixture = swap ? { ...f, homeClubId: f.awayClubId, awayClubId: f.homeClubId } : f;
+      home.set(fixture.homeClubId, home.get(fixture.homeClubId)! + 1);
+      return fixture;
+    });
 }
 
 /** Players without a birth date are taken as 26 when the career starts. */

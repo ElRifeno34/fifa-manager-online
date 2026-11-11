@@ -36,9 +36,12 @@ const involves = (f: CareerFixture, clubId: string) =>
 export const nextUserFixture = (state: CareerState) =>
   state.fixtures.find((f) => !f.result && involves(f, state.manager.clubId));
 
-/** Today's matches not played yet. */
+/**
+ * Matches to play today: today's, and any left behind when the calendar was moved past them, so
+ * that a season always ends.
+ */
 export const fixturesToday = (state: CareerState) =>
-  state.fixtures.filter((f) => !f.result && f.date === state.date);
+  state.fixtures.filter((f) => !f.result && f.date <= state.date);
 
 export type AdvanceStop = "userMatch" | "seasonEnd" | "conversation";
 

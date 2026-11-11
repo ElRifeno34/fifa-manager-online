@@ -2,12 +2,19 @@
  * End of a season: final tables, promotion and relegation, players' progression and ageing,
  * retirements, youth intake, and the next season's calendar.
  */
-import { deriveAttributes, generateRoundRobin } from "@fmo/data";
+import { deriveAttributes } from "@fmo/data";
 import { createRng, deriveSeed, squadStrength, type Position, type Rng } from "@fmo/engine";
 import { addDays, ageOn, daysBetween, nextSeasonStart, seasonLabel } from "./calendar.ts";
 import { poolFor } from "./names.ts";
 import { leagueTable } from "./play.ts";
-import { budgets, RELEGATION_WAGE_CUT, seasonRevenue, WAGE_FLOOR } from "./finance.ts";
+import {
+  budgets,
+  investSurplus,
+  payPrizes,
+  RELEGATION_WAGE_CUT,
+  seasonRevenue,
+  WAGE_FLOOR,
+} from "./finance.ts";
 import {
   careerAge,
   contractYears,
@@ -19,6 +26,7 @@ import {
 } from "./people.ts";
 import { clubsOf, indexSquads, newSeasonStats, post, squadOf, toEngine } from "./state.ts";
 import { seasonMeeting, seasonReview } from "./board.ts";
+import { leagueCalendar } from "./world.ts";
 import { refreshLevelAdjustments, round3 } from "./strength.ts";
 import { settleClubSystems } from "./training.ts";
 import type { Attributes } from "@fmo/engine";
@@ -36,6 +44,7 @@ export function endSeason(state: CareerState) {
   const records = closeTables(state);
   moveClubs(state, records);
   seasonReview(state, records);
+  payPrizes(state, records);
   state.promises = [];
   state.history.push(...records);
   archivePlayers(state);
@@ -59,7 +68,7 @@ export function endSeason(state: CareerState) {
   state.season = { label: seasonLabel(start), index: state.season.index + 1, start };
   state.fixtures = [];
   for (const league of state.leagues) {
-    for (const f of generateRoundRobin(clubsOf(state, league.id), start)) {
+    for (const f of leagueCalendar(clubsOf(state, league.id), start)) {
       state.fixtures.push({
         id: state.nextId++,
         leagueId: league.id,
@@ -85,6 +94,7 @@ export function endSeason(state: CareerState) {
   /* New budgets: revenue follows the squad's value and the division the club now plays in. */
   const squads = indexSquads(state);
   refreshLevelAdjustments(state, squads);
+  investSurplus(state);
   for (const club of Object.values(state.clubs)) {
     const f = club.finance;
     f.revenue = seasonRevenue(state, club, squads.get(club.id) ?? []);
@@ -196,7 +206,14 @@ const MENTAL: (keyof Attributes)[] = ["vision", "positioning", "composure"];
  */
 function develop(state: CareerState, start: string, rng: Rng) {
   const changes: { id: string; delta: number }[] = [];
-  const rounds = new Map(state.leagues.map((l) => [l.id, (clubsOf(state, l.id).length - 1) * 2]));
+  /* Matches each club played this season, from the calendar (single round in very large leagues). */
+  const rounds = new Map(
+    state.leagues.map((l) => [
+      l.id,
+      (state.fixtures.filter((f) => f.leagueId === l.id).length * 2) /
+        Math.max(clubsOf(state, l.id).length, 1),
+    ]),
+  );
   for (const p of Object.values(state.players)) {
     if (!p.clubId) continue;
     const age = careerAge(p, ageOn(p.birthDate, start));
@@ -288,7 +305,7 @@ function intake(state: CareerState, start: string, rng: Rng): CareerPlayer[] {
       const overall = Math.round(Math.max(38, Math.min(64, strength * 0.62 + rng.next() * 8)));
       const potential = Math.min(
         92,
-        Math.round(overall + 12 + rng.next() * (16 + club.reputation * 2)),
+        Math.round(overall + 8 + rng.next() * (12 + club.reputation * 2)),
       );
       let number = 30;
       while (used.has(number) && number < 99) number++;

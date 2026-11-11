@@ -69,7 +69,8 @@ décisions.
    moteur).
 4. **Transferts** (fait) : marché, négociation avec contre-offres, prolongations, mercato de l'IA.
 5. **Discussions** (fait) : joueurs, adjoint, direction ; promesses, confiance, licenciement.
-6. **Équilibrage** : 10 saisons simulées pour vérifier l'économie, les effectifs et les niveaux.
+6. **Équilibrage** (fait) : économie, marché, niveaux, buts et blessures vérifiés sur 6 à 8
+   saisons simulées.
 7. **Écrans** sur la DA, commencés dès l'étape 1 : nouvelle partie, hub, effectif, compo,
    entraînement, transferts, discussions, match en texte, classement, fin de saison.
 

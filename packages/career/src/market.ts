@@ -6,8 +6,20 @@
 import { createRng, deriveSeed, type Rng } from "@fmo/engine";
 import { addDays, ageOn, daysBetween } from "./calendar.ts";
 import { weeklyWages } from "./finance.ts";
-import { contractYears, rolesOf, seasonsAfter, valueOf, type Role } from "./people.ts";
-import { post } from "./state.ts";
+import { deriveAttributes } from "@fmo/data";
+import { COUNTRIES, poolFor } from "./names.ts";
+import {
+  contractYears,
+  estimateValue,
+  initialMorale,
+  personalityFor,
+  rolesOf,
+  seasonsAfter,
+  valueOf,
+  type Role,
+} from "./people.ts";
+import { newSeasonStats, post } from "./state.ts";
+import { ABROAD } from "./types.ts";
 import { refreshLevelAdjustments } from "./strength.ts";
 import {
   askingPrice,
@@ -37,7 +49,17 @@ const LINE_OF: Record<CareerPlayer["position"], Line> = {
 /** Players a club wants in each line. */
 const DEPTH: Record<Line, number> = { goal: 2, defence: 7, midfield: 7, attack: 5 };
 /** Signings a club makes at most per window. */
-const MAX_SIGNINGS = 3;
+const MAX_SIGNINGS = 4;
+/** Share of the club AI's signings made abroad rather than in the game's leagues. */
+const IMPORT_CHANCE = 0.3;
+const LINE_POSITIONS: Record<Line, CareerPlayer["position"][]> = {
+  goal: ["GB"],
+  defence: ["DC", "DC", "DG", "DD"],
+  midfield: ["MC", "MC", "MDC", "MOC", "MG", "MD"],
+  attack: ["BU", "BU", "AG", "AD"],
+};
+/** Chance, each market week, that a foreign club buys one of a club's players. */
+const ABROAD_CHANCE = 0.06;
 
 /** Start of the window open today, to count what each club already did in it. */
 function windowStart(state: CareerState): string {
@@ -64,9 +86,9 @@ export function marketWeeks(state: CareerState, squads: Map<string, CareerPlayer
     };
     for (const club of Object.values(state.clubs)) {
       if (club.id === state.manager.clubId) continue;
-      if (shop(state, club, squads, rng, rolesIn)) {
-        roles.clear();
-      }
+      if (club.finance.balance < -club.finance.revenue * 0.05) listForSale(club, squads, rolesIn);
+      if (shop(state, club, squads, rng, rolesIn)) roles.clear();
+      if (rng.chance(ABROAD_CHANCE) && sellAbroad(state, club, squads, rng, rolesIn)) roles.clear();
     }
     /* Signings change the squads, and so the clubs' collective level. */
     refreshLevelAdjustments(state, squads);
@@ -92,18 +114,21 @@ function shop(
   /* Short of players in a line, or else a chance to upgrade the weakest starter. */
   let wanted: (p: CareerPlayer) => boolean;
   let bar: number;
+  let position: CareerPlayer["position"];
   const roles = rolesIn(club.id);
   const starters = squad.filter((p) => roles.get(p.id) === "key" || roles.get(p.id) === "regular");
   if (short) {
-    if (!rng.chance(0.6)) return false;
+    if (!rng.chance(0.8)) return false;
     const levels = squad.map((p) => p.overall).sort((a, b) => a - b);
     bar = (levels[Math.floor(levels.length / 2)] ?? 60) - 3;
     wanted = (p) => LINE_OF[p.position] === short;
+    position = rng.pick(LINE_POSITIONS[short]);
   } else {
-    if (!rng.chance(0.25) || starters.length === 0) return false;
+    if (!rng.chance(0.35) || starters.length === 0) return false;
     const weakest = [...starters].sort((a, b) => a.overall - b.overall)[0]!;
     bar = weakest.overall + 3;
     wanted = (p) => p.position === weakest.position;
+    position = weakest.position;
   }
 
   const f = club.finance;
@@ -119,7 +144,11 @@ function shop(
     if (price > f.transferBudget || wage > wageRoom) continue;
     candidates.push({ p, price, wage });
   }
-  if (candidates.length === 0) return false;
+  /* Some signings come from abroad: talent in, money out of the game. */
+  if (candidates.length === 0 || rng.chance(IMPORT_CHANCE)) {
+    if (importPlayer(state, club, squads, position, bar, wageRoom, rng)) return true;
+    if (candidates.length === 0) return false;
+  }
   /* The best level for the money, with some taste: one of the five best picks. */
   const score = (c: (typeof candidates)[number]) =>
     c.p.overall - 4 * Math.log10(1 + c.price / 1e6) + (c.p.listed ? 3 : 0);
@@ -176,4 +205,131 @@ function remindExpiring(state: CareerState) {
       `Sans prolongation, partiront libres cet été : ${ending.map((p) => p.name).join(", ")}.`,
     );
   }
+}
+
+/** A club in debt puts its most valuable players who are not key men up for sale. */
+function listForSale(
+  club: CareerClub,
+  squads: Map<string, CareerPlayer[]>,
+  rolesIn: (clubId: string) => Map<string, Role>,
+) {
+  const roles = rolesIn(club.id);
+  const forSale = (squads.get(club.id) ?? [])
+    .filter((p) => roles.get(p.id) !== "key" && !p.listed)
+    .sort((a, b) => (b.marketValueEur ?? 0) - (a.marketValueEur ?? 0))
+    .slice(0, 2);
+  for (const p of forSale) p.listed = true;
+}
+
+/**
+ * Players also leave for leagues outside the game: a foreign club pays the asking price, the money
+ * comes in and the player is gone. This keeps talent and cash flowing out of a closed world.
+ */
+function sellAbroad(
+  state: CareerState,
+  club: CareerClub,
+  squads: Map<string, CareerPlayer[]>,
+  rng: Rng,
+  rolesIn: (clubId: string) => Map<string, Role>,
+): boolean {
+  const squad = squads.get(club.id) ?? [];
+  if (squad.length <= MIN_SQUAD_TO_SELL + 2) return false;
+  const keepers = squad.filter((p) => p.position === "GB").length;
+  const options = squad.filter(
+    (p) =>
+      ageOn(p.birthDate, state.date) <= 30 &&
+      valueOf(p, state.date) >= 1_000_000 &&
+      (p.position !== "GB" || keepers > 2),
+  );
+  if (!options.length) return false;
+  const weights = options.map((p) => valueOf(p, state.date) ** 0.5);
+  const total = weights.reduce((s, w) => s + w, 0);
+  let roll = rng.next() * total;
+  let p = options[0]!;
+  for (let i = 0; i < options.length; i++) {
+    roll -= weights[i]!;
+    if (roll <= 0) {
+      p = options[i]!;
+      break;
+    }
+  }
+  const fee =
+    Math.round((askingPrice(state, p.id, rolesIn(club.id)) * (0.9 + rng.next() * 0.25)) / 100_000) *
+    100_000;
+  club.finance.balance += fee;
+  club.finance.transfers -= fee;
+  club.finance.transferBudget += Math.round(fee * 0.5);
+  state.transfers.push({ date: state.date, playerId: p.id, fromId: club.id, toId: ABROAD, fee });
+  p.clubId = null;
+  p.contract = null;
+  p.number = null;
+  p.listed = false;
+  p.retired = true;
+  p.abroad = true;
+  squad.splice(squad.indexOf(p), 1);
+  return true;
+}
+
+/** Signs a player from a league outside the game, at the level the club is looking for. */
+function importPlayer(
+  state: CareerState,
+  club: CareerClub,
+  squads: Map<string, CareerPlayer[]>,
+  position: CareerPlayer["position"],
+  bar: number,
+  wageRoom: number,
+  rng: Rng,
+): boolean {
+  const age = rng.int(21, 29);
+  const overall = Math.round(Math.min(90, bar + rng.int(0, 4)));
+  const value = estimateValue(overall, age);
+  const fee = Math.round((value * (0.9 + rng.next() * 0.2)) / 100_000) * 100_000;
+  const wage = marketWage(value);
+  if (fee > club.finance.transferBudget || wage > wageRoom) return false;
+  const id = `gen-${state.nextId++}`;
+  const pool = poolFor(rng.pick(COUNTRIES));
+  const squad = squads.get(club.id) ?? [];
+  const numbers = new Set(squad.map((p) => p.number));
+  let number = 2;
+  while (numbers.has(number) && number < 99) number++;
+  const player: CareerPlayer = {
+    id,
+    name: `${rng.pick(pool.first)} ${rng.pick(pool.last)}`,
+    nationality: pool.nationality,
+    birthDate: addDays(
+      `${Number(state.date.slice(0, 4)) - age}${state.date.slice(4)}`,
+      -rng.int(0, 364),
+    ),
+    foot: rng.chance(0.25) ? "left" : "right",
+    heightCm: rng.int(170, 192),
+    number,
+    position,
+    secondaryPositions: [],
+    overall,
+    potential: Math.min(94, overall + Math.max(0, 25 - age) * 2),
+    attributes: deriveAttributes({ id, position, overall, age, heightCm: null, performance: null }),
+    marketValueEur: value,
+    clubId: club.id,
+    retired: false,
+    contract: { wage, until: seasonsAfter(state.season.start, contractYears(age, rng) - 1) },
+    personality: personalityFor(state.seed, id),
+    morale: initialMorale(state.seed, id),
+    injury: null,
+    suspension: 0,
+    trainingFocus: null,
+    listed: false,
+    generated: true,
+    fatigue: 0,
+    fatigueDate: null,
+    ratings: [],
+    season: newSeasonStats(),
+    history: [],
+  };
+  state.players[id] = player;
+  club.finance.balance -= fee;
+  club.finance.transfers += fee;
+  club.finance.transferBudget = Math.max(0, club.finance.transferBudget - fee);
+  state.transfers.push({ date: state.date, playerId: id, fromId: ABROAD, toId: club.id, fee });
+  squad.push(player);
+  return true;
 }

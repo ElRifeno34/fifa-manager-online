@@ -93,7 +93,9 @@ export function monthlyReview(state: CareerState) {
   const league = state.clubs[clubId]!.leagueId;
   const table = leagueTable(state, league);
   const played = table.find((l) => l.clubId === clubId)?.played ?? 0;
-  const total = (table.length - 1) * 2;
+  const total = state.fixtures.filter(
+    (f) => f.homeClubId === clubId || f.awayClubId === clubId,
+  ).length;
   if (played < 4) return;
   const progress = played / total;
   const position = table.findIndex((l) => l.clubId === clubId) + 1;

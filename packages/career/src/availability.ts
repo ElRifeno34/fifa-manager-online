@@ -18,7 +18,7 @@ const INJURIES: { kind: string; weight: number; days: [number, number] }[] = [
 
 /** Chance of an injury over 90 minutes, rising with fatigue. */
 const injuryChance = (fatigue: number, minutes: number) =>
-  (0.022 + fatigue * 0.0003) * (minutes / 90);
+  (0.042 + fatigue * 0.0005) * (minutes / 90);
 
 /** Yellow cards that bring a one-match ban, then every this many more. */
 const YELLOW_LIMIT = 5;

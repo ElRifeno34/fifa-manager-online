@@ -104,7 +104,10 @@ export function suggestTraining(
     daysToMatch <= 1 ? "light" : daysToMatch >= 6 && fatigue < 10 ? "high" : "normal";
   if (known < 0.6) return { intensity, theme: "tactical" };
   const week = Math.floor(daysBetween(state.season.start, state.date) / 7);
-  return { intensity, theme: week % 2 === 0 ? "technical" : "physical" };
+  /* Technique, fitness and tactics in turn, so that defending progresses as much as attacking. */
+  const themes = ["technical", "physical", "tactical"] as const;
+  /* Pre-season weeks count negative: keep the index positive. */
+  return { intensity, theme: themes[((week % 3) + 3) % 3]! };
 }
 
 /** Runs the weekly sessions due up to today. */
@@ -134,7 +137,7 @@ function session(state: CareerState, club: CareerClub, squad: CareerPlayer[], pl
     p.fatigue = Math.max(0, Math.min(100, condition.fatigue + load));
     p.fatigueDate = date;
     if (plan.theme !== "recovery") grow(p, date, plan, level.growth);
-    if (rng.chance(level.injury * (1 + condition.fatigue / 50))) {
+    if (rng.chance(level.injury * 1.5 * (1 + condition.fatigue / 50))) {
       const days = rng.int(3, 21);
       p.injury = { kind: "blessure à l'entraînement", until: addDays(date, days) };
       if (club.id === state.manager.clubId) {
