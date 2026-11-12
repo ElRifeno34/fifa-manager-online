@@ -1,0 +1,27 @@
+{
+  "pack": { "id": "liga-mx-2026-27", "name": "Liga MX 2026-27", "season": "2026-27", "version": 1 },
+  "league": { "id": "liga-mx", "name": "Liga MX", "country": "Mexique" },
+  "tmCompetition": "MEX1",
+  "openfootballPath": null,
+  "clubs": [
+    { "id": "cruz-azul", "name": "Cruz Azul", "initials": "CAZ", "wikipedia": "Cruz Azul" },
+    { "id": "america", "name": "América", "initials": "AME", "wikipedia": "Club América" },
+    { "id": "guadalajara", "name": "Guadalajara", "initials": "GDL", "wikipedia": "C.D. Guadalajara" },
+    { "id": "toluca", "name": "Toluca", "initials": "TOL", "wikipedia": "Deportivo Toluca F.C." },
+    { "id": "atlas", "name": "Atlas", "initials": "ATL", "wikipedia": "Atlas F.C." },
+    { "id": "santos-laguna", "name": "Santos Laguna", "initials": "SAN", "wikipedia": "Santos Laguna" },
+    { "id": "pachuca", "name": "Pachuca", "initials": "PAC", "wikipedia": "C.F. Pachuca" },
+    { "id": "tijuana", "name": "Tijuana", "initials": "TIJ", "wikipedia": "Club Tijuana" },
+    { "id": "monterrey", "name": "Monterrey", "initials": "MTY", "wikipedia": "C.F. Monterrey" },
+    { "id": "pumas-unam", "name": "Pumas UNAM", "initials": "PUM", "wikipedia": "Club Universidad Nacional" },
+    { "id": "queretaro", "name": "Querétaro", "initials": "QUE", "wikipedia": "Querétaro F.C." },
+    { "id": "atletico-san-luis", "name": "Atlético de San Luis", "initials": "ASL", "wikipedia": "Atlético de San Luis" },
+    { "id": "puebla", "name": "Puebla", "initials": "PUE", "wikipedia": "Club Puebla" },
+    { "id": "tigres-uanl", "name": "Tigres UANL", "initials": "TIG", "wikipedia": "Tigres UANL" },
+    { "id": "atlante", "name": "Atlante", "initials": "ATL", "wikipedia": "Atlante F.C." },
+    { "id": "necaxa", "name": "Necaxa", "initials": "NEC", "wikipedia": "Club Necaxa" },
+    { "id": "juarez", "name": "Juárez", "initials": "JUA", "wikipedia": "FC Juárez" },
+    { "id": "leon", "name": "León", "initials": "LEO", "wikipedia": "Club León" }
+  ],
+  "newspapers": []
+}

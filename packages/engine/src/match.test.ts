@@ -186,4 +186,36 @@ describe("tactics", () => {
       );
     expect(late("high")).toBeGreaterThan(late("medium"));
   });
+
+  it("makes possession and direct identities visible in match stats", () => {
+    const withStyle = (style: Tactics["style"]) =>
+      series(
+        N,
+        () => sheet("h", even, { style }),
+        () => sheet("a", rival),
+      );
+    const possession = withStyle("possession");
+    const direct = withStyle("direct");
+    expect(sum(possession, (r) => r.stats.home.passesCompleted)).toBeGreaterThan(
+      sum(direct, (r) => r.stats.home.passesCompleted) * 1.5,
+    );
+    expect(sum(possession, (r) => r.stats.home.possession)).toBeGreaterThan(
+      sum(direct, (r) => r.stats.home.possession),
+    );
+  });
+
+  it("records pressing volume, midfield regains and the counters they trigger", () => {
+    const results = series(
+      N,
+      () => sheet("h", even, { pressing: "high" }),
+      () => sheet("a", rival, { style: "direct" }),
+    );
+    const sequences = sum(results, (r) => r.stats.home.pressingSequences);
+    const regains = sum(results, (r) => r.stats.home.midfieldRegains);
+    const counters = sum(results, (r) => r.stats.away.counterAttacks);
+    expect(sequences).toBeGreaterThan(0);
+    expect(regains).toBeGreaterThan(0);
+    expect(regains).toBeLessThanOrEqual(sequences);
+    expect(counters).toBeGreaterThan(0);
+  });
 });

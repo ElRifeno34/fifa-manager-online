@@ -235,7 +235,7 @@ export interface MenuItem {
 export const MENU: MenuItem[] = [
   { id: "avancer", label: "Avancer", icon: FastForward },
   { id: "effectif", label: "Effectif", icon: Users, badge: 2 },
-  { id: "tactique", label: "Tactique", icon: ClipboardList },
+  { id: "tactique", label: "Tactique", icon: ClipboardList, href: "/banc-de-test" },
   { id: "entrainement", label: "Entraînement", icon: Dumbbell },
   { id: "transferts", label: "Transferts", icon: ArrowLeftRight, badge: 3 },
   { id: "competition", label: "Compétition", icon: Trophy },

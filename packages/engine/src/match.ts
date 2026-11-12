@@ -132,6 +132,9 @@ const emptyStats = (): TeamStats => ({
   expectedGoals: 0,
   passes: 0,
   passesCompleted: 0,
+  pressingSequences: 0,
+  midfieldRegains: 0,
+  counterAttacks: 0,
   corners: 0,
   fouls: 0,
   yellowCards: 0,
@@ -667,6 +670,7 @@ export function simulateMatch(input: {
     const passes = Math.max(1, Math.round(T.passesPerPossession[style] * (0.5 + rng.next())));
     attacking.stats.passes += passes;
     attacking.stats.passesCompleted += passes;
+    if (counter) attacking.stats.counterAttacks++;
     const passer = pick(attacking, (l) =>
       l.line === "goal" ? 0.2 : (l.line === "midfield" ? 2 : 1) * attr(l, "passing"),
     );
@@ -677,6 +681,7 @@ export function simulateMatch(input: {
     /* Fouls stop play wherever the ball is. */
     let beatPress = false;
     let skipMidfield = counter;
+    if (!skipMidfield && defend.pressing === "high") defending.stats.pressingSequences++;
     if (
       rng.chance(
         T.foulPerPossession *
@@ -723,6 +728,7 @@ export function simulateMatch(input: {
       if (defend.line === "low") logit += 0.08;
       if (!rng.chance(logistic(logit))) {
         attacking.stats.passesCompleted--;
+        defending.stats.midfieldRegains++;
         const counterChance = { low: 0.05, medium: 0.09, high: 0.2 }[defend.pressing];
         return lose(counterChance, 40, 0.4);
       }
@@ -875,9 +881,9 @@ export function simulateMatch(input: {
 function finish(teams: Record<Side, Team>, events: MatchEvent[]): MatchResult {
   const home = teams.home;
   const away = teams.away;
-  /* As in real statistics, possession is the share of completed passes. */
-  const total = home.stats.passesCompleted + away.stats.passesCompleted || 1;
-  home.stats.possession = Math.round((home.stats.passesCompleted / total) * 100);
+  /* Possession is based on simulated time on the ball, not a proxy such as completed passes. */
+  const total = home.seconds + away.seconds || 1;
+  home.stats.possession = Math.round((home.seconds / total) * 100);
   away.stats.possession = 100 - home.stats.possession;
   for (const t of [home, away]) t.stats.expectedGoals = round1(t.stats.expectedGoals);
 

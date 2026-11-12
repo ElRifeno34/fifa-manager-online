@@ -185,7 +185,7 @@ export function playToday(
     );
     const seed = deriveSeed(state.seed, state.season.label, fixture.id);
     const result = simulateMatch({ seed, home, away });
-    record(state, fixture, result, squads);
+    record(state, fixture, result, squads, home.tactics, away.tactics);
     /* Playing a system counts as practice; the manager's club trains what it plays. */
     for (const played of [home, away]) {
       const club = state.clubs[played.clubId]!;
@@ -201,7 +201,14 @@ export function playToday(
   return { played: today, userMatch };
 }
 
-function record(state: CareerState, fixture: CareerFixture, result: MatchResult, squads: Squads) {
+function record(
+  state: CareerState,
+  fixture: CareerFixture,
+  result: MatchResult,
+  squads: Squads,
+  homeTactics: TeamSheet["tactics"],
+  awayTactics: TeamSheet["tactics"],
+) {
   fixture.result = {
     home: result.score.home,
     away: result.score.away,
@@ -214,6 +221,12 @@ function record(state: CareerState, fixture: CareerFixture, result: MatchResult,
         side: e.side!,
       })),
     manOfTheMatch: result.manOfTheMatch,
+    analysis: {
+      homeTactics,
+      awayTactics,
+      homeStats: result.stats.home,
+      awayStats: result.stats.away,
+    },
   };
   /* Everyone in both squads: rest counts up to today, then the match adds its own fatigue. */
   for (const clubId of [fixture.homeClubId, fixture.awayClubId]) {
@@ -264,13 +277,27 @@ function reportUserMatch(state: CareerState, f: CareerFixture) {
   const scorers = r.goals
     .filter((g) => (g.side === "home") === home)
     .map((g) => `${state.players[g.playerId]?.name ?? "?"} (${g.minute}')`);
+  const analysis = r.analysis;
+  const tactics = analysis && (home ? analysis.homeTactics : analysis.awayTactics);
+  const stats = analysis && (home ? analysis.homeStats : analysis.awayStats);
+  const tacticalSummary =
+    tactics && stats
+      ? `Identité : ${tactics.formation}, ${styleLabel(tactics.style)}, pressing ${levelLabel(tactics.pressing)}, ligne ${levelLabel(tactics.line)}.\n` +
+        `Sur le terrain : ${stats.possession}% de possession, ${stats.passesCompleted}/${stats.passes} passes réussies, ${stats.shots} tirs (${stats.expectedGoals.toFixed(1)} xG), ${stats.midfieldRegains} récupérations au milieu, ${stats.pressingSequences} séquences de pressing haut, ${stats.counterAttacks} contre-attaques.`
+      : "";
   post(
     state,
     "result",
     `${outcome} ${mine}-${theirs} ${home ? "contre" : "chez"} ${opponent}`,
-    scorers.length ? `Buteurs : ${scorers.join(", ")}.` : "Aucun but de notre côté.",
+    (scorers.length ? `Buteurs : ${scorers.join(", ")}.` : "Aucun but de notre côté.") +
+      tacticalSummary,
   );
 }
+
+const styleLabel = (style: TeamSheet["tactics"]["style"]) =>
+  ({ possession: "possession", balanced: "équilibré", direct: "jeu direct" })[style];
+const levelLabel = (level: TeamSheet["tactics"]["pressing"]) =>
+  ({ low: "bas", medium: "médian", high: "haut" })[level];
 
 /** Current table of a league, first to last. */
 export function leagueTable(state: CareerState, leagueId: string): TableLine[] {

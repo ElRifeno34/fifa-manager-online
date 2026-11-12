@@ -9,6 +9,8 @@
     "dev": "npm run dev -w @fmo/web",
     "pack:fetch": "npm run pack:fetch -w @fmo/data --",
     "pack:build": "npm run pack:build -w @fmo/data",
+    "cap": "npm run cap -w @fmo/web --",
+    "mobile:sync": "npm run mobile:sync -w @fmo/web",
     "calibrate": "npm run calibrate -w @fmo/engine --",
     "play": "npm run play -w @fmo/engine --",
     "benchmark": "npm run benchmark -w @fmo/engine --",

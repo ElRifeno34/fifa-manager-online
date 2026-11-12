@@ -78,6 +78,13 @@ describe("day to day", () => {
     const scorer = played.flatMap((f) => f.result!.goals)[0];
     if (scorer) expect(state.players[scorer.playerId]!.season.goals).toBeGreaterThan(0);
     expect(state.inbox.at(-1)!.kind).toBe("result");
+    expect(state.inbox.at(-1)!.body).toContain("Identité : 5-3-2, jeu direct");
+    expect(state.inbox.at(-1)!.body).toContain("récupérations au milieu");
+    const userFixture = played.find((f) => f.homeClubId === "a" || f.awayClubId === "a")!;
+    expect(userFixture.result!.analysis).toBeDefined();
+    expect(
+      userFixture.result!.analysis![userFixture.homeClubId === "a" ? "homeTactics" : "awayTactics"],
+    ).toEqual(sheet.tactics);
     expect(leagueTable(state, "top").reduce((s, l) => s + l.played, 0)).toBe(4);
   });
 

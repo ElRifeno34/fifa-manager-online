@@ -124,6 +124,12 @@ export interface TeamStats {
   expectedGoals: number;
   passes: number;
   passesCompleted: number;
+  /** Opposition build-up sequences faced while using a high press. */
+  pressingSequences: number;
+  /** Opposition build-up possessions lost in midfield against this team's defense. */
+  midfieldRegains: number;
+  /** Possessions that began immediately after a turnover and were played as a counter. */
+  counterAttacks: number;
   corners: number;
   fouls: number;
   yellowCards: number;

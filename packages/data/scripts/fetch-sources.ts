@@ -79,14 +79,15 @@ interface Page {
   title: string;
   timestamp: string;
   wikitext: string;
+  host?: string;
 }
 
-async function readPages(titles: string[]): Promise<Map<string, Page>> {
+async function readPages(titles: string[], host = "en.wikipedia.org"): Promise<Map<string, Page>> {
   const pages = new Map<string, Page>();
   for (const batch of chunks(titles, PAGES_PER_CALL)) {
     let resume: Record<string, string> = {};
     for (;;) {
-      const data = await wikiApi("en.wikipedia.org", {
+      const data = await wikiApi(host, {
         action: "query",
         prop: "revisions",
         rvprop: "content|timestamp",
@@ -116,10 +117,13 @@ async function fetchSquads(leagueId: string, clubs: ClubConfig[], season = "2026
   const seasonPage = (club: ClubConfig) => `${season} ${club.wikipedia} season`;
   const pathOf = (club: ClubConfig) => join(RAW, `wikipedia/${leagueId}/${club.id}.json`);
   const missing = clubs.filter((club) => refresh || !existsSync(pathOf(club)));
-  for (const batch of chunks(missing, PAGES_PER_CALL)) {
-    const pages = await readPages(
-      batch.flatMap((c) => (c.wikipediaSeason ? [seasonPage(c), c.wikipedia] : [c.wikipedia])),
-    );
+  for (const group of new Set(missing.map((club) => club.wikipediaHost ?? "en.wikipedia.org"))) {
+    const sameHost = missing.filter((club) => (club.wikipediaHost ?? "en.wikipedia.org") === group);
+    for (const batch of chunks(sameHost, PAGES_PER_CALL)) {
+      const pages = await readPages(
+        batch.flatMap((c) => (c.wikipediaSeason ? [seasonPage(c), c.wikipedia] : [c.wikipedia])),
+        group,
+      );
     for (const club of batch) {
       const season = club.wikipediaSeason ? pages.get(seasonPage(club)) : undefined;
       const main = pages.get(club.wikipedia);
@@ -130,8 +134,9 @@ async function fetchSquads(leagueId: string, clubs: ClubConfig[], season = "2026
       if (!best) throw new Error(`No Wikipedia page for ${club.name}: ${club.wikipedia}`);
       const colors = main ? parseKitColors(main.wikitext) : null;
       mkdirSync(dirname(pathOf(club)), { recursive: true });
-      writeFileSync(pathOf(club), JSON.stringify({ ...best, colors }));
+      writeFileSync(pathOf(club), JSON.stringify({ ...best, host: group, colors }));
       console.log(`  ${club.id}: ${present(best)} players from "${best.title}"`);
+    }
     }
   }
 }
@@ -141,27 +146,33 @@ async function fetchLinks(leagueId: string, clubs: ClubConfig[]) {
   const path = join(RAW, `wikidata/${leagueId}.json`);
   if (!refresh && existsSync(path)) return;
 
-  const titles = new Set<string>();
+  const titlesByHost = new Map<string, Set<string>>();
   for (const club of clubs) {
-    const { wikitext } = JSON.parse(
+    const { wikitext, host = club.wikipediaHost ?? "en.wikipedia.org" } = JSON.parse(
       readFileSync(join(RAW, `wikipedia/${leagueId}/${club.id}.json`), "utf8"),
     );
+    const titles = titlesByHost.get(host) ?? new Set<string>();
     for (const player of parseSquad(wikitext)) if (player.title) titles.add(player.title);
+    titlesByHost.set(host, titles);
   }
 
   const titleToItem = new Map<string, string>();
-  for (const batch of chunks([...titles], 50)) {
-    const data = await wikiApi("en.wikipedia.org", {
-      action: "query",
-      prop: "pageprops",
-      ppprop: "wikibase_item",
-      titles: batch.join("|"),
-      redirects: "1",
-    });
-    for (const page of data.query.pages) {
-      const item = page.pageprops?.wikibase_item;
-      if (!item) continue;
-      for (const title of requestedTitles(data.query, page.title)) titleToItem.set(title, item);
+  const titleHost = new Map<string, string>();
+  for (const [host, titles] of titlesByHost) {
+    for (const title of titles) titleHost.set(title, host);
+    for (const batch of chunks([...titles], 50)) {
+      const data = await wikiApi(host, {
+        action: "query",
+        prop: "pageprops",
+        ppprop: "wikibase_item",
+        titles: batch.join("|"),
+        redirects: "1",
+      });
+      for (const page of data.query.pages) {
+        const item = page.pageprops?.wikibase_item;
+        if (!item) continue;
+        for (const title of requestedTitles(data.query, page.title)) titleToItem.set(title, item);
+      }
     }
   }
 

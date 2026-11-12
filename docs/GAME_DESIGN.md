@@ -263,6 +263,13 @@ arrêtés, changements de tactique et remplacements **pendant** le match.
 - **Note de chaque joueur** (sur 10, 6.0 = match moyen) et l'**homme du match**.
 - **Fil des temps forts** en texte (« 34' — But de Martin, servi par Diallo »).
 
+Les statistiques tactiques doivent raconter ce que les consignes ont produit : possession calculée
+sur le temps simulé avec le ballon, volume de passes, séquences affrontées sous pressing haut,
+récupérations au milieu et contre-attaques. Le compte rendu distingue toujours la consigne (l'identité
+choisie) des faits observés pendant ce match. Ces indicateurs sont des mesures du moteur, pas des
+données de tracking réelles ; les récupérations au milieu ne doivent pas être présentées comme des
+récupérations hautes dans le dernier tiers.
+
 ### Visionneuse 2D (paysage)
 
 - Vue de dessus, terrain entier, joueurs en ronds aux couleurs du club avec leur numéro.

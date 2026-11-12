@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { AppBackground } from "@/components/hub/app-background";
 import { HomeHub } from "@/components/hub/home-hub";
+import { MatchLab } from "@/components/match-lab";
 import { MailView } from "@/components/hub/mail-view";
 import { RotateOverlay } from "@/components/hub/rotate-overlay";
 import { SocialViewer } from "@/components/hub/social-viewer";
@@ -25,6 +26,7 @@ export default function App() {
             <ErrorBoundary key={location.pathname}>
               <Routes>
                 <Route path="/" element={<HomeHub />} />
+                <Route path="/banc-de-test" element={<MatchLab />} />
                 <Route path="/messagerie" element={<MailView />} />
                 <Route path="/medias/fil" element={<SocialViewer />} />
                 <Route path="*" element={<HomeHub />} />

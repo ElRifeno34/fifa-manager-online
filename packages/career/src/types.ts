@@ -2,7 +2,7 @@
  * A career is one plain object: it saves as JSON, loads back, and every rule reads and writes it.
  */
 import type { Newspaper } from "@fmo/data";
-import type { Attributes, Position, Tactics } from "@fmo/engine";
+import type { Attributes, Position, Tactics, TeamStats } from "@fmo/engine";
 
 export const CAREER_FORMAT = "fmo-career";
 export const CAREER_VERSION = 7;
@@ -282,7 +282,19 @@ export interface CareerFixture {
   time: string | null;
   homeClubId: string;
   awayClubId: string;
-  result: { home: number; away: number; goals: Goal[]; manOfTheMatch: string } | null;
+  result: {
+    home: number;
+    away: number;
+    goals: Goal[];
+    manOfTheMatch: string;
+    /** Tactical context and match evidence for post-match feedback; optional for older saves. */
+    analysis?: {
+      homeTactics: Tactics;
+      awayTactics: Tactics;
+      homeStats: TeamStats;
+      awayStats: TeamStats;
+    };
+  } | null;
 }
 
 export type InboxKind =

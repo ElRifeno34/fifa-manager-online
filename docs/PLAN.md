@@ -81,7 +81,7 @@ décisions.
 - [x] Package moteur avec RNG déterministe + tests Vitest
 - [x] CI GitHub Actions (format, lint, typecheck, test, build)
 - [x] Motion installé, composant d'apparition des sections
-- [ ] Capacitor (iOS + Android) configuré en paysage
+- [x] Capacitor (iOS + Android) configuré en paysage, projets natifs générés (compilation iOS à valider sur macOS/Xcode)
 - [x] Design system Figma v0.1 (couleurs, typos, espacements, 6 composants)
 - [x] Maquette du hub du club (Figma) + prototype Lovable
 - [ ] Maquettes des 3 autres écrans clés (effectif, compo et tactique, match 2D)
@@ -96,6 +96,10 @@ décisions.
 - **Vrais clubs et joueurs**, chargés depuis des **packs de données** séparés du code.
 - **Packs réels 2026-27 pour 20 championnats**, générés à partir de sources gratuites et non
   versionnés (dépôt public).
+- La Belgique est déjà couverte par `pro-league-2026-27`. Le Danemark existe déjà par
+  `superligaen-2026-27`. Les nouveaux packs demandés sont l'Écosse, la Suède, l'Argentine, le
+  Mexique et le Maroc; leurs sources brutes et leurs calendriers doivent être contrôlés avant
+  publication d'un pack jouable.
 - **Simulation rapide** de plusieurs journées.
 - **V1 élargie** : transferts, entraînement et discussions (joueurs, adjoint, direction) font
   partie de la première version, avec montées et descentes entre D1 et D2 dans cinq pays et une
@@ -116,3 +120,28 @@ décisions.
 - Les vrais clubs, joueurs, blasons et photos nécessitent des licences : Apple et Google retirent les
   apps qui les utilisent sans autorisation. Sans licence, publier avec un pack fictif.
 - « FIFA » ne doit apparaître nulle part dans l'app publiée (le nom du repo peut rester).
+
+## Couverture des compétitions UEFA
+
+Pour les qualifications de la saison 2026-27, la liste des accès est déterminée par le coefficient
+des associations sur les cinq saisons précédentes. Le classement 2026-27 en cours évolue chaque
+semaine; il sert à suivre la prochaine répartition, pas à remplacer le classement de référence déjà
+utilisé pour une saison démarrée. Sources: [classements UEFA](https://www.uefa.com/nationalassociations/uefarankings/)
+et [liste d'accès 2026-27](https://www.uefa.com/nationalassociations/uefarankings/accesslist/uefachampionsleague/).
+
+Parmi les vingt premières associations du classement live consulté le 11 novembre 2026, les packs
+existants couvrent l'Angleterre, l'Italie, l'Espagne, l'Allemagne, la France, le Portugal, la
+Belgique, les Pays-Bas, la Turquie, la Grèce et le Danemark. L'Écosse est en préparation. Pour
+compléter cette tranche, ajouter dans cet ordre de priorité la Pologne, la Tchéquie, la Norvège,
+Chypre, la Suisse, la Hongrie, l'Autriche et la Croatie. La Roumanie (22e dans ce relevé) peut suivre.
+Le rang exact est variable: conserver les coefficients et les règles d'accès dans des données
+versionnées par saison plutôt que les coder en dur.
+
+Cette sélection est une couverture de départ, pas une représentation complète des trois coupes:
+les 55 associations UEFA ont des clubs qualifiables. Le système devra aussi modéliser les coupes
+nationales, les positions qualificatives, les tours préliminaires, les têtes de série, les
+repêchages/réallocations et les changements d'accès dus aux vainqueurs européens.
+
+Les formats domestiques doivent être décrits par compétition, avant de prétendre simuler une saison
+réelle: split écossais/danois, phases et play-offs argentins et mexicains, saison suédoise sur l'année
+civile. Le calendrier double aller-retour générique ne représente pas ces formats.

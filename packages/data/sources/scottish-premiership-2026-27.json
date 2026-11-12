@@ -1,0 +1,21 @@
+{
+  "pack": { "id": "scottish-premiership-2026-27", "name": "Scottish Premiership 2026-27", "season": "2026-27", "version": 1 },
+  "league": { "id": "scottish-premiership", "name": "Scottish Premiership", "country": "Écosse" },
+  "tmCompetition": "SC1",
+  "openfootballPath": null,
+  "clubs": [
+    { "id": "aberdeen", "name": "Aberdeen", "initials": "ABE", "wikipedia": "Aberdeen F.C." },
+    { "id": "celtic", "name": "Celtic", "initials": "CEL", "wikipedia": "Celtic F.C." },
+    { "id": "dundee", "name": "Dundee", "initials": "DUN", "wikipedia": "Dundee F.C." },
+    { "id": "dundee-united", "name": "Dundee United", "initials": "DUU", "wikipedia": "Dundee United F.C." },
+    { "id": "falkirk", "name": "Falkirk", "initials": "FAL", "wikipedia": "Falkirk F.C." },
+    { "id": "hearts", "name": "Heart of Midlothian", "initials": "HEA", "wikipedia": "Heart of Midlothian F.C." },
+    { "id": "hibernian", "name": "Hibernian", "initials": "HIB", "wikipedia": "Hibernian F.C." },
+    { "id": "kilmarnock", "name": "Kilmarnock", "initials": "KIL", "wikipedia": "Kilmarnock F.C." },
+    { "id": "motherwell", "name": "Motherwell", "initials": "MOT", "wikipedia": "Motherwell F.C." },
+    { "id": "rangers", "name": "Rangers", "initials": "RAN", "wikipedia": "Rangers F.C." },
+    { "id": "st-johnstone", "name": "St Johnstone", "initials": "STJ", "wikipedia": "St Johnstone F.C." },
+    { "id": "st-mirren", "name": "St Mirren", "initials": "STM", "wikipedia": "St Mirren F.C." }
+  ],
+  "newspapers": []
+}

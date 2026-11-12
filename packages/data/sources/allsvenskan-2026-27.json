@@ -1,0 +1,26 @@
+{
+  "pack": { "id": "allsvenskan-2026-27", "name": "Allsvenskan 2026", "season": "2026-27", "version": 1 },
+  "league": { "id": "allsvenskan", "name": "Allsvenskan", "country": "Suède" },
+  "tmCompetition": "SE1",
+  "openfootballPath": null,
+  "wikipediaSeason": "2026",
+  "clubs": [
+    { "id": "aik", "name": "AIK", "initials": "AIK", "wikipedia": "AIK Fotboll" },
+    { "id": "hacken", "name": "BK Häcken", "initials": "HAC", "wikipedia": "BK Häcken" },
+    { "id": "degerfors", "name": "Degerfors IF", "initials": "DEG", "wikipedia": "Degerfors IF" },
+    { "id": "djurgarden", "name": "Djurgårdens IF", "initials": "DIF", "wikipedia": "Djurgårdens IF Fotboll" },
+    { "id": "gais", "name": "GAIS", "initials": "GAI", "wikipedia": "GAIS" },
+    { "id": "halmstad", "name": "Halmstads BK", "initials": "HAL", "wikipedia": "Halmstads BK" },
+    { "id": "hammarby", "name": "Hammarby IF", "initials": "HAM", "wikipedia": "Hammarby Fotboll" },
+    { "id": "brommapojkarna", "name": "IF Brommapojkarna", "initials": "BRO", "wikipedia": "IF Brommapojkarna" },
+    { "id": "elfsborg", "name": "IF Elfsborg", "initials": "ELF", "wikipedia": "IF Elfsborg" },
+    { "id": "ifk-goteborg", "name": "IFK Göteborg", "initials": "GOT", "wikipedia": "IFK Göteborg" },
+    { "id": "sirius", "name": "IK Sirius", "initials": "SIR", "wikipedia": "IK Sirius Fotboll" },
+    { "id": "kalmar", "name": "Kalmar FF", "initials": "KAL", "wikipedia": "Kalmar FF" },
+    { "id": "malmo", "name": "Malmö FF", "initials": "MAL", "wikipedia": "Malmö FF" },
+    { "id": "mjalby", "name": "Mjällby AIF", "initials": "MJA", "wikipedia": "Mjällby AIF" },
+    { "id": "orgryte", "name": "Örgryte IS", "initials": "ORG", "wikipedia": "Örgryte IS" },
+    { "id": "vasteras", "name": "Västerås SK", "initials": "VAS", "wikipedia": "Västerås SK Fotboll" }
+  ],
+  "newspapers": []
+}

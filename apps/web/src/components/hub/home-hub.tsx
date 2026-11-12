@@ -95,7 +95,7 @@ export function HomeHub() {
   }, [anyOverlay, advance, navigate, season.news.length]);
 
   const openTile = (id: string) => {
-    if (id !== "medias") notYet();
+    if (!MENU.some((item) => item.id === id && item.href)) notYet();
   };
 
   const commands = useMemo<Command[]>(() => {

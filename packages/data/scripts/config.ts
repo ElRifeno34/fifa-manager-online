@@ -12,6 +12,8 @@ export interface ClubConfig {
   initials: string;
   /** Article holding the squad: the club page, or a season page for hand-written configs. */
   wikipedia: string;
+  /** Language edition for club pages that have no English article. */
+  wikipediaHost?: string;
   /** Override the season-page title for leagues played over a calendar year. */
   wikipediaSeason?: string;
   city?: string;
