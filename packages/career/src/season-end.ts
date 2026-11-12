@@ -206,11 +206,12 @@ const MENTAL: (keyof Attributes)[] = ["vision", "positioning", "composure"];
  */
 function develop(state: CareerState, start: string, rng: Rng) {
   const changes: { id: string; delta: number }[] = [];
-  /* Matches each club played this season, from the calendar (single round in very large leagues). */
+  /* League fixtures divided by the number of clubs gives matches per club in a single round.
+   * A double round-robin naturally yields twice that value. */
   const rounds = new Map(
     state.leagues.map((l) => [
       l.id,
-      (state.fixtures.filter((f) => f.leagueId === l.id).length * 2) /
+      state.fixtures.filter((f) => f.leagueId === l.id).length /
         Math.max(clubsOf(state, l.id).length, 1),
     ]),
   );

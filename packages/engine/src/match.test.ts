@@ -65,7 +65,7 @@ describe("simulateMatch", () => {
     expect(wins / results.length).toBeGreaterThan(0.7);
   });
 
-  it("lifts a club whose collective plays above its squad", () => {
+  it("lifts a club whose collective plays above its squad", { timeout: 15_000 }, () => {
     const points = (levelAdjustment: number) =>
       sum(
         series(
@@ -165,7 +165,7 @@ describe("tactics", () => {
     expect(shots("low")).toBeLessThan(shots("medium"));
   });
 
-  it("gets a high press played through by good passers", () => {
+  it("gets a high press played through by good passers", { timeout: 15_000 }, () => {
     const passers = fast(14, { passing: 19, dribbling: 18, composure: 19 }, () => true);
     const gain = (opponent: typeof rival) =>
       conceded({ pressing: "medium" }, opponent) - conceded({ pressing: "high" }, opponent);

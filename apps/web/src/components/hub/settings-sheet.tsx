@@ -25,6 +25,13 @@ export function SettingsSheet({ open, onClose }: SettingsSheetProps) {
     const panel = panelRef.current;
     panel?.querySelector<HTMLElement>("[data-autofocus]")?.focus();
 
+    const getFocusable = () =>
+      [
+        ...(panel?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? []),
+      ].filter((el) => el.getAttribute("aria-hidden") !== "true" && el.offsetParent !== null);
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
@@ -33,12 +40,15 @@ export function SettingsSheet({ open, onClose }: SettingsSheetProps) {
         return;
       }
       if (e.key !== "Tab" || !panel) return;
-      const focusables = panel.querySelectorAll<HTMLElement>(
-        'button, [href], input, [tabindex]:not([tabindex="-1"])',
-      );
+      const focusables = getFocusable();
       if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
+      const first = focusables[0]!;
+      const last = focusables[focusables.length - 1]!;
+      if (!panel.contains(document.activeElement)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+        return;
+      }
       if (e.shiftKey && document.activeElement === first) {
         e.preventDefault();
         last.focus();
@@ -184,7 +194,7 @@ export function SettingsSheet({ open, onClose }: SettingsSheetProps) {
             aria-describedby="bg-anim-desc"
             onClick={() => setAnimatedBg(!animatedBg)}
             className={cn(
-              "relative h-6 w-11 shrink-0 border transition-colors duration-150",
+              "relative h-11 w-11 shrink-0 border transition-colors duration-150",
               animatedBg ? "border-club-rule bg-club" : "border-line-strong bg-surface",
             )}
           >

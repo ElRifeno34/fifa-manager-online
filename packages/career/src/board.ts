@@ -158,10 +158,15 @@ function sack(state: CareerState, reason: string) {
   const rng = createRng(deriveSeed(state.seed, "jobs", state.date));
   const current = state.clubs[state.manager.clubId]!;
   /* Smaller clubs are willing to give him a new chance. */
-  const options = Object.values(state.clubs)
+  const pool = Object.values(state.clubs)
     .filter((c) => c.id !== current.id && c.reputation <= current.reputation)
-    .sort(() => rng.next() - 0.5)
-    .slice(0, 3);
+    .sort((a, b) => a.id.localeCompare(b.id));
+  /* Fisher–Yates is deterministic and does not rely on a non-transitive random comparator. */
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = rng.int(0, i);
+    [pool[i], pool[j]] = [pool[j]!, pool[i]!];
+  }
+  const options = pool.slice(0, 3);
   const fallback = Object.values(state.clubs).find((c) => c.id !== current.id)!;
   const offers = options.length ? options : [fallback];
   openConversation(state, {

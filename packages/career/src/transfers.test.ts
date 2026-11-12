@@ -94,6 +94,20 @@ describe("buying a player", () => {
     expect(() => startTransfer(state, squadOf(state, "c")[3]!.id)).toThrow(/closed/);
   });
 
+  it("rejects fractional contract durations and invalid numeric offers", () => {
+    const state = career();
+    const player = target(state);
+    const negotiation = startTransfer(state, player.id);
+    expect(() => offerFee(state, negotiation.id, Number.NaN)).toThrow(/fee/);
+    offerFee(state, negotiation.id, negotiation.askingFee);
+    expect(() => offerContract(state, negotiation.id, { wage: 10_000, years: 1.5 })).toThrow(
+      /whole seasons/,
+    );
+    expect(() =>
+      offerContract(state, negotiation.id, { wage: Number.POSITIVE_INFINITY, years: 1 }),
+    ).toThrow(/wage/);
+  });
+
   it("signs a free agent at any time", () => {
     const state = career();
     const p = squadOf(state, "e")[5]!;
@@ -151,9 +165,28 @@ describe("own players", () => {
     state.offers.push(offer);
     const counter = answerOffer(state, offer.id, { counter: 9_000_000 });
     expect(counter.status).toBe("countered");
-    expect(answerOffer(state, offer.id, { counter: 6_500_000 }).status).toBe("accepted");
+    expect(answerOffer(state, offer.id, "accept").status).toBe("accepted");
     expect(p.clubId).toBe("c");
-    expect(state.transfers.at(-1)!.fee).toBe(6_500_000);
+    expect(state.transfers.at(-1)!.fee).toBe(7_000_000);
+  });
+
+  it("does not accept a counter-offer above the buyer's hidden limit", () => {
+    const state = career();
+    const p = squadOf(state, "a")[3]!;
+    const offer = {
+      id: state.nextId++,
+      date: state.date,
+      buyerId: "c",
+      playerId: p.id,
+      fee: 5_000_000,
+      limit: 6_000_000,
+      round: 0,
+      status: "open" as const,
+    };
+    state.offers.push(offer);
+    expect(answerOffer(state, offer.id, { counter: 9_000_000 }).status).toBe("countered");
+    expect(answerOffer(state, offer.id, "accept").status).toBe("accepted");
+    expect(state.transfers.at(-1)!.fee).toBe(6_000_000);
   });
 });
 

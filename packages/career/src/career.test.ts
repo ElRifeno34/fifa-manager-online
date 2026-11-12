@@ -156,6 +156,10 @@ describe("determinism and saves", () => {
     expect(loaded.season.index).toBe(1);
     expect(() => loadCareer(JSON.stringify({ format: "other" }))).toThrow();
     expect(() => loadCareer(JSON.stringify({ ...state, version: 99 }))).toThrow();
+    const missingPlayerClub = structuredClone(state);
+    missingPlayerClub.players[Object.keys(missingPlayerClub.players)[0]!]!.clubId = "missing";
+    expect(() => loadCareer(saveCareer(missingPlayerClub))).toThrow(/unknown club/);
+    expect(() => loadCareer("{")).toThrow(/valid JSON/);
   });
 });
 
@@ -192,5 +196,22 @@ describe("season 2026-27", () => {
     expect(state.season.label).toBe("2026-27");
     expect(state.fixtures.every((f) => f.date >= "2026-08-15")).toBe(true);
     expect(state.date >= "2026-07-01").toBe(true);
+  });
+
+  it("keeps all matches in a large odd-sized league's single round", () => {
+    const pack = makePack(
+      "large-odd",
+      Array.from({ length: 25 }, (_, i) => `c${i}`),
+      70,
+    );
+    const state = createCareer({ packs: [pack], clubId: "c0", managerName: "T", seed: 1 });
+    expect(state.fixtures).toHaveLength((25 * 24) / 2);
+    expect(new Set(state.fixtures.map((f) => f.round))).toHaveProperty("size", 25);
+    const gamesPerClub = new Map<string, number>();
+    for (const fixture of state.fixtures) {
+      gamesPerClub.set(fixture.homeClubId, (gamesPerClub.get(fixture.homeClubId) ?? 0) + 1);
+      gamesPerClub.set(fixture.awayClubId, (gamesPerClub.get(fixture.awayClubId) ?? 0) + 1);
+    }
+    expect([...gamesPerClub.values()].every((games) => games === 24)).toBe(true);
   });
 });

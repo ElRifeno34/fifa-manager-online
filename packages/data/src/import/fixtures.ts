@@ -4,28 +4,40 @@ const WEEK_MS = 7 * 86400000;
 
 /**
  * Double round-robin by the circle method, for leagues without a published calendar: one round
- * a week from `firstDate`, and every club meets every other club once at home and once away.
+ * a week from `firstDate`, every club meets every other club once at home and once away, and an
+ * odd-sized league gets a bye each round.
  */
 export function generateRoundRobin(clubIds: readonly string[], firstDate: string): Fixture[] {
   const ids = [...clubIds].sort();
-  if (ids.length % 2 !== 0) throw new Error("An even number of clubs is required");
+  if (ids.length < 2) throw new Error("At least two clubs are required");
+  if (new Set(ids).size !== ids.length) throw new Error("Club ids must be unique");
+  const parsedStart = Date.parse(`${firstDate}T00:00:00Z`);
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(firstDate) ||
+    Number.isNaN(parsedStart) ||
+    new Date(parsedStart).toISOString().slice(0, 10) !== firstDate
+  ) {
+    throw new Error(`Invalid first date: ${firstDate}`);
+  }
 
-  const rounds = ids.length - 1;
-  const rotation = ids.slice(1);
+  /* Add a bye slot when needed; the club paired with it rests this round. */
+  const scheduleIds = ids.length % 2 === 0 ? ids : [...ids, "__bye__"];
+  const rounds = scheduleIds.length - 1;
+  const rotation = scheduleIds.slice(1);
   const firstLeg: [string, string][][] = [];
   for (let round = 0; round < rounds; round++) {
-    const circle = [ids[0]!, ...rotation];
+    const circle = [scheduleIds[0]!, ...rotation];
     const pairs: [string, string][] = [];
     for (let i = 0; i < circle.length / 2; i++) {
       const a = circle[i]!;
       const b = circle[circle.length - 1 - i]!;
-      pairs.push((round + i) % 2 === 0 ? [a, b] : [b, a]);
+      if (a !== "__bye__" && b !== "__bye__") pairs.push((round + i) % 2 === 0 ? [a, b] : [b, a]);
     }
     firstLeg.push(pairs);
     rotation.unshift(rotation.pop()!);
   }
 
-  const start = Date.parse(firstDate);
+  const start = parsedStart;
   const legs = [...firstLeg, ...firstLeg.map((r) => r.map(([a, b]): [string, string] => [b, a]))];
   return legs.flatMap((pairs, index) =>
     pairs.map(([homeClubId, awayClubId]) => ({

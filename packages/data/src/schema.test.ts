@@ -42,7 +42,14 @@ const fixture = (homeClubId: string, awayClubId: string, round: number) => ({
 });
 
 const pack: Pack = {
-  meta: { id: "p", name: "P", season: "2026-27", version: 1, generatedAt: "now", sources: [] },
+  meta: {
+    id: "p",
+    name: "P",
+    season: "2026-27",
+    version: 1,
+    generatedAt: "2026-08-01T12:00:00.000Z",
+    sources: [],
+  },
   league: { id: "l", name: "L", country: "C", fixturesSource: "generated" },
   clubs: [club("a"), club("b")],
   players: [player],
@@ -67,5 +74,25 @@ describe("packSchema", () => {
   it("rejects out-of-range attributes", () => {
     const players = [{ ...player, attributes: { ...attributes, pace: 21 } }];
     expect(packSchema.safeParse({ ...pack, players }).success).toBe(false);
+  });
+  it("rejects invalid calendar dates and self-fixtures", () => {
+    const invalidDate = { ...pack, fixtures: [fixture("a", "b", 1), fixture("b", "a", 2)] };
+    invalidDate.fixtures[0]!.date = "2026-02-30";
+    expect(packSchema.safeParse(invalidDate).success).toBe(false);
+    expect(
+      packSchema.safeParse({ ...pack, fixtures: [fixture("a", "a", 1), fixture("b", "a", 2)] })
+        .success,
+    ).toBe(false);
+  });
+  it("rejects duplicate clubs and invalid newspaper club references", () => {
+    expect(packSchema.safeParse({ ...pack, clubs: [club("a"), club("a")] }).success).toBe(false);
+    const newspapers = [
+      { id: "paper", name: "Paper", city: "City", tone: "neutral", favoriteClubIds: ["z"] },
+    ];
+    expect(packSchema.safeParse({ ...pack, newspapers }).success).toBe(false);
+  });
+  it("requires a complete home-and-away pairing in each distinct round", () => {
+    const fixtures = [fixture("a", "b", 1), fixture("b", "a", 1)];
+    expect(packSchema.safeParse({ ...pack, fixtures }).success).toBe(false);
   });
 });

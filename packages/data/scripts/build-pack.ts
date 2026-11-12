@@ -1,6 +1,7 @@
 /**
  * Assembles /data/packs/<pack>.json for each league: squads from Wikipedia, level and profile from
- * Transfermarkt, fixtures from openfootball. Run pack:fetch first. Usage: pack:build [league ids].
+ * Transfermarkt, fixtures from openfootball or a generated calendar where needed. Run pack:fetch
+ * first. Usage: pack:build [league ids].
  */
 import { createReadStream, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -103,14 +104,26 @@ await readCsv("transfermarkt/appearances.csv.gz", (row) => {
 
 function ageOn(birthDate: string | null): number | null {
   if (!birthDate) return null;
-  return Math.floor((Date.parse(SEASON_START) - Date.parse(birthDate)) / (365.25 * 86400000));
+  const [by, bm, bd] = birthDate.split("-").map(Number) as [number, number, number];
+  const [year, month, day] = SEASON_START.split("-").map(Number) as [number, number, number];
+  return year - by - (month < bm || (month === bm && day < bd) ? 1 : 0);
 }
 
 const FEET: Record<string, Player["foot"]> = { left: "left", right: "right", both: "both" };
 const slug = (text: string) => normalize(text).replace(/ +/g, "-");
 
 function buildFixtures(config: LeagueConfig, id: string): Fixture[] {
-  if (!config.openfootballPath) {
+  if (
+    !config.openfootballPath ||
+    config.league.id === "brasileirao" ||
+    config.league.id === "mls"
+  ) {
+    /*
+     * The in-game season starts in summer 2026. A calendar-year competition such as Brazil's
+     * 2026 season has already begun before that date; carrying over its January–December schedule
+     * would silently skip half the fixtures when a career starts. MLS has conferences/play-offs,
+     * which are not representable by the current plain round-robin career rules.
+     */
     return generateRoundRobin(
       config.clubs.map((c) => c.id),
       SEASON_START,
@@ -218,7 +231,7 @@ function buildLeague(config: LeagueConfig) {
       } else {
         report.byMethod[method]++;
         if (method === "none") report.unmatched.push(`${club.id}: ${wiki.name}`);
-        if (method === "name") report.byName.push(`${club.id}: ${wiki.name} -> ${row?.name}`);
+        if (method === "name" && row) report.byName.push(`${club.id}: ${wiki.name} -> ${row.name}`);
       }
 
       const birthDate = row?.date_of_birth?.slice(0, 10) || null;
@@ -311,11 +324,21 @@ function buildLeague(config: LeagueConfig) {
     meta: {
       ...config.pack,
       generatedAt: new Date().toISOString(),
-      sources: ["Wikipedia (CC BY-SA)", "Wikidata (CC0)", "transfermarkt-datasets", "openfootball"],
+      sources: [
+        "Wikipedia (CC BY-SA)",
+        "Wikidata (CC0)",
+        "transfermarkt-datasets",
+        ...(config.openfootballPath && !["brasileirao", "mls"].includes(config.league.id)
+          ? ["openfootball"]
+          : []),
+      ],
     },
     league: {
       ...config.league,
-      fixturesSource: config.openfootballPath ? "openfootball" : "generated",
+      fixturesSource:
+        config.openfootballPath && !["brasileirao", "mls"].includes(config.league.id)
+          ? "openfootball"
+          : "generated",
     },
     clubs,
     players: allPlayers,

@@ -505,6 +505,15 @@ On s'en **inspire** (ambiance, structure), on ne reprend **aucun** élément gra
   visible en bas à droite, comme le « Avancer » des modes carrière.
 - Une partie du texte de la référence console doit être agrandie : on vise un écran de téléphone,
   pas une télé.
+- Contrôles interactifs avec une cible tactile d'au moins 44 × 44 px, y compris interrupteurs,
+  flèches de carrousel et actions secondaires.
+- Tout contenu qui défile automatiquement peut être mis en pause au survol, au focus ou par une
+  commande explicite ; respecter `prefers-reduced-motion` et ne pas animer les informations non lues.
+- Les dialogues et panneaux modaux gardent le focus à l'intérieur, se ferment avec Échap et
+  rendent le focus au contrôle qui les a ouverts. Les actions principales restent accessibles au
+  clavier et au lecteur d'écran.
+- Les parcours doivent présenter des états de chargement, vide, erreur et succès ; un contrôle ne
+  doit pas ressembler à une action fonctionnelle s'il ne fait qu'afficher un message « indisponible ».
 
 ### Design system v0.1 (thème sombre, conservé en option)
 
@@ -561,6 +570,55 @@ Interface **mobile paysage**, pensée pour le **tactile**.
 | 20  | **Entraînement**        | Plan de la semaine, intensité, thème, axes individuels, familiarité tactique         | Oui |
 | 21  | Carrière coach          | Profil de l'entraîneur : réputation, palmarès, contrat, offres d'autres clubs        | Oui |
 | 22  | **Discussions**         | Boîte de réception, conversations avec les joueurs, l'adjoint et la direction        | Oui |
+
+---
+
+## 11.1 Revue de conception — améliorations proposées à discuter
+
+Ces propositions ne sont pas encore des règles de la V1. Elles visent à rendre les décisions plus
+lisibles et la carrière plus gratifiante, sans transformer le jeu en tableur ni en jeu d'action.
+
+### Priorité proposée : clarifier le feedback des décisions
+
+1. **Rapport d'avant-match personnalisé** : montrer les deux ou trois facteurs qui expliquent le
+   rapport de force (forme, fatigue, qualité d'une ligne, adversaire rapide face à une ligne haute),
+   puis proposer des réglages sans modifier la tactique à la place du joueur.
+2. **Explication d'après-match** : relier les temps forts et les statistiques à une cause lisible
+   (« les pertes sous pressing ont donné trois contres »), en séparant les faits simulés des
+   commentaires narratifs.
+3. **Aperçu de conséquence avant validation** : pour entraînement, négociation, libération ou
+   décision de direction, afficher le coût, le risque et l'effet attendu avant confirmation ;
+   conserver une annulation quand la décision n'a pas encore produit d'effet irréversible.
+4. **Historique consultable** : conserver les décisions clés, résultats, transferts et progression
+   dans une chronologie filtrable, pour que les carrières longues restent compréhensibles.
+
+### À envisager après validation du cœur de jeu
+
+5. **Objectifs choisis par le joueur** : en début de saison, pouvoir accepter l'objectif du conseil,
+   négocier une cible plus ambitieuse ou demander un objectif de reconstruction, avec budget et
+   confiance cohérents.
+6. **Identité tactique persistante** : permettre d'enregistrer quelques plans nommés (par exemple
+   « domicile », « bloc bas », « protéger un avantage ») et de comparer la familiarité avant de
+   changer de système.
+7. **Développement des jeunes plus lisible** : rapports de potentiel sous forme de fourchette,
+   mentorat et décision de prêt à introduire quand ces systèmes ont un modèle de règles robuste.
+8. **Calendriers spécifiques aux compétitions** : traiter séparément conférences/play-offs MLS,
+   groupes et barrages, ainsi que reports ; un calendrier généré en aller-retour ne doit pas être
+   présenté comme le calendrier réel.
+9. **Paramètres d'accessibilité** : taille de texte, intensité d'animation, commandes tactiles
+   alternatives au glisser-déposer et options de contraste qui ne reposent pas seulement sur la
+   couleur.
+
+### Questions pour arbitrage produit
+
+- La V1 privilégie-t-elle la **lisibilité des conséquences**, la profondeur tactique, ou le récit de
+  carrière ? Je recommande de commencer par les points 1 à 4, avant d'ajouter de nouvelles boucles.
+- Souhaites-tu pouvoir remplacer à tout moment les choix du staff, ou certains conseils doivent-ils
+  s'appliquer automatiquement en simulation rapide ?
+- L'objectif de saison doit-il être une négociation à conséquences, ou une préférence purement
+  cosmétique ?
+- Pour les championnats à format particulier, préfère-t-on les règles réellement représentées ou
+  une ligue simplifiée clairement étiquetée comme telle ?
 
 Le menu du hub prévoit déjà les entrées Entraînement, Transferts et Carrière coach (DA v2, voir
 [design/HUB_V2.md](design/HUB_V2.md)) ; leurs écrans font partie de la v1.

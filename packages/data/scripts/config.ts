@@ -12,6 +12,8 @@ export interface ClubConfig {
   initials: string;
   /** Article holding the squad: the club page, or a season page for hand-written configs. */
   wikipedia: string;
+  /** Override the season-page title for leagues played over a calendar year. */
+  wikipediaSeason?: string;
   city?: string;
   primary?: string;
   secondary?: string;
@@ -35,8 +37,12 @@ export interface LeagueConfig {
 export function loadLeagues(): LeagueConfig[] {
   const dir = join(ROOT, "packages/data/sources");
   const wanted = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-  return readdirSync(dir)
+  const configs = readdirSync(dir)
     .filter((file) => file.endsWith(".json"))
     .map((file) => JSON.parse(readFileSync(join(dir, file), "utf8")) as LeagueConfig)
     .filter((config) => wanted.length === 0 || wanted.includes(config.league.id));
+  const found = new Set(configs.map((config) => config.league.id));
+  const unknown = wanted.filter((id) => !found.has(id));
+  if (unknown.length) throw new Error(`Unknown competition id(s): ${unknown.join(", ")}`);
+  return configs;
 }

@@ -27,8 +27,26 @@ describe("generateRoundRobin", () => {
     expect(fixtures[0]?.date).toBe("2026-08-15");
     expect(fixtures.find((f) => f.round === 2)?.date).toBe("2026-08-22");
   });
-  it("refuses an odd number of clubs", () => {
-    expect(() => generateRoundRobin(["a", "b", "c"], "2026-08-15")).toThrow();
+  it("schedules a bye week when the league has an odd number of clubs", () => {
+    const odd = generateRoundRobin(["a", "b", "c"], "2026-08-15");
+    expect(odd).toHaveLength(6);
+    for (let round = 1; round <= 6; round++) {
+      const playing = odd
+        .filter((fixture) => fixture.round === round)
+        .flatMap((fixture) => [fixture.homeClubId, fixture.awayClubId]);
+      expect(playing).toHaveLength(2);
+      expect(new Set(playing).size).toBe(2);
+    }
+  });
+  it("rejects duplicate ids and invalid start dates", () => {
+    expect(() => generateRoundRobin(["a", "a"], "2026-08-15")).toThrow(/unique/);
+    expect(() => generateRoundRobin(["a", "b"], "2026-02-30")).toThrow(/date/);
+  });
+  it("supports calendar-year leagues with odd club counts", () => {
+    const fixtures = generateRoundRobin(["a", "b", "c", "d", "e"], "2026-01-01");
+    expect(fixtures).toHaveLength(20);
+    expect(Math.max(...fixtures.map((fixture) => fixture.round))).toBe(10);
+    expect(fixtures.every((fixture) => fixture.homeClubId !== fixture.awayClubId)).toBe(true);
   });
 });
 

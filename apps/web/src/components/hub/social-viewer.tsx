@@ -15,15 +15,17 @@ export function SocialViewer() {
   const [commentsHidden, setCommentsHidden] = useState(false);
   const count = POSTS.length;
 
+  const activeIndex = Math.min(index, Math.max(0, count - 1));
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        setIndex((i) => (i + 1) % count);
+        setIndex((i) => (i + 1) % Math.max(count, 1));
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
-        setIndex((i) => (i - 1 + count) % count);
+        setIndex((i) => (i - 1 + Math.max(count, 1)) % Math.max(count, 1));
       } else if (e.key === "Escape") {
         navigate("/");
       }
@@ -32,7 +34,27 @@ export function SocialViewer() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [count, navigate]);
 
-  const post = POSTS[index] ?? POSTS[0]!;
+  const post = POSTS[activeIndex];
+
+  if (!post) {
+    return (
+      <main id="contenu" className="flex h-dvh items-center justify-center p-6">
+        <section className="sheet flex max-w-lg flex-col items-center gap-4 p-6 text-center">
+          <h1 className="font-display text-2xl font-bold uppercase text-ink">Aucune publication</h1>
+          <p className="text-sm text-ink-2">
+            Le fil social sera disponible après la prochaine journée.
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="caps min-h-11 rounded-md bg-club px-4 text-club-on"
+          >
+            Retour au hub
+          </button>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main
@@ -53,7 +75,7 @@ export function SocialViewer() {
           >
             <NavButton
               label="Publication précédente"
-              onClick={() => setIndex((index - 1 + count) % count)}
+              onClick={() => setIndex((activeIndex - 1 + count) % count)}
             >
               <ChevronLeft className="size-4" aria-hidden />
             </NavButton>
@@ -61,9 +83,12 @@ export function SocialViewer() {
               className="min-w-9 text-center font-mono text-xs font-semibold text-ink-2"
               aria-live="polite"
             >
-              {index + 1} / {count}
+              {activeIndex + 1} / {count}
             </span>
-            <NavButton label="Publication suivante" onClick={() => setIndex((index + 1) % count)}>
+            <NavButton
+              label="Publication suivante"
+              onClick={() => setIndex((activeIndex + 1) % count)}
+            >
               <ChevronRight className="size-4" aria-hidden />
             </NavButton>
           </div>

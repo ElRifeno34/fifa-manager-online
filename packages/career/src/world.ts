@@ -41,10 +41,20 @@ const GENERATED_START = "2026-08-15";
 function calendarOf(pack: Pack) {
   const big = pack.clubs.length > SINGLE_ROUND_ABOVE;
   if (!big && pack.fixtures.every((f) => f.date >= SEASON_OPENS)) return pack.fixtures;
-  return leagueCalendar(
+  const generated = leagueCalendar(
     pack.clubs.map((c) => c.id),
     GENERATED_START,
   ).map((f) => ({ ...f, time: null }));
+  /* Preserve the real bye-week round numbers for odd-sized leagues. */
+  if (pack.clubs.length % 2 !== 0 && pack.fixtures.length > 0) {
+    const dates = [...new Set(pack.fixtures.map((f) => f.round))].sort((a, b) => a - b);
+    const targetByGeneratedRound = new Map(dates.map((round, index) => [index + 1, round]));
+    return generated.map((fixture) => ({
+      ...fixture,
+      round: targetByGeneratedRound.get(fixture.round) ?? fixture.round,
+    }));
+  }
+  return generated;
 }
 
 /** Above this many clubs, a league plays each opponent once: MLS's 30 clubs play 29 matches. */
@@ -56,8 +66,9 @@ export function leagueCalendar(clubIds: readonly string[], start: string) {
   if (clubIds.length <= SINGLE_ROUND_ABOVE) return fixtures;
   /* A single round: the club with fewer home games so far plays at home, to share them out. */
   const home = new Map(clubIds.map((id) => [id, 0]));
+  const singleRoundCount = clubIds.length % 2 === 0 ? clubIds.length - 1 : clubIds.length;
   return fixtures
-    .filter((f) => f.round < clubIds.length)
+    .filter((f) => f.round <= singleRoundCount)
     .map((f) => {
       const swap = home.get(f.homeClubId)! > home.get(f.awayClubId)!;
       const fixture = swap ? { ...f, homeClubId: f.awayClubId, awayClubId: f.homeClubId } : f;

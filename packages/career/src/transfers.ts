@@ -37,9 +37,12 @@ export function askingPrice(
   playerId: string,
   roles?: Map<string, Role>,
 ): number {
-  const p = state.players[playerId]!;
+  const p = state.players[playerId];
+  if (!p) throw new Error(`Unknown player: ${playerId}`);
   if (!p.clubId) return 0;
-  const role = (roles ?? rolesOf(squadOf(state, p.clubId))).get(p.id) ?? "rotation";
+  const club = state.clubs[p.clubId];
+  if (!club) throw new Error(`Unknown club: ${p.clubId}`);
+  const role = (roles ?? rolesOf(squadOf(state, club.id))).get(p.id) ?? "rotation";
   const left = seasonsLeft(state, p);
   const contract = left <= 0 ? 0.5 : left === 1 ? 0.8 : left === 2 ? 1 : 1.1;
   const listed = p.listed ? 0.85 : 1;
@@ -169,6 +172,8 @@ export function offerFee(state: CareerState, negotiationId: number, fee: number)
   const n = negotiationOf(state, negotiationId);
   if (n.stage !== "fee") throw new Error("Not negotiating a fee");
   if (!isWindowOpen(state)) throw new Error("The transfer window is closed");
+  if (!Number.isFinite(fee) || fee < 0)
+    throw new Error("A transfer fee must be a non-negative amount");
   const club = state.clubs[state.manager.clubId]!;
   if (fee > club.finance.transferBudget) {
     return { status: "rejected", reason: "La direction refuse : budget transferts dépassé." };
@@ -198,10 +203,18 @@ export function offerContract(
 ): Answer {
   const n = negotiationOf(state, negotiationId);
   if (n.stage !== "contract") throw new Error("Not negotiating a contract");
+  if (!Number.isFinite(offer.wage) || offer.wage < 0) {
+    throw new Error("A wage must be a non-negative amount");
+  }
   const p = state.players[n.playerId]!;
   const mine = state.manager.clubId;
   const club = state.clubs[mine]!;
-  if (offer.years < 1 || offer.years > 5) throw new Error("A contract lasts one to five seasons");
+  if (!Number.isInteger(offer.years) || offer.years < 1 || offer.years > 5) {
+    throw new Error("A contract lasts one to five whole seasons");
+  }
+  if (offer.promise && !["key", "regular", "rotation"].includes(offer.promise)) {
+    throw new Error("Unknown playing-time promise");
+  }
   /* The board keeps the wage bill within budget. */
   const current = n.kind === "renewal" ? (p.contract?.wage ?? 0) : 0;
   if (weeklyWages(squadOf(state, mine)) - current + offer.wage > club.finance.wageBudget * 1.05) {
@@ -253,6 +266,12 @@ export function transferPlayer(
   fee: number,
   contract: { wage: number; until: string },
 ) {
+  if (!Number.isFinite(fee) || fee < 0) throw new Error("A transfer fee must be non-negative");
+  if (!Number.isFinite(contract.wage) || contract.wage < 0) {
+    throw new Error("A contract wage must be non-negative");
+  }
+  if (!state.clubs[toId]) throw new Error(`Unknown destination club: ${toId}`);
+  if (p.clubId && !state.clubs[p.clubId]) throw new Error(`Unknown selling club: ${p.clubId}`);
   const fromId = p.clubId;
   const buyer = state.clubs[toId]!.finance;
   buyer.balance -= fee;
@@ -321,14 +340,38 @@ export function answerOffer(
   const offer = state.offers.find((o) => o.id === offerId && o.status === "open");
   if (!offer) throw new Error("No such open offer");
   const p = state.players[offer.playerId]!;
+  if (!p.clubId || p.clubId !== state.manager.clubId) {
+    offer.status = "withdrawn";
+    return { status: "rejected", reason: "Le joueur n'est plus dans votre club." };
+  }
+  if (!state.clubs[offer.buyerId]) {
+    offer.status = "withdrawn";
+    return { status: "rejected", reason: "Le club acheteur n'existe plus." };
+  }
   if (answer === "reject") {
     offer.status = "rejected";
     blockedMove(state, p, offer.buyerId);
     return { status: "rejected", reason: "Offre refusée." };
   }
   const fee = answer === "accept" ? offer.fee : answer.counter;
+  if (!Number.isFinite(fee) || fee < 0) throw new Error("A counter-offer must be non-negative");
+  if (answer !== "accept" && fee <= offer.fee) {
+    return {
+      status: "rejected",
+      reason: "La contre-offre doit être supérieure à l'offre initiale.",
+    };
+  }
+  const previousFee = offer.fee;
   offer.round++;
-  if (answer === "accept" || fee <= offer.limit) {
+  if (answer === "accept") {
+    offer.status = "accepted";
+    const buyer = state.clubs[offer.buyerId]!;
+    const wage = Math.max(p.contract?.wage ?? 0, marketWage(valueOf(p, state.date)));
+    transferPlayer(state, p, buyer.id, fee, { wage, until: seasonsAfter(state.season.start, 3) });
+    return { status: "accepted" };
+  }
+  if (fee <= offer.limit) {
+    offer.fee = fee;
     offer.status = "accepted";
     const buyer = state.clubs[offer.buyerId]!;
     const wage = Math.max(p.contract?.wage ?? 0, marketWage(valueOf(p, state.date)));
@@ -339,7 +382,7 @@ export function answerOffer(
     offer.status = "withdrawn";
     return { status: "rejected", reason: `${state.clubs[offer.buyerId]!.name} retire son offre.` };
   }
-  offer.fee = Math.min(offer.limit, Math.round((offer.fee + fee) / 2 / 100_000) * 100_000);
+  offer.fee = Math.min(offer.limit, Math.round((previousFee + fee) / 2 / 100_000) * 100_000);
   return { status: "countered", counter: offer.fee };
 }
 
@@ -357,11 +400,11 @@ export function searchPlayers(state: CareerState, filters: SearchFilters = {}, l
     .filter((p) => !p.retired && p.clubId !== state.manager.clubId)
     .filter((p) => !filters.freeOnly || !p.clubId)
     .filter((p) => !filters.position || p.position === filters.position)
-    .filter((p) => !filters.maxAge || ageOn(p.birthDate, state.date) <= filters.maxAge)
-    .filter((p) => !filters.minOverall || p.overall >= filters.minOverall)
-    .filter((p) => !filters.maxValue || valueOf(p, state.date) <= filters.maxValue)
+    .filter((p) => filters.maxAge === undefined || ageOn(p.birthDate, state.date) <= filters.maxAge)
+    .filter((p) => filters.minOverall === undefined || p.overall >= filters.minOverall)
+    .filter((p) => filters.maxValue === undefined || valueOf(p, state.date) <= filters.maxValue)
     .sort((a, b) => b.overall - a.overall)
-    .slice(0, limit)
+    .slice(0, Math.max(0, Math.floor(limit)))
     .map((p) => ({
       player: p,
       value: valueOf(p, state.date),

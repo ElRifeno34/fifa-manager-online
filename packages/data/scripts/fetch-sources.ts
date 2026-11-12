@@ -24,15 +24,18 @@ async function get(url: string): Promise<Response> {
       return null;
     });
     if (!response) {
-      console.log("  network error, retrying in 30s");
-      await wait(30000);
+      if (attempt === 5) throw new Error(`Network request failed after ${attempt + 1} attempts: ${url}`);
+      const delay = Math.min(30000, 1000 * 2 ** attempt);
+      console.log(`  network error, retrying in ${Math.round(delay / 1000)}s`);
+      await wait(delay);
       continue;
     }
     if (response.ok) return response;
-    if (response.status !== 429 || attempt === 5) {
-      throw new Error(`${response.status} on ${url}`);
+    if ((response.status !== 429 && response.status < 500) || attempt === 5) {
+      throw new Error(`${response.status} ${response.statusText} on ${url}`);
     }
-    const seconds = Number(response.headers.get("retry-after")) || 30;
+    const retryAfter = Number(response.headers.get("retry-after"));
+    const seconds = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : 30;
     console.log(`  rate limited, waiting ${seconds}s`);
     await wait(seconds * 1000);
   }
@@ -114,9 +117,11 @@ async function fetchSquads(leagueId: string, clubs: ClubConfig[], season = "2026
   const pathOf = (club: ClubConfig) => join(RAW, `wikipedia/${leagueId}/${club.id}.json`);
   const missing = clubs.filter((club) => refresh || !existsSync(pathOf(club)));
   for (const batch of chunks(missing, PAGES_PER_CALL)) {
-    const pages = await readPages(batch.flatMap((c) => [seasonPage(c), c.wikipedia]));
+    const pages = await readPages(
+      batch.flatMap((c) => (c.wikipediaSeason ? [seasonPage(c), c.wikipedia] : [c.wikipedia])),
+    );
     for (const club of batch) {
-      const season = pages.get(seasonPage(club));
+      const season = club.wikipediaSeason ? pages.get(seasonPage(club)) : undefined;
       const main = pages.get(club.wikipedia);
       /* First team only: some season pages list just their academy players. */
       const present = (page?: Page) =>
@@ -161,16 +166,18 @@ async function fetchLinks(leagueId: string, clubs: ClubConfig[]) {
   }
 
   const itemToTransfermarkt = new Map<string, string>();
+  const entities = new Map<string, any>();
   for (const batch of chunks([...new Set(titleToItem.values())], 50)) {
     const data = await wikiApi("www.wikidata.org", {
       action: "wbgetentities",
       ids: batch.join("|"),
       props: "claims",
     });
-    for (const [item, entity] of Object.entries<any>(data.entities)) {
-      const id = entity.claims?.P2446?.[0]?.mainsnak?.datavalue?.value;
-      if (id) itemToTransfermarkt.set(item, id);
-    }
+    for (const [item, entity] of Object.entries<any>(data.entities)) entities.set(item, entity);
+  }
+  for (const item of new Set(titleToItem.values())) {
+    const id = entities.get(item)?.claims?.P2446?.[0]?.mainsnak?.datavalue?.value;
+    if (id) itemToTransfermarkt.set(item, id);
   }
   const links = Object.fromEntries(
     [...titleToItem].map(([title, item]) => [
