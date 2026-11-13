@@ -7,7 +7,7 @@ import { RosterView } from "@/components/roster-view";
 import { MailView } from "@/components/hub/mail-view";
 import { RotateOverlay } from "@/components/hub/rotate-overlay";
 import { SocialViewer } from "@/components/hub/social-viewer";
-import { V1Wireframes } from "@/components/v1-wireframes";
+import { CareerV1Wireframes } from "@/components/career-v1-wireframes";
 import { ClubThemeProvider } from "@/components/providers/club-theme";
 import { GameStateProvider } from "@/components/providers/game-state";
 import { ToastProvider } from "@/components/providers/toast";
@@ -32,7 +32,7 @@ export default function App() {
                 <Route path="/banc-de-test" element={<MatchLab />} />
                 <Route path="/messagerie" element={<MailView />} />
                 <Route path="/medias/fil" element={<SocialViewer />} />
-                <Route path="/maquettes-v1" element={<V1Wireframes />} />
+                <Route path="/maquettes-v1" element={<CareerV1Wireframes />} />
                 <Route path="*" element={<HomeHub />} />
               </Routes>
             </ErrorBoundary>

@@ -1,42 +1,51 @@
-# Wireframes et maquettes de la V1
+# Wireframes de la carrière V1
 
-Le prototype React est accessible en lançant le front-end puis en ouvrant `/maquettes-v1`. Le bouton
-**Wireframe** affiche la structure et la hiérarchie des écrans ; **Maquette** montre la direction
-visuelle sombre avec les couleurs du club en accent. La navigation de gauche permet d’explorer les
-écrans dans l’ordre et le panneau latéral explique leur rôle et ce qu’ils déclenchent.
+Le prototype consultable se trouve sur la route `/maquettes-v1`. Il comprend une carte de structure,
+une vue détaillée pour chaque écran V1 et un basculement entre filaire et aperçu visuel. Les contrôles
+illustrent la navigation ; ils ne créent pas encore de sauvegarde.
 
-## Boucle de carrière
+## Architecture fonctionnelle
 
 ```text
-Choisir un championnat et un club
-              ↓
-Accueil : échéance, messages et décisions
-              ↓
-Effectif → Composition et consignes
-              ↓
-Avant-match → Match simulé → Résumé et classement
-              ↓
-Entraînement, transferts et discussions
-              ↓
-Retour à l’accueil, puis prochaine journée
+Menu principal
+├── Nouvelle carrière → compétition → club → objectif/budget → création
+├── Continuer / sauvegardes locales → hub du club
+└── Réglages
+
+Hub du club
+├── Effectif → fiche joueur → temps de jeu / entraînement / contrat
+├── Composition → tactique → avant-match → match texte → résumé
+├── Calendrier → résultats / classement / simulation rapide
+├── Entraînement → forme, fatigue, progression, familiarité tactique
+├── Transferts → négociation vendeur → négociation joueur → finances
+├── Discussions → joueur / adjoint / direction → promesses suivies
+├── Presse et fil → récits liés aux événements de la carrière
+└── Fin de saison → bilan / jeunes / contrats / budget / saison suivante
 ```
 
-## Écrans du prototype
+## Écrans inclus en V1
 
-| Écran                   | Décision montrée                             | Effet attendu dans le jeu                                |
-| ----------------------- | -------------------------------------------- | -------------------------------------------------------- |
-| Nouvelle carrière       | Choisir championnat et club                  | Charger le pack, puis créer une sauvegarde locale        |
-| Accueil du club         | Choisir la prochaine action                  | Accéder aux échéances, messages et sections de gestion   |
-| Effectif                | Évaluer rôles, moral, forme et disponibilité | Préparer le onze de départ                               |
-| Composition et tactique | Placer les joueurs et régler le style        | Fournir les titulaires et consignes au moteur            |
-| Avant-match et match    | Lancer ou simuler la rencontre               | Produire un résultat, des événements et des statistiques |
-| Après-match             | Lire les conséquences                        | Mettre à jour calendrier, fatigue, moral et classement   |
-| Entraînement            | Régler thème et intensité                    | Faire évoluer les joueurs et la familiarité tactique     |
-| Transferts et contrats  | Faire une offre ou négocier                  | Modifier effectif, contrats et finances                  |
+| Section          | Écrans                                                       |
+| ---------------- | ------------------------------------------------------------ |
+| Démarrer         | Menu principal, nouvelle carrière, sauvegardes               |
+| Piloter le club  | Hub du club                                                  |
+| Gérer l’équipe   | Effectif, fiche joueur, composition et tactique              |
+| Jouer les matchs | Avant-match, match en direct (texte), résumé après-match     |
+| Suivre la saison | Calendrier, classement, simulation rapide, fin de saison     |
+| Gestion          | Entraînement, transferts et contrats, finances               |
+| Relations        | Carrière coach, discussions et promesses, presse, fil social |
 
-## Ce que la maquette représente
+## Structure récurrente d’un écran
 
-Les écrans illustrent le parcours et les informations nécessaires, avec des exemples fictifs. Le
-prototype n’enregistre pas encore de carrière et ne lance pas le moteur depuis ces écrans. La
-connexion du parcours de nouvelle partie, de la composition, des résultats et des classements à une
-sauvegarde réelle reste un chantier de la phase 3.
+1. Barre de contexte : club, saison, date et compétition.
+2. Titre et objectif de l’écran.
+3. Indicateurs importants ou état courant.
+4. Zone principale : tableau, calendrier, feuille de match ou conversations.
+5. Panneau latéral : décisions, conséquences et alertes.
+6. Actions principales et retour vers la prochaine étape de carrière.
+
+## Hors périmètre V1
+
+Les photos sociales générées, la visionneuse de match 2D, les coupes et barrages, les prêts et clauses
+ainsi que le multijoueur en ligne restent en phases ultérieures. Les écrans V1 n’appellent pas encore
+la sauvegarde et le moteur depuis le prototype.
