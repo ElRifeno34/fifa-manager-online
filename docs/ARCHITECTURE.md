@@ -202,6 +202,10 @@ Le moteur d'événements est en place dans `packages/engine`, sans interface :
 | `npm run tune:clubs` | Ajuste le niveau collectif de chaque club sur les cotes de 2026-27          |
 | `npm run calibrate`  | Simule des saisons entières : titres, points, classements                   |
 
+Pour poursuivre les ligues valides si certains packs n'ont pas encore onze joueurs par club :
+`npm run calibrate -- --seasons 8 --skip-incomplete`. Le rapport nomme chaque pack ignoré ; sans
+cette option, la commande s'arrête en expliquant quel effectif doit être réparé.
+
 Résultat (2 382 matchs de 2026-27 rejoués, comparés à la saison 2025-26 et aux cotes de 2026-27) :
 
 | Mesure                                  | Réalité          | Moteur           |
@@ -210,7 +214,16 @@ Résultat (2 382 matchs de 2026-27 rejoués, comparés à la saison 2025-26 et a
 | Tirs / tirs cadrés par équipe           | 12,7 / 4,3       | 12,7 / 4,3       |
 | Corners / fautes / jaunes par équipe    | 4,8 / 12,5 / 2,1 | 4,8 / 12,5 / 2,1 |
 | Nuls                                    | 26 %             | 27 %             |
-| Score de Brier contre les cotes 2026-27 | 0,590 (cotes)    | 0,614            |
+| Score de Brier contre les cotes 2026-27 | 0,590 (cotes)    | 0,615            |
+
+**Calibration multi-saisons (8 saisons simulées par pack complet).** Sur 24 des 25 packs locaux
+(le pack marocain est exclu afin que les effectifs fictifs de COD Meknès, RCA Zemamra et WS Témara
+n'influencent pas les résultats), le moteur produit en moyenne 2,83 buts par match, 45 % de victoires à domicile,
+26 % de nuls et 29 % de victoires à l'extérieur. Les tirs sont à 13,2 par équipe. Les favoris dont
+le meilleur onze a une note moyenne supérieure d'au moins 10 points gagnent 68 % des rencontres
+agrégées. Cette définition correspond au favori _très supérieur_ du game design. Les écarts par
+championnat sont conservés quand ils sont plausibles : MLS et Arabie saoudite marquent davantage,
+tandis que Ligue 2 marque moins. Les formats réels de certaines ligues restent un sujet de phase 1.
 
 En carrière, la première saison donne 2,7 à 2,9 buts par match selon le championnat, et les
 meilleurs buteurs marquent 20 à 34 buts.

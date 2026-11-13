@@ -30,17 +30,17 @@ Liens :
 
 ## Phases
 
-| Phase                   | Contenu                                                                                            | Livrable                   |
-| ----------------------- | -------------------------------------------------------------------------------------------------- | -------------------------- |
-| **0. Fondations**       | Monorepo, CI, Capacitor, DA + design system Figma, maquettes                                       | Base technique + maquettes |
-| **1. Données**          | Format des packs, pack de développement réel, écrans effectif et fiche joueur                      | Effectifs réels chargés    |
-| **2. Moteur headless**  | Simulation par événements, tests, ajustement sur la saison réelle 2026-27                          | Scores réalistes en CLI    |
-| **3. Carrière v1**      | Saisons et montées-descentes, entraînement, transferts, finances, discussions, écrans, sauvegardes | **V1 jouable en solo**     |
-| **4. Visualisation 2D** | Couche chorégraphie, rendu PixiJS, replay                                                          | Les matchs se regardent    |
-| **5. Profondeur**       | Coupes, barrages, prêts et clauses, tactique en direct, contenu IA                                 | Monde plus riche           |
-| **6. Publication**      | Licences ou pack fictif, tests sur appareils, stores iOS/Android, desktop éventuel                 | App sur les stores         |
-| **7. Online**           | Serveur, base de données, comptes, ligues privées entre amis, journées planifiées                  | **Multijoueur entre amis** |
-| **8. Produit**          | Ligues publiques, scalabilité, anti-triche, monétisation sans pay-to-win                           | Passage à l'échelle        |
+| Phase                             | Contenu                                                                                            | Livrable                                                      |
+| --------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **0. Fondations**                 | Monorepo, CI, Capacitor, DA + design system Figma, maquettes                                       | Base technique + maquettes                                    |
+| **1. Données (en cours)**         | Packs locaux, catalogue multi-ligues, écran effectif et fiche joueur                               | Effectifs consultables dans toutes les compétitions intégrées |
+| **2. Moteur headless (terminée)** | Simulation par événements, tactiques mesurables, tests, benchmark et calibration multi-saisons     | Moteur calibré et reproductible en CLI                        |
+| **3. Carrière v1**                | Saisons et montées-descentes, entraînement, transferts, finances, discussions, écrans, sauvegardes | **V1 jouable en solo**                                        |
+| **4. Visualisation 2D**           | Couche chorégraphie, rendu PixiJS, replay                                                          | Les matchs se regardent                                       |
+| **5. Profondeur**                 | Coupes, barrages, prêts et clauses, tactique en direct, contenu IA                                 | Monde plus riche                                              |
+| **6. Publication**                | Licences ou pack fictif, tests sur appareils, stores iOS/Android, desktop éventuel                 | App sur les stores                                            |
+| **7. Online**                     | Serveur, base de données, comptes, ligues privées entre amis, journées planifiées                  | **Multijoueur entre amis**                                    |
+| **8. Produit**                    | Ligues publiques, scalabilité, anti-triche, monétisation sans pay-to-win                           | Passage à l'échelle                                           |
 
 ## Piste UI (transversale)
 
@@ -71,8 +71,52 @@ décisions.
 5. **Discussions** (fait) : joueurs, adjoint, direction ; promesses, confiance, licenciement.
 6. **Équilibrage** (fait) : économie, marché, niveaux, buts et blessures vérifiés sur 6 à 8
    saisons simulées.
-7. **Écrans** sur la DA, commencés dès l'étape 1 : nouvelle partie, hub, effectif, compo,
-   entraînement, transferts, discussions, match en texte, classement, fin de saison.
+7. **Écrans** sur la DA, commencés dès l'étape 1 : le hub/messages/fil social, un banc d'essai
+   tactique, l'effectif multi-compétitions et un prototype explicatif des écrans de carrière existent.
+   Le prototype est accessible à `/maquettes-v1` et montre les parcours sans créer de vraie sauvegarde.
+   Le parcours de nouvelle partie, la composition reliée à la sauvegarde, les résultats et les
+   classements de carrière restent à intégrer au front-end.
+
+## Phase 1 — état d'avancement
+
+- [x] Schéma de pack validé (clubs, joueurs, attributs, statistiques, calendriers et métadonnées).
+- [x] Pipeline de collecte et de génération depuis Wikipédia/Wikidata, Transfermarkt et OpenFootball.
+- [x] Pack de référence Liga 2026-27 : 20 clubs, 561 joueurs et 380 rencontres OpenFootball.
+- [x] Catalogue local de 25 compétitions relié à l'écran Effectif : sélection du championnat et du
+      club, recherche, équipe A/réserve et sélection d'un joueur. Les packs restent locaux et ignorés par Git.
+- [x] Fiche joueur : poste, nationalité, âge au début de saison, taille, niveau, attributs et
+      statistiques 2025-26 lorsqu'elles sont disponibles.
+- [ ] Contrôler les joueurs de chaque équipe et la logique du calendrier. Le dernier contrôle a
+      corrigé Västerås SK et Unión Santa Fe. COD Meknès, RCA Zemamra et WS Témara ont maintenant
+      chacun un effectif de démonstration de 24 joueurs fictifs, explicitement signalés dans l’UI ;
+      ils devront être remplacés par des données réelles avant une sortie publique. Certains packs
+      ont aussi des calendriers générés qui ne représentent pas encore les formats réels avec phases
+      ou play-offs.
+- [ ] Relier l'effectif sélectionné à une vraie sauvegarde de carrière et à l'écran de composition.
+
+Le front-end expose maintenant les 25 packs configurés. La phase 1 reste ouverte tant que les
+effectifs vides et calendriers simplifiés n'ont pas été contrôlés, et que la sélection d'un club
+n'ouvre pas encore une sauvegarde jouable. Les packs générés et sources brutes restent locaux; les
+écrans de données affichent les estimations du jeu comme telles.
+
+## Phase 2 — clôturée le 12 novembre 2026
+
+- [x] Moteur d'événements déterministe, avec score, événements horodatés, statistiques, notes et
+      performances individuelles cohérentes.
+- [x] Effets tactiques mesurables et testés : possession/direct, pressing, endurance, ligne haute
+      contre vitesse et bloc bas contre jeu direct.
+- [x] Tests moteur : 31 tests réussis et vérification TypeScript réussie.
+- [x] Benchmark réel : 2 382 matchs de 18 championnats 2026-27, rejoués 20 fois chacun et comparés
+      aux résultats, statistiques 2025-26 et cotes 2026-27.
+- [x] Calibration de huit saisons dans les 24 packs dont tous les clubs ont au moins onze joueurs.
+      Résultat agrégé : 2,83 buts par match, 45 % de victoires à domicile, 26 % de nuls, 29 % de
+      victoires à l'extérieur ; les favoris dont le meilleur onze dépasse l'adversaire d'au moins
+      10 points gagnent 68 % des matchs.
+
+La calibration exclut explicitement le pack marocain afin que les trois effectifs fictifs ajoutés
+ensuite ne biaisent pas les mesures du moteur. Le contrôle et le remplacement par des données réelles
+relèvent de la phase 1. Le moteur de phase 2 est terminé. La visionneuse de match 2D reste en phase 4,
+et la connexion de la carrière au front-end reste en phase 3.
 
 ## Phase 0 en détail
 
@@ -94,7 +138,7 @@ décisions.
 - Vite + React : une seule base de code web pour mobile, navigateur et desktop.
 - Logique de jeu indépendante du stockage, pour réutiliser le même code en online.
 - **Vrais clubs et joueurs**, chargés depuis des **packs de données** séparés du code.
-- **Packs réels 2026-27 pour 20 championnats**, générés à partir de sources gratuites et non
+- **Packs réels 2026-27 pour 25 championnats configurés**, générés à partir de sources gratuites et non
   versionnés (dépôt public).
 - La Belgique est déjà couverte par `pro-league-2026-27`. Le Danemark existe déjà par
   `superligaen-2026-27`. Les nouveaux packs demandés sont l'Écosse, la Suède, l'Argentine, le

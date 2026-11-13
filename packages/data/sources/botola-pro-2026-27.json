@@ -5,7 +5,7 @@
   "openfootballPath": null,
   "clubs": [
     { "id": "as-far", "name": "AS FAR", "initials": "ASF", "wikipedia": "AS FAR" },
-    { "id": "cod-meknes", "name": "COD Meknès", "initials": "COD", "wikipedia": "COD Meknès" },
+    { "id": "cod-meknes", "name": "COD Meknès", "initials": "COD", "wikipedia": "COD Meknès", "fictionalSquadPath": "fictional-squads/cod-meknes.json" },
     { "id": "dh-el-jadida", "name": "DH El Jadida", "initials": "DHJ", "wikipedia": "Difaâ Hassani El Jadidi" },
     { "id": "fus-rabat", "name": "FUS Rabat", "initials": "FUS", "wikipedia": "FUS de Rabat" },
     { "id": "hassania-agadir", "name": "Hassania Agadir", "initials": "HUS", "wikipedia": "Hassania Agadir" },
@@ -14,12 +14,12 @@
     { "id": "kawkab-marrakech", "name": "Kawkab Marrakech", "initials": "KACM", "wikipedia": "KAC Marrakech" },
     { "id": "ma-tetouan", "name": "MA Tétouan", "initials": "MAT", "wikipedia": "Moghreb Tétouan" },
     { "id": "raja-casablanca", "name": "Raja Casablanca", "initials": "RCA", "wikipedia": "Raja Casablanca" },
-    { "id": "rca-zemamra", "name": "RCA Zemamra", "initials": "RCAZ", "wikipedia": "Renaissance Zemamra" },
+    { "id": "rca-zemamra", "name": "RCA Zemamra", "initials": "RCAZ", "wikipedia": "Renaissance Zemamra", "fictionalSquadPath": "fictional-squads/rca-zemamra.json" },
     { "id": "rs-berkane", "name": "RS Berkane", "initials": "RSB", "wikipedia": "RS Berkane" },
     { "id": "amal-tiznit", "name": "US Amal Tiznit", "initials": "USAT", "wikipedia": "Union Sportive Amal Tiznit" },
     { "id": "uts-rabat", "name": "UTS Rabat", "initials": "UTS", "wikipedia": "Union Touarga Sport" },
     { "id": "wydad-casablanca", "name": "Wydad AC", "initials": "WAC", "wikipedia": "Wydad AC" },
-    { "id": "ws-temara", "name": "WS Témara", "initials": "WST", "wikipedia": "Wydad Témara" }
+    { "id": "ws-temara", "name": "WS Témara", "initials": "WST", "wikipedia": "Wydad Témara", "fictionalSquadPath": "fictional-squads/ws-temara.json" }
   ],
   "newspapers": []
 }

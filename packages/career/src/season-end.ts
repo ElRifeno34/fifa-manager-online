@@ -21,7 +21,6 @@ import {
   estimateValue,
   initialMorale,
   personalityFor,
-  rolesOf,
   seasonsAfter,
 } from "./people.ts";
 import { clubsOf, indexSquads, newSeasonStats, post, squadOf, toEngine } from "./state.ts";

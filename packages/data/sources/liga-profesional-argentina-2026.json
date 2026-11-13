@@ -33,7 +33,7 @@
     { "id": "sarmiento", "name": "Sarmiento", "initials": "SAR", "wikipedia": "Club Atlético Sarmiento" },
     { "id": "talleres", "name": "Talleres", "initials": "TAL", "wikipedia": "Talleres de Córdoba" },
     { "id": "tigres", "name": "Tigre", "initials": "TIG", "wikipedia": "Club Atlético Tigre" },
-    { "id": "union-santa-fe", "name": "Unión", "initials": "UNI", "wikipedia": "Club Atlético Unión" },
+    { "id": "union-santa-fe", "name": "Unión", "initials": "UNI", "wikipedia": "Unión de Santa Fe" },
     { "id": "velez-sarsfield", "name": "Vélez Sarsfield", "initials": "VEL", "wikipedia": "Club Atlético Vélez Sarsfield" }
   ],
   "newspapers": []

@@ -15,7 +15,7 @@ export { conditionOf, squadOf } from "./state.ts";
 export { loadCareer, saveCareer } from "./save.ts";
 export { isAvailable } from "./availability.ts";
 export { budgets, weeklyWages } from "./finance.ts";
-export { estimateValue, rolesOf, updateMorale, type Role } from "./people.ts";
+export { estimateValue, initialMorale, rolesOf, updateMorale, type Role } from "./people.ts";
 export { familiarityWith, suggestTraining } from "./training.ts";
 export {
   answerOffer,

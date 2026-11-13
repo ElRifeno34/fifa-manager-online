@@ -21,6 +21,8 @@ export interface ClubConfig {
   secondary?: string;
   /** Name in the calendar, when it cannot be matched automatically. */
   openfootball?: string;
+  /** Fallback roster used only while no real first-team players can be parsed. */
+  fictionalSquadPath?: string;
 }
 
 export interface LeagueConfig {

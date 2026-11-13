@@ -3,9 +3,11 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { AppBackground } from "@/components/hub/app-background";
 import { HomeHub } from "@/components/hub/home-hub";
 import { MatchLab } from "@/components/match-lab";
+import { RosterView } from "@/components/roster-view";
 import { MailView } from "@/components/hub/mail-view";
 import { RotateOverlay } from "@/components/hub/rotate-overlay";
 import { SocialViewer } from "@/components/hub/social-viewer";
+import { V1Wireframes } from "@/components/v1-wireframes";
 import { ClubThemeProvider } from "@/components/providers/club-theme";
 import { GameStateProvider } from "@/components/providers/game-state";
 import { ToastProvider } from "@/components/providers/toast";
@@ -26,9 +28,11 @@ export default function App() {
             <ErrorBoundary key={location.pathname}>
               <Routes>
                 <Route path="/" element={<HomeHub />} />
+                <Route path="/effectif" element={<RosterView />} />
                 <Route path="/banc-de-test" element={<MatchLab />} />
                 <Route path="/messagerie" element={<MailView />} />
                 <Route path="/medias/fil" element={<SocialViewer />} />
+                <Route path="/maquettes-v1" element={<V1Wireframes />} />
                 <Route path="*" element={<HomeHub />} />
               </Routes>
             </ErrorBoundary>

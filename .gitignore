@@ -14,3 +14,5 @@ npm-debug.log*
 
 # Generated data packs and raw sources: the repository is public
 /data/
+/apps/web/public/packs/
+/apps/web/public/flags/

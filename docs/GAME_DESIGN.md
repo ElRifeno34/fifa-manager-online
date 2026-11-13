@@ -103,7 +103,7 @@ sont calculés pour chaque joueur, à partir de sa valeur, de son poste et de se
 
 ### V1
 
-- **Les 20 championnats des packs sont jouables.** Les cinq paires D1/D2 sont reliées par des
+- **Les 25 championnats configurés dans les packs sont visés comme jouables.** Les cinq paires D1/D2 sont reliées par des
   **montées et descentes** : Premier League et Championship, Ligue 1 et Ligue 2, Bundesliga et 2. Bundesliga, Serie A et Serie B, LaLiga et LaLiga Hypermotion. Une carrière peut donc durer
   plusieurs saisons, commencer en deuxième division ou y descendre.
 - V1 : **3 montées et 3 descentes** par paire, sans barrages ni play-offs. Les autres championnats
@@ -285,8 +285,12 @@ récupérations hautes dans le dernier tiers.
 | Buts par match                          | 2,5 à 2,9                           |
 | Victoires à domicile / nuls / extérieur | ~45 % / ~27 % / ~28 %               |
 | Tirs par équipe et par match            | 10 à 15                             |
-| Le favori (bien plus fort) gagne        | 65 à 75 % du temps                  |
+| Le favori très supérieur gagne          | 65 à 75 % du temps                  |
 | Écart de points entre 1er et dernier    | Réaliste, sans saison « injouable » |
+
+Pour cette mesure, un **favori très supérieur** est une équipe dont le meilleur onze dépasse
+l'adversaire d'au moins **10 points de note moyenne**. La calibration agrège plusieurs saisons et
+plusieurs ligues afin de ne pas confondre un favori léger avec un écart de niveau net.
 
 Avec de vrais clubs, on vérifie aussi que le classement final ressemble à la réalité en moyenne
 (les gros clubs finissent en haut la plupart du temps, avec des surprises possibles).
@@ -654,7 +658,7 @@ qui bloquent le jeu.
 
 ### V1 (fin de la phase 3) — « une carrière de plusieurs saisons, jouable en solo »
 
-- Création d'une partie : n'importe quel club des 20 championnats des packs.
+- Création d'une partie : n'importe quel club des 25 championnats configurés dans les packs.
 - Plusieurs saisons, avec montées et descentes entre D1 et D2 dans cinq pays.
 - Compo, formation et 3 consignes tactiques ; match en texte et stats, simulation rapide.
 - **Entraînement** hebdomadaire, progression, familiarité tactique.

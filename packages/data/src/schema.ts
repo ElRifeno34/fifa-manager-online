@@ -82,6 +82,8 @@ export const playerSchema = z.strictObject({
   potential: rating,
   attributes: attributesSchema,
   lastSeason: seasonStatsSchema.nullable(),
+  /** Explicitly labels placeholder players so the UI never presents them as real people. */
+  fictional: z.boolean().optional(),
   /** False when no market value was found and the level comes from the squad role alone. */
   levelFromData: z.boolean(),
 });

@@ -62,7 +62,7 @@ export function shareWages(
 ) {
   const weights = players.map((p) => valueOf(p, date) ** 0.7);
   const total = weights.reduce((s, w) => s + w, 0) || 1;
-  return players.map((p, i) =>
+  return players.map((_, i) =>
     Math.max(floor, Math.round((weeklyBill * weights[i]!) / total / 100) * 100),
   );
 }

@@ -39,6 +39,17 @@ const excludedNationalities = new Set<string>(
 const readJson = (path: string) => JSON.parse(readFileSync(join(RAW, path), "utf8"));
 
 type Row = Record<string, string>;
+interface FictionalPlayerSource {
+  id: string;
+  name: string;
+  number: number;
+  nationality: string;
+  birthDate: string;
+  heightCm: number;
+  foot: Player["foot"];
+  position: Player["position"];
+  overall: number;
+}
 
 async function readCsv(path: string, onRow: (row: Row) => void) {
   const stream = createReadStream(join(RAW, path)).pipe(createGunzip());
@@ -190,6 +201,7 @@ function buildLeague(config: LeagueConfig) {
     revisions: {} as Record<string, string>,
     sources: {} as Record<string, string>,
     colorsMissing: [] as string[],
+    fictionalPlayers: {} as Record<string, number>,
   };
   const colors = new Map<string, KitColors>();
 
@@ -204,7 +216,8 @@ function buildLeague(config: LeagueConfig) {
     if (!hand && !page.colors) report.colorsMissing.push(club.name);
     colors.set(club.id, hand ?? page.colors ?? FALLBACK_COLORS);
 
-    for (const wiki of parseSquad(page.wikitext)) {
+    const wikiSquad = parseSquad(page.wikitext);
+    for (const wiki of wikiSquad) {
       if (wiki.section === "loan-out") {
         report.loanedOut++;
         continue;
@@ -270,7 +283,51 @@ function buildLeague(config: LeagueConfig) {
         }),
         lastSeason: stats ? { season: STATS_SEASON.label, ...stats } : null,
         levelFromData: marketValueEur !== null,
+        fictional: false,
       });
+    }
+
+    /* Use the visible placeholder roster only while no real first-team list exists. */
+    if (
+      !wikiSquad.some((player) => player.section === "first-team") &&
+      club.fictionalSquadPath
+    ) {
+      const sourcePath = join(ROOT, "packages/data/sources", club.fictionalSquadPath);
+      const fictionalSquad = JSON.parse(readFileSync(sourcePath, "utf8")) as FictionalPlayerSource[];
+      for (const source of fictionalSquad) {
+        const id = `fictional-${club.id}-${source.id}`;
+        const age = ageOn(source.birthDate);
+        players.set(id, {
+          id,
+          clubId: club.id,
+          name: source.name,
+          nationality: source.nationality,
+          birthDate: source.birthDate,
+          foot: source.foot,
+          heightCm: source.heightCm,
+          number: source.number,
+          squad: "first-team",
+          position: source.position,
+          secondaryPositions: [],
+          marketValueEur: null,
+          overall: source.overall,
+          potential: estimatePotential(source.overall, age),
+          attributes: deriveAttributes({
+            id,
+            position: source.position,
+            overall: source.overall,
+            age,
+            heightCm: source.heightCm,
+            performance: null,
+          }),
+          lastSeason: null,
+          levelFromData: false,
+          fictional: true,
+        });
+      }
+      report.fictionalPlayers[club.id] = fictionalSquad.length;
+      report.sources[club.id] = `Fictional placeholder roster (${fictionalSquad.length} players)`;
+      console.log(`  ${club.id}: ${fictionalSquad.length} explicitly fictional players loaded`);
     }
   }
 
@@ -281,7 +338,7 @@ function buildLeague(config: LeagueConfig) {
     const firstTeam = allPlayers.filter((p) => p.clubId === club.id && p.squad === "first-team");
     if (firstTeam.length < 18) report.thinSquads.push(`${club.name}: ${firstTeam.length}`);
     const clubMedian = median(firstTeam.filter((p) => p.levelFromData).map((p) => p.overall));
-    for (const player of firstTeam.filter((p) => !p.levelFromData)) {
+    for (const player of firstTeam.filter((p) => !p.levelFromData && !p.fictional)) {
       const age = ageOn(player.birthDate);
       player.overall = estimateMissingOverall(clubMedian, player.number);
       player.potential = estimatePotential(player.overall, age);
@@ -328,6 +385,9 @@ function buildLeague(config: LeagueConfig) {
         "Wikipedia (CC BY-SA)",
         "Wikidata (CC0)",
         "transfermarkt-datasets",
+        ...(Object.keys(report.fictionalPlayers).length
+          ? ["Generated fictional placeholders for clubs with no parsed first-team roster"]
+          : []),
         ...(config.openfootballPath && !["brasileirao", "mls"].includes(config.league.id)
           ? ["openfootball"]
           : []),

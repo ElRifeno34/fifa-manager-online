@@ -1,7 +1,7 @@
 /**
  * Simulates whole seasons on the real packs (data/packs, built by pack:build) and compares the
  * season-level output (titles, points, positions); `npm run benchmark` compares with reality.
- * Usage: calibrate [league ids] [--seasons N]
+ * Usage: calibrate [league ids] [--seasons N] [--skip-incomplete]
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -24,6 +24,8 @@ const PACKS = join(dirname(fileURLToPath(import.meta.url)), "../../../data/packs
 const args = process.argv.slice(2);
 const seasonsArg = args.indexOf("--seasons");
 const SEASONS = seasonsArg >= 0 ? Number(args[seasonsArg + 1]) : 10;
+const SKIP_INCOMPLETE = args.includes("--skip-incomplete");
+const FAVOURITE_GAP = 10;
 const wanted = args.filter((a, i) => !a.startsWith("--") && args[i - 1] !== "--seasons");
 
 if (!existsSync(PACKS)) {
@@ -31,16 +33,38 @@ if (!existsSync(PACKS)) {
   process.exit(1);
 }
 
-const pct = (n: number, d: number) => `${((100 * n) / Math.max(d, 1)).toFixed(0)}%`;
+const pct = (n: number, d: number) => (d === 0 ? "—" : `${((100 * n) / d).toFixed(0)}%`);
 const avg = (n: number, d: number) => (n / Math.max(d, 1)).toFixed(2);
 
 const total = { matches: 0, goals: 0, home: 0, draw: 0, favourites: 0, favouriteWins: 0, ms: 0 };
+const skipped: string[] = [];
+let calibrated = 0;
 
 for (const file of readdirSync(PACKS).filter(
   (f) => f.endsWith(".json") && !f.includes(".report"),
 )) {
   const pack = JSON.parse(readFileSync(join(PACKS, file), "utf8")) as Pack;
   if (wanted.length > 0 && !wanted.includes(pack.league.id)) continue;
+
+  const incomplete = pack.clubs
+    .map((club) => ({
+      club: club.name,
+      count: pack.players.filter((player) => player.clubId === club.id).length,
+    }))
+    .filter(({ count }) => count < 11);
+  if (incomplete.length > 0) {
+    const detail = incomplete.map(({ club, count }) => `${club} (${count}/11)`).join(", ");
+    if (!SKIP_INCOMPLETE) {
+      throw new Error(
+        `${pack.league.name} cannot be calibrated: incomplete squads: ${detail}. ` +
+          `Fix the data pack or pass --skip-incomplete to continue with other leagues.`,
+      );
+    }
+    console.warn(`SKIP ${pack.league.name}: incomplete squads: ${detail}`);
+    skipped.push(pack.league.id);
+    continue;
+  }
+  calibrated++;
 
   const bestEleven = new Map<string, number>();
   for (const club of pack.clubs) {
@@ -94,7 +118,7 @@ for (const file of readdirSync(PACKS).filter(
         m.corners += side.corners;
       }
       const gap = bestEleven.get(fixture.homeClubId)! - bestEleven.get(fixture.awayClubId)!;
-      if (Math.abs(gap) >= 5) {
+      if (Math.abs(gap) >= FAVOURITE_GAP) {
         m.favourites++;
         if ((gap > 0 && home > away) || (gap < 0 && away > home)) m.favouriteWins++;
       }
@@ -114,7 +138,8 @@ for (const file of readdirSync(PACKS).filter(
       `away ${pct(m.matches - m.home - m.draw, m.matches)} | shots ${avg(m.shots, 2 * m.matches)} ` +
       `on target ${avg(m.onTarget, 2 * m.matches)} | corners ${avg(m.corners, 2 * m.matches)} ` +
       `fouls ${avg(m.fouls, 2 * m.matches)} yellows ${avg(m.yellows, m.matches)} reds ${avg(m.reds, m.matches)}\n` +
-      `  favourite (best XI 5+ higher) wins ${pct(m.favouriteWins, m.favourites)} of ${m.favourites} | ` +
+      `  strong favourite (best XI +${FAVOURITE_GAP}+) wins ${pct(m.favouriteWins, m.favourites)} ` +
+      `of ${m.favourites} | ` +
       `points: champion ${avg(m.champion, SEASONS)}, last ${avg(m.last, SEASONS)}\n` +
       `  titles: ${[...titles]
         .sort((a, b) => b[1] - a[1])
@@ -134,10 +159,18 @@ for (const file of readdirSync(PACKS).filter(
   total.ms += ms;
 }
 
+if (calibrated === 0) {
+  throw new Error("No complete league packs were selected for calibration.");
+}
+
 console.log(
   `\nAll: goals ${avg(total.goals, total.matches)} | home ${pct(total.home, total.matches)} ` +
     `draw ${pct(total.draw, total.matches)} away ${pct(total.matches - total.home - total.draw, total.matches)} | ` +
-    `favourite wins ${pct(total.favouriteWins, total.favourites)}\n` +
+    `strong favourite (+${FAVOURITE_GAP} best-XI points) wins ` +
+    `${pct(total.favouriteWins, total.favourites)}\n` +
     `Real 2026-27 (football-data.co.uk, 18 leagues): goals 3.00 | home 45% draw 25% away 30% | ` +
     `shots 13.8 per team. Match by match against the odds: npm run benchmark`,
 );
+if (skipped.length > 0) {
+  console.log(`Skipped incomplete packs (${skipped.length}): ${skipped.join(", ")}`);
+}
