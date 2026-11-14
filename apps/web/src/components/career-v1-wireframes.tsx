@@ -17,6 +17,24 @@ type WireframeScreen = {
   next: string;
 };
 
+type ModuleStage = {
+  title: string;
+  purpose: string;
+  data: string[];
+  actions: string[];
+  outcome: string;
+};
+
+type CareerModule = {
+  id: string;
+  title: string;
+  summary: string;
+  entry: string;
+  stages: ModuleStage[];
+  rules: string[];
+  links: string[];
+};
+
 const SCREENS: WireframeScreen[] = [
   {
     id: "menu",
@@ -539,9 +557,473 @@ const NOT_V1 = [
   "Multijoueur en ligne",
 ];
 
+const CAREER_MODULES: CareerModule[] = [
+  {
+    id: "hub",
+    title: "Hub du club",
+    summary: "Le tableau de bord quotidien et le point de retour de chaque sous-système.",
+    entry: "Après le chargement d’une carrière ou la clôture d’une action importante.",
+    stages: [
+      {
+        title: "Résumé du club",
+        purpose: "Situer la carrière en un coup d’œil.",
+        data: [
+          "Date, saison et prochaine échéance",
+          "Classement, forme récente et objectif",
+          "Confiance de la direction",
+        ],
+        actions: ["Ouvrir calendrier", "Voir classement"],
+        outcome: "Le contexte de la saison reste visible sur tous les écrans.",
+      },
+      {
+        title: "Priorités du jour",
+        purpose: "Faire remonter les décisions qui bloquent l’avancée.",
+        data: [
+          "Feuille de match à valider",
+          "Offre ou renouvellement en attente",
+          "Blessure, suspension ou promesse à traiter",
+        ],
+        actions: ["Traiter maintenant", "Rappeler plus tard"],
+        outcome: "Une priorité traitée disparaît de la liste et met à jour son compteur.",
+      },
+      {
+        title: "Accès rapides",
+        purpose: "Rejoindre les gestes les plus fréquents sans chercher dans les menus.",
+        data: ["Prochain match", "Effectif et entraînement", "Messages et dernières nouvelles"],
+        actions: ["Préparer", "Gérer", "Lire"],
+        outcome: "Chaque raccourci ouvre le module correspondant avec le bon contexte.",
+      },
+    ],
+    rules: [
+      "Une alerte n’est affichée que si elle demande une action ou apporte une information nouvelle.",
+      "La simulation s’arrête avant une décision irréversible ou une échéance importante.",
+    ],
+    links: [
+      "Tous les modules reviennent au hub.",
+      "Le calendrier et la boîte de réception déterminent les priorités.",
+    ],
+  },
+  {
+    id: "roster",
+    title: "Effectif et joueurs",
+    summary: "De la vue d’ensemble de l’équipe aux décisions concernant un joueur précis.",
+    entry: "Hub → Effectif ou alerte de disponibilité / contrat.",
+    stages: [
+      {
+        title: "Liste d’effectif",
+        purpose: "Comparer et filtrer les joueurs rapidement.",
+        data: [
+          "Nom, âge, poste et nationalité en drapeau",
+          "Rôle, temps de jeu et moral",
+          "Forme, fatigue, disponibilité et fin de contrat",
+        ],
+        actions: ["Filtrer par poste / statut", "Trier par fatigue / note", "Ouvrir la fiche"],
+        outcome: "Les filtres restent actifs quand on revient de la fiche joueur.",
+      },
+      {
+        title: "Profil joueur",
+        purpose: "Comprendre l’identité, les qualités, l’état et le parcours.",
+        data: [
+          "Attributs par familles et postes",
+          "Stats saison, historique et progression",
+          "Contrat, salaire, statut, humeur et attentes",
+        ],
+        actions: ["Promettre un rôle", "Assigner un axe individuel", "Démarrer une prolongation"],
+        outcome: "Les choix créent un lien vers entraînement, discussions ou contrats.",
+      },
+      {
+        title: "Temps de jeu et disponibilité",
+        purpose: "Repérer les écarts entre rôle promis et minutes jouées.",
+        data: [
+          "Minutes prévues / jouées",
+          "Concurrence au poste",
+          "Risque de mécontentement et état physique",
+        ],
+        actions: ["Ajuster le rôle", "Planifier une rotation", "Parler au joueur"],
+        outcome: "La sélection et la conversation peuvent modifier moral et statut.",
+      },
+    ],
+    rules: [
+      "Une donnée estimée est distinguée d’une donnée réelle du pack.",
+      "Le statut et l’humeur ont un libellé textuel; le drapeau identifie la nationalité sans emoji.",
+    ],
+    links: [
+      "Composition consomme disponibilité, rôle et forme.",
+      "Entraînement met à jour fatigue et progression.",
+      "Transferts gère les contrats et mouvements.",
+    ],
+  },
+  {
+    id: "match",
+    title: "Composition, tactique et match",
+    summary: "Un seul parcours continu de la préparation au bilan sportif.",
+    entry: "Hub → prochain match ou calendrier → rencontre à préparer.",
+    stages: [
+      {
+        title: "Composition",
+        purpose: "Construire onze, banc et remplaçants selon les postes.",
+        data: [
+          "Formation et placement",
+          "Disponibilité, fatigue et forme",
+          "Équilibre des postes et joueurs hors rôle",
+        ],
+        actions: ["Glisser / choisir un joueur", "Auto-composer", "Enregistrer le onze"],
+        outcome: "Les joueurs sélectionnés alimentent l’analyse avant-match.",
+      },
+      {
+        title: "Tactique",
+        purpose: "Définir une identité de jeu simple mais reconnaissable.",
+        data: [
+          "Style de construction et pressing",
+          "Largeur, rythme et hauteur du bloc",
+          "Familiarité et compatibilité de l’effectif",
+        ],
+        actions: ["Choisir un préréglage", "Ajuster les consignes", "Sauvegarder le plan"],
+        outcome: "Le plan influence les occasions, l’intensité et les risques du moteur.",
+      },
+      {
+        title: "Avant-match",
+        purpose: "Lire l’adversaire et confirmer le plan de rencontre.",
+        data: [
+          "Forme et absences des deux équipes",
+          "Forces, style et joueurs clés",
+          "Météo / domicile / enjeu si disponibles",
+        ],
+        actions: ["Modifier onze", "Adapter consignes", "Lancer le match"],
+        outcome: "La tactique et l’état réel des joueurs sont figés au coup d’envoi.",
+      },
+      {
+        title: "Match texte",
+        purpose: "Suivre les événements et décider des ajustements.",
+        data: [
+          "Chronologie commentée",
+          "Score, tirs, possession et occasions",
+          "Fatigue, cartons, blessures et momentum",
+        ],
+        actions: ["Changer un joueur", "Ajuster le plan", "Simuler jusqu’au terme"],
+        outcome: "Les événements et statistiques alimentent un résultat cohérent.",
+      },
+      {
+        title: "Résumé",
+        purpose: "Expliquer le résultat et ses conséquences de carrière.",
+        data: [
+          "Stats comparées et notes",
+          "Buts, occasions clés et homme du match",
+          "Classement, fatigue, moral, blessures",
+        ],
+        actions: ["Voir les notes", "Lire réactions", "Retourner au hub"],
+        outcome: "Calendrier, classement, joueurs et récits sont mis à jour.",
+      },
+    ],
+    rules: [
+      "Les changements en direct sont limités au banc disponible.",
+      "Le résultat dépend de la qualité, de l’identité tactique, de la forme, de la fatigue et du contexte.",
+    ],
+    links: [
+      "Effectif fournit les disponibilités.",
+      "Entraînement fournit forme et familiarité.",
+      "Calendrier et presse reçoivent le résultat.",
+    ],
+  },
+  {
+    id: "season",
+    title: "Calendrier, résultats et classement",
+    summary: "Parcourir la saison, comprendre les enjeux et avancer avec contrôle.",
+    entry: "Hub → Calendrier ou bouton Avancer.",
+    stages: [
+      {
+        title: "Calendrier",
+        purpose: "Choisir une journée ou retrouver une rencontre.",
+        data: [
+          "Date, journée et compétition",
+          "Rencontres, statut et score",
+          "Filtres club / compétition / période",
+        ],
+        actions: ["Ouvrir avant-match", "Voir le résultat", "Changer de journée"],
+        outcome: "Une rencontre jouée ouvre le résumé; une rencontre future ouvre la préparation.",
+      },
+      {
+        title: "Résultats et classement",
+        purpose: "Lire les effets sportifs de chaque journée.",
+        data: [
+          "Points, différence et forme",
+          "Zones titre / Europe / maintien",
+          "Buteurs et résultats de la journée",
+        ],
+        actions: ["Filtrer les résultats", "Ouvrir fiche club", "Voir les buteurs"],
+        outcome: "La position et l’écart à l’objectif sont transmis au hub et à la direction.",
+      },
+      {
+        title: "Simulation rapide",
+        purpose: "Faire passer le temps en gardant les décisions importantes.",
+        data: [
+          "Date de destination",
+          "Séances et matchs simulés",
+          "Alertes qui interrompent l’avance",
+        ],
+        actions: ["Prochain match", "Date choisie", "Annuler l’avance"],
+        outcome: "Un journal de simulation résume changements, résultats et décisions requises.",
+      },
+    ],
+    rules: [
+      "L’avance ne saute jamais une décision bloquante silencieusement.",
+      "Une sauvegarde est proposée avant les grandes transitions de saison.",
+    ],
+    links: [
+      "Le match écrit résultats et statistiques.",
+      "Le hub affiche la prochaine échéance.",
+      "La fin de saison clôt la compétition.",
+    ],
+  },
+  {
+    id: "training",
+    title: "Entraînement",
+    summary: "Construire une semaine qui arbitre entre préparation, récupération et progression.",
+    entry: "Hub → Entraînement ou Effectif → fiche joueur.",
+    stages: [
+      {
+        title: "Vue semaine",
+        purpose: "Visualiser les séances entre deux matchs.",
+        data: [
+          "Calendrier de la semaine",
+          "Jours de match et repos",
+          "Intensité de charge par jour",
+        ],
+        actions: ["Ajouter une séance", "Déplacer une séance", "Appliquer modèle"],
+        outcome: "Le plan montre l’impact prévisionnel avant validation.",
+      },
+      {
+        title: "Constructeur de séance",
+        purpose: "Choisir le but, le groupe et l’intensité de travail.",
+        data: [
+          "Type : tactique, technique, physique, récupération",
+          "Groupe : équipe, ligne ou joueurs ciblés",
+          "Charge : légère, normale, élevée",
+        ],
+        actions: ["Sélectionner le thème", "Assigner joueurs", "Valider séance"],
+        outcome: "La séance produit charge, bénéfice ciblé et risque de fatigue.",
+      },
+      {
+        title: "Aperçu des effets",
+        purpose: "Équilibrer forme immédiate et progression à long terme.",
+        data: ["Fatigue prévue par joueur", "Progression ciblée", "Familiarité tactique attendue"],
+        actions: ["Confirmer semaine", "Réduire la charge", "Envoyer joueurs en récupération"],
+        outcome: "La résolution quotidienne applique l’entraînement et ajuste la disponibilité.",
+      },
+    ],
+    rules: [
+      "Une charge élevée accélère le travail mais augmente fatigue et risque physique.",
+      "La familiarité progresse par répétition de structure et de consignes.",
+    ],
+    links: [
+      "Les matchs consomment forme et énergie.",
+      "Effectif présente les résultats individuels.",
+      "Simulation applique les séances jour après jour.",
+    ],
+  },
+  {
+    id: "transfers",
+    title: "Transferts et contrats",
+    summary: "Séparer clairement l’accord entre clubs, l’accord joueur et l’impact financier.",
+    entry: "Hub → Transferts ou alerte de contrat.",
+    stages: [
+      {
+        title: "Recherche et shortlist",
+        purpose: "Trouver une cible compatible avec le besoin et le budget.",
+        data: [
+          "Poste, âge, niveau et club",
+          "Valeur estimée et disponibilité",
+          "Rapport de recrutement et priorité",
+        ],
+        actions: ["Filtrer", "Ajouter à la shortlist", "Demander observation"],
+        outcome: "La cible suivie reçoit un statut et un coût estimé.",
+      },
+      {
+        title: "Négociation avec le vendeur",
+        purpose: "Convenir d’une indemnité et des modalités.",
+        data: ["Prix demandé", "Offre actuelle et réponse", "Paiement immédiat / échelonné si V1"],
+        actions: ["Envoyer offre", "Répondre contre-offre", "Retirer offre"],
+        outcome: "Accord vendeur ouvre la négociation du contrat joueur.",
+      },
+      {
+        title: "Négociation avec le joueur",
+        purpose: "Convenir de ses conditions personnelles.",
+        data: ["Salaire, durée et rôle", "Prime si prévue", "Promesses liées au temps de jeu"],
+        actions: ["Proposer conditions", "Modifier rôle", "Finaliser / retirer"],
+        outcome: "Accord des deux parties déclenche signature et inscription à l’effectif.",
+      },
+      {
+        title: "Validation financière",
+        purpose: "Montrer le coût total et enregistrer le mouvement.",
+        data: [
+          "Budget restant",
+          "Masse salariale avant / après",
+          "Historique achat, vente ou prolongation",
+        ],
+        actions: ["Confirmer transaction", "Voir finances", "Revenir au dossier"],
+        outcome: "Effectif, finances, contrats et récits sont synchronisés.",
+      },
+    ],
+    rules: [
+      "Pas de signature si l’accord vendeur ou joueur manque.",
+      "Chaque contre-offre conserve l’historique et respecte une limite de tours.",
+    ],
+    links: [
+      "Finances vérifie la soutenabilité.",
+      "Discussions suit les promesses de rôle.",
+      "Effectif reçoit les arrivées et départs.",
+    ],
+  },
+  {
+    id: "talks",
+    title: "Discussions et promesses",
+    summary: "Garder les dialogues courts, contextualisés et suivis dans le temps.",
+    entry: "Hub → Discussions, notification joueur, adjoint ou direction.",
+    stages: [
+      {
+        title: "Boîte de réception",
+        purpose: "Trier les conversations et décisions en attente.",
+        data: ["Auteur et sujet", "Urgence et date limite", "Lien vers joueur, match ou budget"],
+        actions: ["Ouvrir", "Marquer à suivre", "Ignorer si non bloquant"],
+        outcome: "Les sujets urgents restent visibles jusqu’à réponse.",
+      },
+      {
+        title: "Conversation",
+        purpose: "Présenter le contexte puis des réponses compréhensibles.",
+        data: [
+          "Résumé du problème",
+          "Historique récent lié",
+          "Options et conséquences indicatives",
+        ],
+        actions: ["Choisir une réponse", "Reporter", "Rejoindre l’écran associé"],
+        outcome: "La décision actualise relation, moral ou confiance.",
+      },
+      {
+        title: "Promesses suivies",
+        purpose: "Rappeler chaque engagement et vérifier son échéance.",
+        data: [
+          "Promesse et bénéficiaire",
+          "Date limite / condition",
+          "État : en cours, tenue, manquée",
+        ],
+        actions: ["Voir la condition", "Tenir l’engagement", "Expliquer / renégocier"],
+        outcome: "L’échéance résolue est historisée et n’est pas oubliée.",
+      },
+    ],
+    rules: [
+      "Une promesse est formulée avec une condition vérifiable.",
+      "Les conséquences et échéances sont annoncées avant de confirmer.",
+    ],
+    links: [
+      "Effectif fournit le contexte du joueur.",
+      "Transferts et tactique peuvent créer des engagements.",
+      "Le hub affiche les conversations urgentes.",
+    ],
+  },
+  {
+    id: "stories",
+    title: "Presse et fil du club",
+    summary: "Raconter les événements réellement survenus dans la carrière avec des liens utiles.",
+    entry: "Hub → Presse / Fil, ou lien après un match ou une décision.",
+    stages: [
+      {
+        title: "Événements de carrière",
+        purpose: "Rassembler les faits qui peuvent produire un récit.",
+        data: [
+          "Résultat et performance",
+          "Transfert, blessure ou contrat",
+          "Classement, série ou objectif atteint",
+        ],
+        actions: ["Ouvrir événement source", "Filtrer période", "Voir la compétition"],
+        outcome: "Un événement source unique alimente les vues presse et fil.",
+      },
+      {
+        title: "Presse",
+        purpose: "Présenter une une puis un article contextualisé.",
+        data: ["Titre et publication", "Résumé des faits", "Joueurs et rencontre liés"],
+        actions: ["Lire article", "Ouvrir résumé du match", "Ouvrir fiche joueur"],
+        outcome: "Le récit mène directement à l’écran de carrière concerné.",
+      },
+      {
+        title: "Fil du club",
+        purpose: "Montrer réactions des supporters, joueurs et médias.",
+        data: ["Auteur et message", "Événement déclencheur", "Horodatage et tendance"],
+        actions: ["Filtrer auteur", "Voir événement", "Parcourir précédents"],
+        outcome:
+          "Les réactions décorent l’expérience; elles n’altèrent pas seules les règles sportives.",
+      },
+    ],
+    rules: [
+      "Chaque article et publication doit pointer vers un fait connu de la sauvegarde.",
+      "Le texte modèle est prioritaire en V1; la génération IA reste ultérieure.",
+    ],
+    links: [
+      "Le résumé après-match crée les récits sportifs.",
+      "Transferts et discussions créent les récits hors terrain.",
+      "Les cartes renvoient au match, joueur, classement ou contrat.",
+    ],
+  },
+  {
+    id: "season-end",
+    title: "Fin de saison",
+    summary:
+      "Clore proprement une saison puis préparer la suivante sans perdre les décisions importantes.",
+    entry: "Après le dernier match officiel de la saison.",
+    stages: [
+      {
+        title: "Bilan sportif",
+        purpose: "Récapituler les résultats et objectifs du club.",
+        data: [
+          "Position finale et points",
+          "Bilan toutes compétitions",
+          "Objectif direction atteint ou manqué",
+        ],
+        actions: ["Voir statistiques", "Continuer vers la réunion", "Exporter le bilan"],
+        outcome: "La réputation et la confiance sont évaluées sur des critères lisibles.",
+      },
+      {
+        title: "Joueurs et jeunes",
+        purpose: "Décider qui conserver, développer ou faire monter.",
+        data: [
+          "Meilleurs joueurs et progression",
+          "Départs à la retraite / fins de contrat",
+          "Jeunes disponibles et potentiel estimé",
+        ],
+        actions: ["Promouvoir un jeune", "Réviser rôle", "Ouvrir négociation"],
+        outcome: "Les choix modifient l’effectif de la nouvelle campagne.",
+      },
+      {
+        title: "Contrats et budget",
+        purpose: "Préparer les ressources du prochain exercice.",
+        data: ["Contrats expirants", "Masse salariale", "Budget transfert et objectif suivant"],
+        actions: ["Prolonger", "Libérer / vendre", "Confirmer plan financier"],
+        outcome: "L’enveloppe suivante tient compte du bilan et de la division.",
+      },
+      {
+        title: "Nouvelle saison",
+        purpose: "Appliquer la transition et lancer le nouveau calendrier.",
+        data: ["Saison et compétitions", "Effectif finalisé", "Calendrier et objectif du CA"],
+        actions: ["Valider la transition", "Sauvegarder", "Entrer au hub de pré-saison"],
+        outcome: "Une nouvelle date de carrière s’ouvre avec un récapitulatif des changements.",
+      },
+    ],
+    rules: [
+      "La transition de saison demande une validation explicite.",
+      "Une sauvegarde automatique est créée avant d’appliquer vieillissement, contrats et budgets.",
+    ],
+    links: [
+      "Classement confirme les positions finales.",
+      "Finances fournit le budget.",
+      "Effectif et entraînement portent l’évolution des joueurs.",
+    ],
+  },
+];
+
 function CareerV1Wireframes() {
   const [screenId, setScreenId] = useState("overview");
   const [mode, setMode] = useState<"wireframe" | "mockup">("wireframe");
+  const [overviewView, setOverviewView] = useState<"modules" | "screens">("modules");
+  const [selectedModuleId, setSelectedModuleId] = useState("hub");
   const [notice, setNotice] = useState("");
   const selected = SCREENS.find((screen) => screen.id === screenId) ?? SCREENS[0]!;
   const groups = [...new Set(SCREENS.map((screen) => screen.group))];
@@ -580,7 +1062,7 @@ function CareerV1Wireframes() {
               Structure et wireframes
             </h1>
             <p className="mt-1 max-w-3xl text-sm text-slate-400">
-              Vue d’ensemble et 21 écrans V1 détaillés. Utilise le menu pour explorer le parcours.
+              9 modules détaillés et 21 écrans V1. Choisis une vue pour explorer le parcours.
             </p>
           </div>
           <Link
@@ -679,10 +1161,15 @@ function CareerV1Wireframes() {
                   groups={groups}
                   screens={SCREENS.filter((screen) => screen.id !== "overview")}
                   notV1={NOT_V1}
+                  modules={CAREER_MODULES}
+                  view={overviewView}
+                  selectedModuleId={selectedModuleId}
                   panel={panel}
                   muted={muted}
                   accent={accent}
                   onSelect={selectScreen}
+                  onViewChange={setOverviewView}
+                  onModuleSelect={setSelectedModuleId}
                 />
               ) : (
                 <>
@@ -776,7 +1263,7 @@ function CareerV1Wireframes() {
                 </button>
                 <span className={`text-xs ${muted}`}>
                   {screenId === "overview"
-                    ? "Plan global · 21 écrans V1"
+                    ? "9 modules · 21 écrans V1"
                     : `Écran ${currentIndex + 1} sur ${orderedScreens.length}`}
                 </span>
                 <button
@@ -834,19 +1321,30 @@ function Overview({
   groups,
   screens,
   notV1,
+  modules,
+  view,
+  selectedModuleId,
   panel,
   muted,
   accent,
   onSelect,
+  onViewChange,
+  onModuleSelect,
 }: {
   groups: string[];
   screens: WireframeScreen[];
   notV1: string[];
+  modules: CareerModule[];
+  view: "modules" | "screens";
+  selectedModuleId: string;
   panel: string;
   muted: string;
   accent: string;
   onSelect: (id: string) => void;
+  onViewChange: (view: "modules" | "screens") => void;
+  onModuleSelect: (id: string) => void;
 }) {
+  const selectedModule = modules.find((module) => module.id === selectedModuleId) ?? modules[0]!;
   return (
     <div className="space-y-5">
       <section className={`rounded-xl border p-4 ${panel}`}>
@@ -879,43 +1377,89 @@ function Overview({
         </p>
       </section>
 
-      <section>
-        <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
+      <section className={`rounded-xl border p-4 ${panel}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className={`text-xs font-bold uppercase tracking-[0.18em] ${accent}`}>
-              Carte des écrans
+              Explorer le prototype
             </p>
-            <h3 className="mt-1 text-lg font-bold">21 écrans inclus en V1</h3>
+            <p className={`mt-1 text-sm ${muted}`}>
+              Choisis entre les sous-composants détaillés et l’inventaire complet des écrans.
+            </p>
           </div>
-          <p className={`text-xs ${muted}`}>Sélectionne une carte pour voir son wireframe.</p>
-        </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          {groups.map((group) => {
-            const entries = screens.filter((screen) => screen.group === group);
-            if (!entries.length) return null;
-            return (
-              <section key={group} className={`rounded-xl border p-3 ${panel}`}>
-                <h4 className="mb-2 px-1 text-sm font-bold uppercase tracking-wide">{group}</h4>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {entries.map((screen) => (
-                    <button
-                      key={screen.id}
-                      type="button"
-                      onClick={() => onSelect(screen.id)}
-                      className={`rounded-lg border p-3 text-left transition-colors hover:border-emerald-300/70 ${panel}`}
-                    >
-                      <span className="block text-sm font-semibold">{screen.title}</span>
-                      <span className={`mt-1 block text-xs leading-5 ${muted}`}>
-                        {screen.purpose}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-            );
-          })}
+          <div
+            className={`flex rounded-lg border p-1 ${panel}`}
+            role="group"
+            aria-label="Vue du prototype"
+          >
+            <button
+              type="button"
+              aria-pressed={view === "modules"}
+              onClick={() => onViewChange("modules")}
+              className={`rounded-md px-3 py-2 text-sm font-bold ${view === "modules" ? "bg-emerald-300 text-slate-950" : muted}`}
+            >
+              Sous-composants
+            </button>
+            <button
+              type="button"
+              aria-pressed={view === "screens"}
+              onClick={() => onViewChange("screens")}
+              className={`rounded-md px-3 py-2 text-sm font-bold ${view === "screens" ? "bg-emerald-300 text-slate-950" : muted}`}
+            >
+              Écrans V1
+            </button>
+          </div>
         </div>
       </section>
+
+      {view === "modules" ? (
+        <ModuleExplorer
+          modules={modules}
+          selected={selectedModule}
+          panel={panel}
+          muted={muted}
+          accent={accent}
+          onSelect={onModuleSelect}
+        />
+      ) : (
+        <section>
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
+            <div>
+              <p className={`text-xs font-bold uppercase tracking-[0.18em] ${accent}`}>
+                Carte des écrans
+              </p>
+              <h3 className="mt-1 text-lg font-bold">21 écrans inclus en V1</h3>
+            </div>
+            <p className={`text-xs ${muted}`}>Sélectionne une carte pour voir son wireframe.</p>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {groups.map((group) => {
+              const entries = screens.filter((screen) => screen.group === group);
+              if (!entries.length) return null;
+              return (
+                <section key={group} className={`rounded-xl border p-3 ${panel}`}>
+                  <h4 className="mb-2 px-1 text-sm font-bold uppercase tracking-wide">{group}</h4>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {entries.map((screen) => (
+                      <button
+                        key={screen.id}
+                        type="button"
+                        onClick={() => onSelect(screen.id)}
+                        className={`rounded-lg border p-3 text-left transition-colors hover:border-emerald-300/70 ${panel}`}
+                      >
+                        <span className="block text-sm font-semibold">{screen.title}</span>
+                        <span className={`mt-1 block text-xs leading-5 ${muted}`}>
+                          {screen.purpose}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="rounded-xl border border-amber-300/20 bg-amber-200/[0.05] p-4">
         <h3 className="font-bold text-amber-100">Hors V1 · phases suivantes</h3>
@@ -931,6 +1475,126 @@ function Overview({
         </div>
       </section>
     </div>
+  );
+}
+
+function ModuleExplorer({
+  modules,
+  selected,
+  panel,
+  muted,
+  accent,
+  onSelect,
+}: {
+  modules: CareerModule[];
+  selected: CareerModule;
+  panel: string;
+  muted: string;
+  accent: string;
+  onSelect: (id: string) => void;
+}) {
+  return (
+    <section className="space-y-4">
+      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+        {modules.map((module, index) => (
+          <button
+            key={module.id}
+            type="button"
+            aria-pressed={selected.id === module.id}
+            onClick={() => onSelect(module.id)}
+            className={`rounded-xl border p-3 text-left transition-colors ${selected.id === module.id ? "border-emerald-300 bg-emerald-300/10" : panel}`}
+          >
+            <span
+              className={`text-xs font-bold ${selected.id === module.id ? "text-emerald-300" : muted}`}
+            >
+              0{index + 1} · {module.stages.length} étapes
+            </span>
+            <span className="mt-1 block font-bold">{module.title}</span>
+            <span className={`mt-1 block text-xs leading-5 ${muted}`}>{module.summary}</span>
+          </button>
+        ))}
+      </div>
+
+      <article className={`rounded-xl border p-4 sm:p-5 ${panel}`}>
+        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-current/10 pb-4">
+          <div>
+            <p className={`text-xs font-bold uppercase tracking-[0.18em] ${accent}`}>
+              Sous-composant détaillé
+            </p>
+            <h3 className="mt-1 text-xl font-bold">{selected.title}</h3>
+            <p className={`mt-1 max-w-3xl text-sm leading-6 ${muted}`}>{selected.summary}</p>
+          </div>
+          <span className={`rounded-lg border px-3 py-2 text-xs ${muted}`}>
+            Entrée : {selected.entry}
+          </span>
+        </div>
+
+        <div className="mt-4 grid gap-3 xl:grid-cols-2">
+          {selected.stages.map((stage, index) => (
+            <section key={stage.title} className={`rounded-lg border p-4 ${panel}`}>
+              <div className="flex items-start gap-3">
+                <span
+                  className={`flex size-8 shrink-0 items-center justify-center rounded-full border text-sm font-black ${accent}`}
+                >
+                  {index + 1}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-bold">{stage.title}</h4>
+                  <p className={`mt-1 text-sm leading-5 ${muted}`}>{stage.purpose}</p>
+                </div>
+              </div>
+              <div className="mt-3 grid gap-3 md:grid-cols-3">
+                <div>
+                  <p className={`text-[0.65rem] font-bold uppercase tracking-wider ${accent}`}>
+                    Données affichées
+                  </p>
+                  <ul className={`mt-1 space-y-1 text-xs leading-5 ${muted}`}>
+                    {stage.data.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className={`text-[0.65rem] font-bold uppercase tracking-wider ${accent}`}>
+                    Actions
+                  </p>
+                  <ul className={`mt-1 space-y-1 text-xs leading-5 ${muted}`}>
+                    {stage.actions.map((item) => (
+                      <li key={item}>→ {item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className={`text-[0.65rem] font-bold uppercase tracking-wider ${accent}`}>
+                    Résultat / écran suivant
+                  </p>
+                  <p className={`mt-1 text-xs leading-5 ${muted}`}>{stage.outcome}</p>
+                </div>
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          <section className={`rounded-lg border p-4 ${panel}`}>
+            <h4 className="font-bold">Règles métier et garde-fous</h4>
+            <ul className={`mt-2 space-y-1 text-sm leading-5 ${muted}`}>
+              {selected.rules.map((rule) => (
+                <li key={rule}>• {rule}</li>
+              ))}
+            </ul>
+          </section>
+          <section className={`rounded-lg border p-4 ${panel}`}>
+            <h4 className="font-bold">Connexions avec les autres modules</h4>
+            <ul className={`mt-2 space-y-1 text-sm leading-5 ${muted}`}>
+              {selected.links.map((link) => (
+                <li key={link}>• {link}</li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      </article>
+    </section>
   );
 }
 

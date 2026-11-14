@@ -1,8 +1,9 @@
 # Wireframes de la carrière V1
 
-Le prototype consultable se trouve sur la route `/maquettes-v1`. Il comprend une carte de structure,
-une vue détaillée pour chaque écran V1 et un basculement entre filaire et aperçu visuel. Les contrôles
-illustrent la navigation ; ils ne créent pas encore de sauvegarde.
+Le prototype consultable se trouve sur la route `/maquettes-v1`. La vue d’ensemble propose maintenant
+deux explorateurs : les sous-composants détaillés (étapes, données, actions, résultats, règles et liens)
+et l’inventaire écran par écran. Le basculement filaire / aperçu visuel s’applique aux deux vues. Les
+contrôles illustrent la navigation ; ils ne créent pas encore de sauvegarde.
 
 ## Architecture fonctionnelle
 
@@ -13,15 +14,32 @@ Menu principal
 └── Réglages
 
 Hub du club
-├── Effectif → fiche joueur → temps de jeu / entraînement / contrat
+├── Effectif → fiche joueur → temps de jeu / entraînement / contrat / statut
 ├── Composition → tactique → avant-match → match texte → résumé
 ├── Calendrier → résultats / classement / simulation rapide
-├── Entraînement → forme, fatigue, progression, familiarité tactique
-├── Transferts → négociation vendeur → négociation joueur → finances
-├── Discussions → joueur / adjoint / direction → promesses suivies
+├── Entraînement → plan semaine → séance → aperçu des effets → validation
+├── Transferts → recherche → négociation vendeur → négociation joueur → finances
+├── Discussions → boîte de réception → joueur / adjoint / direction → promesses suivies
 ├── Presse et fil → récits liés aux événements de la carrière
 └── Fin de saison → bilan / jeunes / contrats / budget / saison suivante
 ```
+
+## Sous-composants détaillés
+
+| Sous-composant         | Parcours interne                                                       | Données et décisions principales                                                           |
+| ---------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Hub du club            | Résumé → priorités → accès rapides                                     | Date, prochain match, classement, objectif, alertes et décisions bloquantes                |
+| Effectif et joueurs    | Liste → profil → temps de jeu / disponibilité                          | Poste, âge, drapeau de nationalité, statut, humeur, forme, fatigue, minutes et contrat     |
+| Composition et match   | Composition → tactique → avant-match → match texte → résumé            | Onze et banc, identité tactique, familiarité, événements, statistiques et conséquences     |
+| Calendrier et saison   | Calendrier → résultats / classement → simulation rapide                | Journées, scores, zones d’objectif, dates et alertes qui interrompent l’avance             |
+| Entraînement           | Vue semaine → constructeur de séance → aperçu des effets               | Type, groupe, intensité, fatigue attendue, progression et familiarité tactique             |
+| Transferts et contrats | Recherche → vendeur → joueur → validation financière                   | Besoin, shortlist, indemnité, salaire, durée, rôle, budget et masse salariale              |
+| Discussions            | Réception → conversation → promesses suivies                           | Auteur, contexte, choix, conséquence, échéance et état de chaque promesse                  |
+| Presse et fil          | Événement source → article → réactions                                 | Résultat ou décision à l’origine du récit, personnes liées et liens vers les écrans source |
+| Fin de saison          | Bilan sportif → joueurs / jeunes → contrats / budget → nouvelle saison | Objectifs, progression, fins de contrats, enveloppe et calendrier suivant                  |
+
+Chaque carte de sous-composant expose aussi les règles métier et les échanges avec les autres modules.
+Les exemples sont des données de démonstration; les effets décrivent le comportement cible du jeu.
 
 ## Écrans inclus en V1
 
