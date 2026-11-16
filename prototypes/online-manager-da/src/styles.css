@@ -1032,3 +1032,101 @@ button, a, h1, h2, h3, p, span { letter-spacing: 0; }
  .career-hub .warning-tag {padding:6px 8px;}
  .career-hub .career-panel-body {padding:4px 0;}
 }
+
+/* Career V1 finishing pass: keep global progression distinct from local decisions. */
+.career-global-continue {
+  min-height:48px;
+  min-width:136px;
+  justify-content:space-between;
+  padding:6px 12px;
+  border-color:var(--line-strong);
+  background:var(--career-chrome);
+  color:var(--ink);
+}
+.career-global-continue:hover {background:var(--club-primary-subtle);}
+.career-global-continue-copy {display:flex;flex-direction:column;align-items:flex-start;gap:1px;line-height:1.15;}
+.career-global-continue-copy strong {font-size:var(--type-small);font-weight:600;}
+.career-global-continue-copy small {font-size:var(--type-label);font-weight:400;color:var(--ink-2);}
+
+/* A single highlighted match surface gives the hub a clear first decision. */
+.career-hub {align-items:start;}
+.career-hub-left>.career-panel:first-child .career-fixture-hero {
+  padding:16px;
+  gap:12px;
+  border-left:3px solid var(--club-rule);
+  background:var(--club-primary-subtle);
+}
+.career-hub-left>.career-panel:first-child .career-match-names h2 {font-size:var(--type-heading);}
+.career-hub-center>.career-stats {order:-1;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 0 8px;}
+.career-hub-center>.career-stats .career-stat {padding:6px 8px;border-left:2px solid var(--club-ink);background:transparent;}
+.career-hub-center>.career-stats .career-stat:last-child {background:transparent;border-color:var(--success);}
+.career-hub-center>.career-stats .career-stat strong {font-size:var(--type-small);}
+.career-hub-photo {height:196px;}
+.career-hub-photo>div {gap:8px;padding:16px;}
+.career-hub-right .career-panel-body {gap:16px;}
+.career-hub-link-group {display:flex;flex-direction:column;min-width:0;}
+.career-hub-link-group>span {padding:4px 0 6px;color:var(--ink-2);font-size:var(--type-label);font-weight:600;}
+.career-hub-link-group+.career-hub-link-group {padding-top:8px;border-top:1px solid var(--line);}
+.career-decision-row {min-height:44px!important;justify-content:space-between!important;padding:8px 10px!important;border:0!important;border-radius:8px!important;border-bottom:1px solid var(--line)!important;background:transparent!important;text-align:left;}
+.career-decision-row:hover,.career-decision-row:focus-visible {background:var(--club-primary-subtle)!important;}
+.career-decision-row:focus-visible {outline:2px solid var(--club-ink);outline-offset:2px;}
+
+/* Group related inputs and outcomes without adding another stack of cards. */
+.career-decision-zone {display:flex;flex-direction:column;gap:10px;min-width:0;padding:12px 14px;border-left:3px solid var(--club-rule);background:var(--club-primary-subtle);}
+.career-decision-zone .warning-tag {margin:0;}
+.career-list-row {border-radius:8px;transition:background 140ms,box-shadow 140ms;}
+.career-list-row:focus-within,.career-list-row:hover {background:var(--club-primary-subtle);box-shadow:inset 3px 0 var(--club-ink);}
+.career-table tbody tr {transition:background 140ms,box-shadow 140ms;}
+.career-table tbody tr.selected {background:var(--club-primary-subtle);box-shadow:inset 4px 0 var(--club-ink);}
+.career-table tbody tr:focus-within {box-shadow:inset 4px 0 var(--club-ink);}
+.career-bench a {border-radius:8px;transition:background 140ms,box-shadow 140ms;}
+.career-bench a:hover,.career-bench a:focus-visible {background:var(--club-primary-subtle);box-shadow:inset 3px 0 var(--club-ink);}
+
+/* Landscape phone: reclaim vertical room while keeping both status strips visible. */
+@media (max-height:500px) and (min-width:741px) {
+  .career-app {padding: max(4px,env(safe-area-inset-top)) max(4px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(4px,env(safe-area-inset-left));}
+  .career-workspace {min-height:0;}
+  .career-top {min-height:48px;padding:2px 10px;}
+  .career-top .career-icon {min-width:44px;min-height:44px;width:44px;height:44px;}
+  .career-global-continue {min-height:44px;min-width:128px;padding:4px 10px;}
+  .career-section-tabs a {min-height:40px;padding-block:4px;}
+  .career-demo {min-height:20px;padding-block:2px;white-space:nowrap;}
+  .career-notice {display:block;flex:0 0 auto;min-height:22px;padding-block:2px;line-height:1.35;white-space:normal;}
+  .career-content {padding:6px 12px 10px;}
+  .career-panel-heading {min-height:40px;padding-bottom:6px;}
+  .career-panel-body {gap:8px;padding-block:8px;}
+  .career-hub,.career-two,.career-live,.career-tactics,.career-feed-grid {gap:10px;}
+  .career-hub-left,.career-hub-center,.career-hub-right {gap:10px;}
+  .career-hub-left>.career-panel:first-child .career-panel-heading {min-height:32px;padding-bottom:0;font-size:var(--type-label);white-space:nowrap;}
+  .career-hub-left>.career-panel:first-child .career-panel-heading>span:first-child {display:none;}
+  .career-hub-left>.career-panel:first-child .career-panel-heading a {white-space:nowrap;}
+  .career-hub-left>.career-panel:first-child .career-fixture-hero {padding:8px;gap:1px;}
+  .career-hub-left>.career-panel:first-child .career-match-names {gap:8px;}
+  .career-hub-left>.career-panel:first-child .career-match-names h2 {font-size:var(--type-body);line-height:1;}
+  .career-hub-left>.career-panel:first-child .career-match-names h2 span {display:inline;margin-left:4px;}
+  .career-hub-left>.career-panel:first-child .career-fixture-hero>p:not(.warning-tag) {line-height:1.2;}
+  .career-hub-left>.career-panel:first-child .career-fixture-hero>.warning-tag {padding:3px 6px;font-size:var(--type-label);line-height:1.2;}
+  .career-hub-left>.career-panel:first-child .career-fixture-hero>.career-action {min-height:44px;padding:6px 10px;}
+  .career-hub-center>.career-stats {gap:4px;padding-bottom:4px;}
+  .career-hub-center>.career-stats .career-stat {padding:4px 6px;}
+  .career-hub-center>.career-stats .career-stat strong {font-size:var(--type-label);}
+  .career-hub-photo {height:132px;}
+  .career-hub-photo>div {padding:10px;gap:4px;}
+  .career-hub-right .career-panel-body {gap:8px;}
+  .career-hub-link-group+.career-hub-link-group {padding-top:4px;}
+  .career-decision-zone {gap:8px;padding:8px 10px;}
+}
+@media (max-height:500px) and (max-width:740px) {
+  .career-global-continue {min-width:0;padding-inline:8px;}
+  .career-global-continue-copy small {display:none;}
+  .career-section-tabs {scrollbar-width:thin;}
+  .career-section-tabs a {min-height:44px;}
+  .career-hub-link-group .career-decision-row {padding-inline:6px!important;}
+  .career-decision-zone {padding:8px 10px;}
+}
+@media (min-width:1100px) and (min-height:501px) {
+  .career-section-tabs {display:none;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .career-list-row,.career-table tbody tr,.career-bench a {transition:none;}
+}

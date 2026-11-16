@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Check, FolderOpen, Play, Plus, Save } from "lucide-react";
-import { IMAGES, CAREER_SAVE_EXAMPLES, CAREER_FIXTURES, CAREER_TABLE } from "@/data/mock";
+import { CAREER_SAVE_EXAMPLES, CAREER_FIXTURES, CAREER_TABLE } from "@/data/mock";
 import { CLUBS, type ClubId } from "@/lib/clubs";
 import { useClubTheme } from "@/components/om/club-theme-provider";
 import { Crest } from "@/components/om/crest";
 import { Button } from "@/components/om/button";
 import { useCareer, captureCareer, restoreCareer } from "./session";
 import { Action, Confirm, Field, Go, Panel, Stat, dateLabel, money } from "./ui";
+import pressConference from "../../../../docs/codex/references/press-conference.png";
 import regraguiPhoto from "@/assets/walid-regragui.jpg.asset.json";
 import stadiumMontage from "@/assets/regragui-stadium-menu.jpg";
 export function MenuView() {
@@ -250,7 +251,7 @@ export function HubView() {
       </div>
       <div className="career-hub-center">
         <div className="career-hub-photo">
-          <img src={IMAGES.press} alt="Conférence de presse du club" />
+          <img src={pressConference} alt="Joueur de football lors d’une conférence de presse" />
           <div>
              <p className="caps">{club.name} · 2026–27</p>
             <h2>Le prochain rendez-vous se prépare</h2>
@@ -274,12 +275,18 @@ export function HubView() {
       </div>
       <div className="career-hub-right">
         <Panel title="Votre programme" index="04">
-          <Go to="/equipe/effectif">Effectif</Go>
-          <Go to="/equipe/tactique">Composition</Go>
-          <Go to="/equipe/entrainement">Entraînement</Go>
-          <Go to="/gestion/transferts">Transferts</Go>
-          <Go to="/saison/calendrier">Calendrier</Go>
-          <Go to="/saison/classement">Classement</Go>
+          <div className="career-hub-link-group" role="group" aria-label="Préparer le prochain match">
+            <span>Préparer le prochain match</span>
+            <Go to="/equipe/effectif" className="career-decision-row">Effectif</Go>
+            <Go to="/equipe/tactique" className="career-decision-row">Composition</Go>
+            <Go to="/equipe/entrainement" className="career-decision-row">Entraînement</Go>
+          </div>
+          <div className="career-hub-link-group" role="group" aria-label="Suivre la saison et le club">
+            <span>Suivre la saison et le club</span>
+            <Go to="/gestion/transferts" className="career-decision-row">Transferts</Go>
+            <Go to="/saison/calendrier" className="career-decision-row">Calendrier</Go>
+            <Go to="/saison/classement" className="career-decision-row">Classement</Go>
+          </div>
         </Panel>
       </div>
     </div>

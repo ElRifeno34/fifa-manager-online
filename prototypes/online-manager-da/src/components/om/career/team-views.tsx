@@ -162,7 +162,7 @@ export function RosterView() {
               </thead>
               <tbody>
                 {players.map((p) => (
-                  <tr key={p.id} className={selected === p.id ? "selected" : ""}>
+                  <tr key={p.id} className={selected === p.id ? "selected" : ""} aria-selected={selected === p.id}>
                     <td>
                       <div className="career-player-cell">
                         <Flag nation={p.nation} />
@@ -297,12 +297,14 @@ export function TacticsView() {
               ))}
             </select>
           </Field>
-          <p className="warning-tag">2 titulaires fatigués · Aucun calcul de performance.</p>
-          <Action primary onClick={() => setConfirm(true)}>
-            <Check size={16} />
-            Valider la composition
-          </Action>
-          <Go to="/match/avant">Avant-match</Go>
+          <div className="career-decision-zone" aria-label="Valider la préparation du match">
+            <p className="warning-tag">2 titulaires fatigués · Aucun calcul de performance.</p>
+            <Action primary onClick={() => setConfirm(true)}>
+              <Check size={16} />
+              Valider la composition
+            </Action>
+            <Go to="/match/avant">Avant-match</Go>
+          </div>
         </Panel>
         <Panel title="Banc & disponibilité" index="03">
           <div className="career-bench">

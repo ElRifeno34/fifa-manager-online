@@ -223,7 +223,18 @@ export function CareerShell({ children }: { children: ReactNode }) {
               {CAREER_FIXTURES[state.current] ? `${dateLabel(CAREER_FIXTURES[state.current]?.date ?? "2027-05-30")} · J${state.current + 1}` : "Saison terminée"}
             </strong>
           </div>
-          <div className="career-continue"><Go to={state.current >= 38 ? "/saison/bilan" : "/match/avant"} primary>{state.current >= 38 ? "Bilan" : "Continuer"}</Go></div>
+          <div className="career-continue">
+            <Go
+              to={state.current >= 38 ? "/saison/bilan" : "/match/avant"}
+              className="career-global-continue"
+              ariaLabel={state.current >= 38 ? "Continuer la carrière vers le bilan de saison" : `Continuer la carrière vers l’avant-match · J${CAREER_FIXTURES[state.current]?.day ?? state.current + 1}`}
+            >
+              <span className="career-global-continue-copy">
+                <strong>Continuer</strong>
+                <small>{state.current >= 38 ? "Bilan de saison" : `Avant-match · J${CAREER_FIXTURES[state.current]?.day ?? state.current + 1}`}</small>
+              </span>
+            </Go>
+          </div>
           <Button
             className="career-icon"
             onClick={() => setSettings(true)}
