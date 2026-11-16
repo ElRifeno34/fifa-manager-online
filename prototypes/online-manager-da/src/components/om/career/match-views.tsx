@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
-import { Play, Pause, SkipForward, RefreshCw } from "lucide-react";
+import { Play, Pause, SkipForward, RefreshCw, ArrowLeftRight, LogOut } from "lucide-react";
 import { CAREER_FIXTURES, MATCH_SCRIPT } from "@/data/mock";
 import { useClubTheme } from "@/components/om/club-theme-provider";
 import { Crest } from "@/components/om/crest";
 import { useCareer } from "./session";
 import { Action, Confirm, Empty, Go, Panel, Stat, dateLabel } from "./ui";
+import { MatchPitch } from "./match-pitch";
 export function useFixture() {
   const { state } = useCareer();
   const { club } = useClubTheme();
@@ -100,9 +101,12 @@ export function LiveMatchView() {
     state.squad.find((p) => !state.lineup.includes(p.id))?.id ?? "p12",
   );
   const [exit, setExit] = useState(false);
+  const [replay, setReplay] = useState<number | null>(null);
   const navigate = useNavigate();
   const step = MATCH_SCRIPT[Math.min(state.matchStep, MATCH_SCRIPT.length - 1)] ?? MATCH_SCRIPT[0];
   const ended = state.matchStep >= MATCH_SCRIPT.length - 1;
+  const outgoing = state.squad.find(p => p.id === out && state.lineup.includes(p.id));
+  const incoming = state.squad.find(p => p.id === inside && !state.lineup.includes(p.id));
   useEffect(() => {
     if (!playing || ended) return;
     const t = setTimeout(
@@ -118,14 +122,15 @@ export function LiveMatchView() {
       </Empty>
     );
   return (
-    <div className="career-live">
-      <Panel title="Tableau d’affichage">
+    <div className="career-live match-live-workspace">
+      <Panel title="Tableau d’affichage" className="match-live-main">
+        <p className="caps text-ink-2">{club.competition} · J{fixture?.day} · {fixture && dateLabel(fixture.date)}</p>
         <div className="career-score">
-          <span>{club.name}</span>
+          <span><Crest initials={club.initials} className="size-8" />{club.name}</span>
           <strong className="font-mono">
             {step?.home} – {step?.away}
           </strong>
-          <span>{opponent}</span>
+          <span><span className="match-opponent-mark" aria-hidden="true">{opponent.slice(0,3).toUpperCase()}</span>{opponent}</span>
         </div>
         <div className="career-live-minute font-mono">
           {step?.minute}′ <span>{ended ? "Terminé" : playing ? "En cours" : "En pause"}</span>
@@ -156,6 +161,7 @@ export function LiveMatchView() {
           >
             Aller à la fin
           </Action>
+          <Action title="Revoir le dernier temps fort sans modifier le match" disabled={state.matchStep === 0} onClick={() => { setPlaying(false); setReplay(state.matchStep); }}><RefreshCw size={16} />Replay</Action>
         </div>
         {ended && (
           <Go to="/match/resume" primary>
@@ -167,14 +173,18 @@ export function LiveMatchView() {
           <Stat label="Tirs" value={state.matchStep > 3 ? "12 / 7" : "5 / 3"} />
           <Stat label="Formation" value={state.formation} />
         </div>
+        <MatchPitch players={state.lineup.flatMap(id => { const player=state.squad.find(p => p.id===id); return player ? [player] : []; })} />
+        <div className="career-actions match-management-actions">
         <Action
           disabled={ended}
           onClick={() => {
             setPlaying(false);
+            setOut(state.lineup[0] ?? "");
+            setInside(state.squad.find(p => !state.lineup.includes(p.id))?.id ?? "");
             setSub(true);
           }}
         >
-          Faire un changement
+          <ArrowLeftRight size={16} />Faire un changement
         </Action>
         <Action
           onClick={() => {
@@ -182,11 +192,13 @@ export function LiveMatchView() {
             setExit(true);
           }}
         >
-          Quitter la rencontre
+          <LogOut size={16} />Quitter la rencontre
         </Action>
+        </div>
       </Panel>
-      <Panel title="Commentaires en direct" index="02">
-        <ol className="career-commentary" aria-live="polite">
+      <Panel title="Commentaires en direct" index="02" className="match-live-journal">
+        <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{step?.minute}′ · {step?.text}</p>
+        <ol className="career-commentary">
           {MATCH_SCRIPT.slice(0, state.matchStep + 1)
             .sort((a, b) => b.minute - a.minute)
             .map((event) => (
@@ -205,6 +217,11 @@ export function LiveMatchView() {
           Chronologie et statistiques fictives, identiques à chaque démonstration.
         </p>
       </Panel>
+      <Confirm open={replay !== null} onOpenChange={open => { if (!open) setReplay(null); }} title="Replay du temps fort" description="Relecture du journal fictif, sans vidéo ni modification du score ou de la progression.">
+        <div className="match-replay-event"><strong className="font-mono">{replay !== null ? MATCH_SCRIPT[replay]?.minute : 0}′</strong><p>{replay !== null ? MATCH_SCRIPT[replay]?.text : ""}</p></div>
+        <Action onClick={() => setReplay(i => i === null ? null : Math.max(0,i-1))} disabled={replay === 0}>Temps fort précédent</Action>
+        <Action primary onClick={() => setReplay(null)}>Retour au match</Action>
+      </Confirm>
       <Confirm
         open={sub}
         onOpenChange={setSub}
@@ -238,13 +255,13 @@ export function LiveMatchView() {
         </label>
         <Action
           primary
+          disabled={!outgoing || !incoming}
           onClick={() => {
-            const a = state.squad.find((p) => p.id === out);
-            const b = state.squad.find((p) => p.id === inside);
+            if (!outgoing || !incoming) return;
             update((s) => ({
               ...s,
               lineup: s.lineup.map((id) => (id === out ? inside : id)),
-              substitutions: [...s.substitutions, `${step?.minute}′ · ${a?.name} → ${b?.name}`],
+              substitutions: [...s.substitutions, `${step?.minute}′ · ${outgoing.name} → ${incoming.name}`],
             }));
             notify("Changement noté dans le journal.");
             setSub(false);

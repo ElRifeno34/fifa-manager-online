@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import * as Dialog from "@radix-ui/react-dialog";
 import {
   ArrowLeft,
   Home,
@@ -7,10 +8,20 @@ import {
   CalendarDays,
   MoreHorizontal,
   Menu,
+  X,
   Settings,
   ChevronRight,
   Moon,
   Sun,
+  ClipboardList,
+  Trophy,
+  Newspaper,
+  MessageCircle,
+  FastForward,
+  Dumbbell,
+  ArrowLeftRight,
+  UserRound,
+  Briefcase,
 } from "lucide-react";
 import { useState, useEffect, type ReactNode } from "react";
 import { Button } from "@/components/om/button";
@@ -76,6 +87,17 @@ export const navigation = [
     ],
   },
 ] as const;
+const referenceNavigation = [
+  { label: "Avancer", icon: FastForward, to: "/match/avant", primary: true },
+  { label: "Effectif", icon: Users, to: "/equipe/effectif", badge: 2 },
+  { label: "Tactique", icon: ClipboardList, to: "/equipe/tactique" },
+  { label: "Entraînement", icon: Dumbbell, to: "/equipe/entrainement" },
+  { label: "Transferts", icon: ArrowLeftRight, to: "/gestion/transferts", badge: 3 },
+  { label: "Compétition", icon: Trophy, to: "/saison/calendrier" },
+  { label: "Médias", icon: Newspaper, to: "/medias/fil", badge: 5 },
+  { label: "Carrière coach", icon: UserRound, to: "/carriere/coach" },
+  { label: "Bureau du manager", icon: Briefcase, to: "/gestion/discussions" },
+] as const;
 const paths: Record<
   string,
   { title: string; eyebrow: string; back: Exclude<CareerPath, "/equipe/joueur/$id"> }
@@ -120,6 +142,19 @@ export function CareerShell({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState(false);
   const [more, setMore] = useState(false);
   useEffect(() => {
+    if (settings || more || pathname === "/") return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey || event.altKey ||
+          (event.target instanceof HTMLElement && (event.target.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(event.target.tagName)))) return;
+      if (/^[1-9]$/.test(event.key)) {
+        event.preventDefault();
+        document.querySelector<HTMLAnchorElement>(`[data-career-shortcut="${event.key}"]`)?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [pathname, settings, more]);
+  useEffect(() => {
     const main = document.getElementById("career-content");
     if (main) main.scrollTop = 0;
     setMore(false);
@@ -150,56 +185,48 @@ export function CareerShell({ children }: { children: ReactNode }) {
     );
   }
   return (
-    <div className="career-app">
+    <div className={`career-app ${pathname === "/hub" ? "is-hub" : ""}`}>
       <a href="#career-content" className="skip-link">
         Aller au contenu
       </a>
       <aside className="career-rail" aria-label="Navigation principale">
         <Link to="/" className="career-brand" title="Menu de carrière">
           <Crest initials={club.initials} className="career-crest-small" />
-          <span>
-            Online
-            <br />
-            Manager
-          </span>
+          <span><strong>{club.name}</strong><small>{club.competition} · 2026–27</small></span>
         </Link>
-        <nav aria-label="Sections de carrière">
-          {navigation.map((group, i) => (
-            <div key={group.label} className="career-nav-group">
+        <nav aria-label="Sections de carrière" className="career-navigation-list">
+          {referenceNavigation.map((item, index) => {
+            const selected = pathname === item.to ||
+               (item.to === "/gestion/transferts" && pathname === "/gestion/finances") ||
+               (item.to === "/medias/fil" && pathname === "/gestion/presse") ||
+              (item.to === "/equipe/effectif" && pathname.startsWith("/equipe/joueur/")) ||
+              (item.to === "/saison/calendrier" && (pathname.startsWith("/saison/") || pathname.startsWith("/match/")));
+            return (
               <Link
-                to={group.to}
-                onClick={(e) => {
-                  if (
-                    i === 4 &&
-                    window.matchMedia("(max-height: 500px), (max-width: 1099px)").matches
-                  ) {
-                    e.preventDefault();
-                    setMore((v) => !v);
-                  }
-                }}
-                className={`career-nav-main ${active === i ? "is-active" : ""}`}
-                aria-current={active === i ? "page" : undefined}
-                title={group.label}
+                key={item.to}
+                to={item.to}
+                className={`career-nav-main ${"primary" in item ? "is-primary" : ""} ${selected ? "is-active" : ""}`}
+                data-career-shortcut={index + 1}
+                aria-keyshortcuts={String(index + 1)}
+                aria-current={selected ? (pathname === item.to ? "page" : "true") : undefined}
+                aria-label={`${item.label}${"badge" in item ? `, ${item.badge} notifications` : ""}`}
+                title={item.label}
               >
-                <group.icon size={20} strokeWidth={1.5} />
-                <span>{group.label}</span>
+                <item.icon size={20} strokeWidth={1.5} aria-hidden="true" />
+                <span>{item.label}</span>
+                {"badge" in item && <span className="career-menu-badge" aria-hidden="true">{item.badge}</span>}
               </Link>
-              <div className={`career-nav-detail ${active === i ? "is-expanded" : ""}`}>
-                {group.links.map(([label, to]) => (
-                  <Link to={to} key={to} className={pathname === to ? "is-active" : ""} aria-current={pathname === to ? "page" : undefined}>
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
+
         </nav>
+        <div className="career-rail-tools"><Link to="/hub" className="career-icon" title="Accueil du manager" aria-label="Accueil du manager"><Home size={20} aria-hidden="true" /></Link><Dialog.Root open={more} onOpenChange={setMore}><Dialog.Trigger asChild><Button className="career-icon" title="Toutes les pages" aria-label="Plus : toutes les pages"><MoreHorizontal size={20} aria-hidden="true" /></Button></Dialog.Trigger><Dialog.Portal><Dialog.Overlay className="career-navigation-overlay" /><Dialog.Content className="career-more" id="career-more-menu"><div className="flex items-center justify-between"><Dialog.Title className="caps">Toutes les pages</Dialog.Title><Dialog.Close asChild><Button className="career-icon" aria-label="Fermer toutes les pages" title="Fermer"><X size={20} aria-hidden="true" /></Button></Dialog.Close></div><Dialog.Description className="sr-only">Choisir une destination de carrière.</Dialog.Description><nav aria-label="Toutes les pages de carrière">{navigation.map(group => group.links.map(([label, to]) => <Link key={to} to={to} aria-current={pathname === to ? "page" : undefined} onClick={() => setMore(false)}>{label}<ChevronRight size={16} strokeWidth={1.5} aria-hidden="true" /></Link>))}</nav></Dialog.Content></Dialog.Portal></Dialog.Root></div>
         <div className="career-rail-coach"><span className="career-coach-avatar" aria-hidden="true">{state.coach.slice(0, 1)}</span><div><strong>{state.coach}</strong><span>Manager · 2026–27</span></div></div>
         <Button
           className="career-rail-theme"
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          title="Changer de thème"
-          aria-label="Changer de thème"
+          title={theme === "light" ? "Activer le thème sombre" : "Activer le thème clair"}
+          aria-label={theme === "light" ? "Activer le thème sombre" : "Activer le thème clair"}
         >
           {theme === "light" ? (
             <Moon size={20} strokeWidth={1.5} />
@@ -210,11 +237,11 @@ export function CareerShell({ children }: { children: ReactNode }) {
       </aside>
       <div className="career-workspace">
         <header className="career-top">
-          <Link to={page.back} className="career-icon" title="Retour" aria-label="Retour">
+          <Link to={page.back} className="career-icon" title={`Retour : ${paths[page.back]?.title ?? "Effectif"}`} aria-label={`Retour : ${paths[page.back]?.title ?? "Effectif"}`}>
             <ArrowLeft size={20} strokeWidth={1.5} />
           </Link>
           <div className="min-w-0">
-            <p className="caps text-ink-2">{page.eyebrow} · 2026–27</p>
+            <p className="caps text-ink-2">Carrière · 2026–27</p>
             <h1>{page.title}</h1>
           </div>
           <div className="career-club">
@@ -223,23 +250,12 @@ export function CareerShell({ children }: { children: ReactNode }) {
               {CAREER_FIXTURES[state.current] ? `${dateLabel(CAREER_FIXTURES[state.current]?.date ?? "2027-05-30")} · J${state.current + 1}` : "Saison terminée"}
             </strong>
           </div>
-          <div className="career-continue">
-            <Go
-              to={state.current >= 38 ? "/saison/bilan" : "/match/avant"}
-              className="career-global-continue"
-              ariaLabel={state.current >= 38 ? "Continuer la carrière vers le bilan de saison" : `Continuer la carrière vers l’avant-match · J${CAREER_FIXTURES[state.current]?.day ?? state.current + 1}`}
-            >
-              <span className="career-global-continue-copy">
-                <strong>Continuer</strong>
-                <small>{state.current >= 38 ? "Bilan de saison" : `Avant-match · J${CAREER_FIXTURES[state.current]?.day ?? state.current + 1}`}</small>
-              </span>
-            </Go>
-          </div>
+          <div className="career-continue"><Go to={state.current >= 38 ? "/saison/bilan" : "/match/avant"}>{state.current >= 38 ? "Bilan" : "Prochain match"}</Go></div>
           <Button
             className="career-icon"
             onClick={() => setSettings(true)}
             title="Réglages"
-            aria-label="Réglages"
+            aria-label="Ouvrir les réglages du jeu"
           >
             <Settings size={20} strokeWidth={1.5} />
           </Button>
@@ -252,29 +268,13 @@ export function CareerShell({ children }: { children: ReactNode }) {
           <span>Données fictives · Modifications temporaires, perdues au rechargement</span>
           <span className="career-demo-version">V1 / DÉMO</span>
         </div>
-        <main id="career-content" className="career-content" key={pathname}>
+        <main id="career-content" className={`career-content ${pathname !== "/hub" ? "career-screen" : ""}`} key={pathname}>
           {children}
         </main>
         <div className="career-notice" role="status" aria-live="polite">
           {notice || "Carrière de démonstration · Aucun moteur de jeu"}
         </div>
       </div>
-      {more && (
-        <div className="career-more">
-          <div className="flex items-center justify-between">
-            <h2 className="caps">Plus</h2>
-            <Button className="career-icon" aria-label="Fermer Plus" onClick={() => setMore(false)}>
-              <Menu size={20} />
-            </Button>
-          </div>
-          {navigation[4].links.map(([label, to]) => (
-            <Link key={to} to={to} onClick={() => setMore(false)}>
-              {label}
-              <ChevronRight size={16} strokeWidth={1.5} aria-hidden="true" />
-            </Link>
-          ))}
-        </div>
-      )}
       <SettingsSheet open={settings} onClose={() => setSettings(false)} />
     </div>
   );

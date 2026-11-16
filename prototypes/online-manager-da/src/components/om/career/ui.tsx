@@ -57,17 +57,13 @@ export function Go({
   to,
   children,
   primary = false,
-  className,
-  ariaLabel,
 }: {
   to: Exclude<CareerPath, "/equipe/joueur/$id">;
   children: ReactNode;
   primary?: boolean;
-  className?: string;
-  ariaLabel?: string;
 }) {
   return (
-    <Link to={to} aria-label={ariaLabel} className={`career-action ${primary ? "is-primary" : ""} ${className ?? ""}`.trim()}>
+    <Link to={to} className={`career-action ${primary ? "is-primary" : ""}`}>
       {children}
       <ArrowRight size={16} strokeWidth={1.5} />
     </Link>

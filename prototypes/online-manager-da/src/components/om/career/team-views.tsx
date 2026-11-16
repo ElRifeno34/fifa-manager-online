@@ -4,6 +4,7 @@ import { Check, Search, AlertTriangle } from "lucide-react";
 import { type CareerPlayer } from "@/data/mock";
 import { useCareer, findPlayers } from "./session";
 import { Action, Confirm, Empty, Field, Flag, Go, Panel, Stat, money } from "./ui";
+import { TacticalAdvisor } from "./tactical-advisor";
 export function PlayerDetail({
   player,
   compact = false,
@@ -86,6 +87,7 @@ export function RosterView() {
         <div className="career-toolbar">
           <Field label="Recherche">
             <div className="career-search">
+              <Search size={18} aria-hidden="true" />
               <input
                 aria-label="Rechercher un joueur"
                 value={query}
@@ -162,7 +164,7 @@ export function RosterView() {
               </thead>
               <tbody>
                 {players.map((p) => (
-                  <tr key={p.id} className={selected === p.id ? "selected" : ""} aria-selected={selected === p.id}>
+                  <tr key={p.id} className={selected === p.id ? "selected" : ""}>
                     <td>
                       <div className="career-player-cell">
                         <Flag nation={p.nation} />
@@ -297,15 +299,14 @@ export function TacticsView() {
               ))}
             </select>
           </Field>
-          <div className="career-decision-zone" aria-label="Valider la préparation du match">
-            <p className="warning-tag">2 titulaires fatigués · Aucun calcul de performance.</p>
-            <Action primary onClick={() => setConfirm(true)}>
-              <Check size={16} />
-              Valider la composition
-            </Action>
-            <Go to="/match/avant">Avant-match</Go>
-          </div>
+          <p className="warning-tag">2 titulaires fatigués · Aucun calcul de performance.</p>
+          <Action primary onClick={() => setConfirm(true)}>
+            <Check size={16} />
+            Valider la composition
+          </Action>
+          <Go to="/match/avant">Avant-match</Go>
         </Panel>
+        <TacticalAdvisor />
         <Panel title="Banc & disponibilité" index="03">
           <div className="career-bench">
             {state.squad

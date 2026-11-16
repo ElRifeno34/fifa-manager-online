@@ -1,16 +1,16 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Check, FolderOpen, Play, Plus, Save } from "lucide-react";
-import { CAREER_SAVE_EXAMPLES, CAREER_FIXTURES, CAREER_TABLE } from "@/data/mock";
+import { ArrowRight, Check, FolderOpen, Play, Plus, Save, ClipboardList, Users, Goal, AlertTriangle, CalendarDays } from "lucide-react";
+import { IMAGES, CAREER_SAVE_EXAMPLES, CAREER_FIXTURES, CAREER_TABLE, getClubNews } from "@/data/mock";
 import { CLUBS, type ClubId } from "@/lib/clubs";
 import { useClubTheme } from "@/components/om/club-theme-provider";
 import { Crest } from "@/components/om/crest";
 import { Button } from "@/components/om/button";
 import { useCareer, captureCareer, restoreCareer } from "./session";
 import { Action, Confirm, Field, Go, Panel, Stat, dateLabel, money } from "./ui";
-import pressConference from "../../../../docs/codex/references/press-conference.png";
 import regraguiPhoto from "@/assets/walid-regragui.jpg.asset.json";
 import stadiumMontage from "@/assets/regragui-stadium-menu.jpg";
+import { NewsCarousel } from "@/components/om/news-carousel";
 export function MenuView() {
   const [photoFailed, setPhotoFailed] = useState(false);
   const [entered, setEntered] = useState(false);
@@ -210,85 +210,73 @@ export function SavesView() {
 export function HubView() {
   const { state } = useCareer();
   const { club } = useClubTheme();
+  const navigate = useNavigate();
+  const [storyIndex, setStoryIndex] = useState(0);
   const next = CAREER_FIXTURES[state.current];
+  const opponent = (fixture: typeof next) => fixture?.opponent === "Rival"
+    ? club.id === "barcelone" ? "Real Madrid" : "FC Barcelone"
+    : fixture?.opponent ?? "Fin de saison";
+  const stories = getClubNews(club).map((story, index) => index === 0
+    ? { ...story, headline: `${club.name} : le rendez-vous approche`, lead: `${opponent(next)} · ${next ? dateLabel(next.date) : "Bilan de saison"} · 21:00. Le groupe prépare la prochaine rencontre.` }
+    : story);
+  useEffect(() => {
+    const openNews = () => navigate({ to: "/gestion/presse" });
+    const onKey = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey || event.altKey ||
+          (event.target instanceof HTMLElement && /^(INPUT|SELECT|TEXTAREA)$/.test(event.target.tagName))) return;
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        if (document.querySelector('[role="dialog"]')) return;
+        event.preventDefault();
+        setStoryIndex(i => (i + (event.key === "ArrowRight" ? 1 : -1) + stories.length) % stories.length);
+      }
+    };
+    window.addEventListener("om-news-all", openNews);
+    window.addEventListener("keydown", onKey);
+    return () => { window.removeEventListener("om-news-all", openNews); window.removeEventListener("keydown", onKey); };
+  }, [navigate, stories.length]);
   return (
-    <div className="career-hub">
-       <div className="career-hub-left">
-        <Panel title="Prochain rendez-vous" to="/match/avant">
-          <div className="career-fixture-hero">
-            <span className="caps text-ink-2">
-              {next ? `${dateLabel(next.date)} · J${next.day}` : "30 mai 2027 · Bilan"}
-            </span>
-            <div className="career-match-names">
-              <Crest initials={club.initials} className="size-11" />
-              <h2>
-                {club.name}
-                <span>
-                  vs{" "}
-                  {next?.opponent === "Rival"
-                    ? club.id === "barcelone"
-                      ? "Real Madrid"
-                      : "FC Barcelone"
-                    : (next?.opponent ?? "Fin de saison")}
-                </span>
-              </h2>
+    <div className="career-v0-hub">
+      <div className="career-v0-main">
+        <section className="career-match-focus" aria-label="Prochain rendez-vous">
+          <div className="career-match-focus-copy">
+            <p className="caps">{club.competition} · {next ? `Journée ${next.day}` : "Saison terminée"}</p>
+            <h2>{next ? <>Face à <span>{opponent(next)}</span></> : "Le bilan de votre saison"}</h2>
+            <p className="career-focus-date"><CalendarDays size={16} aria-hidden="true" />{next ? `${dateLabel(next.date)} · 21:00 · ${next.home ? "Domicile" : "Extérieur"}` : "2026–27"}</p>
+          </div>
+          <div className="career-match-focus-action">
+            {next && <span className={`career-readiness ${state.validated ? "is-ready" : ""}`}>{state.validated ? <Check size={16} /> : <AlertTriangle size={16} />}{state.validated ? "Onze validé · 2 joueurs fatigués" : "Onze à valider · 2 joueurs fatigués"}</span>}
+            <Go to={!next ? "/saison/bilan" : state.validated ? "/match/avant" : "/equipe/tactique"} primary>{!next ? "Voir le bilan" : state.validated ? "Préparer le match" : "Valider mon onze"}</Go>
+          </div>
+          <nav className="career-preparation" aria-label="Préparation du match">
+            <Go to="/equipe/effectif"><Users size={16} /><span>Effectif</span></Go>
+            <Go to="/equipe/tactique"><ClipboardList size={16} /><span>Composition</span>{state.validated && <Check size={14} />}</Go>
+            <Go to="/match/avant"><Goal size={16} /><span>Avant-match</span></Go>
+          </nav>
+        </section>
+        <NewsCarousel stories={stories} index={storyIndex} onIndexChange={setStoryIndex} className="career-v0-news" />
+        <div className="career-v0-tables">
+          <Panel title={`Classement · ${club.competition}`} to="/saison/classement">
+            <div className="career-hub-standings">
+              {CAREER_TABLE.slice(0, 5).map((row, i) => <div key={row.name} className={i === 1 ? "is-managed" : ""}><span>{i + 1}</span><strong>{i === 1 ? club.name : row.name}</strong><b>{i === 1 ? 27 + state.completed.length * 3 : row.points}</b></div>)}
             </div>
-            <p className="text-ink-2">
-              {next?.home ? "Domicile" : "Extérieur"} · 21:00 · {club.competition}
-            </p>
-            <p className="warning-tag">
-              2 titulaires fatigués · {state.validated ? "Compo validée" : "Compo à valider"}
-            </p>
-            <Go to={state.current >= 38 ? "/saison/bilan" : "/match/avant"} primary>
-              {state.current >= 38 ? "Voir le bilan" : "Préparer le match"}
-            </Go>
-          </div>
-        </Panel>
-        <Panel title="Vestiaire" index="02" to="/gestion/discussions">
-          <p>El Amrani souhaite parler de son temps de jeu.</p>
-          <Go to="/gestion/discussions">Ouvrir la discussion</Go>
-        </Panel>
-      </div>
-      <div className="career-hub-center">
-        <div className="career-hub-photo">
-          <img src={pressConference} alt="Joueur de football lors d’une conférence de presse" />
-          <div>
-             <p className="caps">{club.name} · 2026–27</p>
-            <h2>Le prochain rendez-vous se prépare</h2>
-            <Go to="/gestion/presse">Conférence de presse</Go>
-          </div>
+          </Panel>
+          <Panel title="Vie du club" index="02" to="/gestion/discussions">
+            <div className="career-stats"><Stat label="Position" value="2e" /><Stat label="Points" value={27 + state.completed.length * 3} /><Stat label="Budget" value={`${money(state.budget)} M€`} /></div>
+            <p className="career-v0-inbox">El Amrani souhaite parler de son temps de jeu.</p>
+            <Go to="/gestion/discussions">Ouvrir la discussion</Go>
+          </Panel>
         </div>
-        <div className="career-stats">
-          <Stat label="Position" value="2e" />
-          <Stat label="Points" value={27 + state.completed.length * 3} />
-          <Stat label="Budget" value={`${money(state.budget)} M€`} />
+      </div>
+      <aside className="career-v0-calendar" aria-label="Calendrier">
+        <div className="career-v0-fixture">
+          <CalendarDays size={20} aria-hidden="true" /><h2>Calendrier</h2><span className="caps">2026–27</span>
         </div>
-        <Panel title="Fil du club" index="03" to="/medias/fil">
-          {state.feed.slice(0, 3).map((event) => (
-            <div className="career-feed-preview" key={event.id}>
-              <span className="caps text-club-ink">{event.type}</span>
-              <strong>{event.title}</strong>
-              <p>{event.body}</p>
-            </div>
-          ))}
-        </Panel>
-      </div>
-      <div className="career-hub-right">
-        <Panel title="Votre programme" index="04">
-          <div className="career-hub-link-group" role="group" aria-label="Préparer le prochain match">
-            <span>Préparer le prochain match</span>
-            <Go to="/equipe/effectif" className="career-decision-row">Effectif</Go>
-            <Go to="/equipe/tactique" className="career-decision-row">Composition</Go>
-            <Go to="/equipe/entrainement" className="career-decision-row">Entraînement</Go>
-          </div>
-          <div className="career-hub-link-group" role="group" aria-label="Suivre la saison et le club">
-            <span>Suivre la saison et le club</span>
-            <Go to="/gestion/transferts" className="career-decision-row">Transferts</Go>
-            <Go to="/saison/calendrier" className="career-decision-row">Calendrier</Go>
-            <Go to="/saison/classement" className="career-decision-row">Classement</Go>
-          </div>
-        </Panel>
-      </div>
+        <div className="career-v0-agenda">
+          {CAREER_FIXTURES.slice(state.current, state.current + 4).map(fixture => <Go key={fixture.id} to="/saison/calendrier"><span><strong className="font-display">{dateLabel(fixture.date)}</strong><small>J{fixture.day} · {opponent(fixture)}</small></span></Go>)}
+          <Go to="/saison/calendrier">Tout le calendrier</Go>
+        </div>
+        <div className="career-agenda-club"><span className="caps">Votre club</span><strong>2e <small>au classement</small></strong><span>{27 + state.completed.length * 3} points · {money(state.budget)} M€</span><Go to="/gestion/discussions">Vestiaire</Go></div>
+      </aside>
     </div>
   );
 }

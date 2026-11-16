@@ -105,7 +105,7 @@ export function TransfersView() {
                 <Go to="/gestion/finances">Voir les finances</Go>
               </>
             ) : stage === 0 ? (
-              <div className="career-decision-zone" aria-label="Négocier avec le club vendeur">
+              <>
                 <p>
                   Le vendeur demande 18 M€. Toute offre inférieure déclenche une contre-proposition
                   fixe.
@@ -150,9 +150,9 @@ export function TransfersView() {
                 >
                   Réinitialiser
                 </Action>
-              </div>
+              </>
             ) : stage === 1 ? (
-              <div className="career-decision-zone" aria-label="Négocier le contrat avec le joueur">
+              <>
                 <p>Le joueur souhaite un salaire de 55 000 €/semaine et quatre ans.</p>
                 <Field label="Salaire / semaine (€)">
                   <input
@@ -201,9 +201,9 @@ export function TransfersView() {
                 >
                   Retour au vendeur
                 </Action>
-              </div>
+              </>
             ) : (
-              <div className="career-decision-zone" aria-label="Vérifier les conditions financières">
+              <>
                 <h3>Récapitulatif financier</h3>
                 <dl className="career-details">
                   <div>
@@ -232,7 +232,7 @@ export function TransfersView() {
                 </Action>
                 <Action onClick={() => setStage(1)}>Revoir le contrat</Action>
                 <Go to="/gestion/finances">Consulter les finances</Go>
-              </div>
+              </>
             )}
           </Panel>
         </div>

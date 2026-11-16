@@ -448,6 +448,8 @@ export const MATCH_SCRIPT = [
  {minute:75,home:2,away:1,text:'71′ · Costa reprend un centre de Serrano. Le club reprend l’avantage.'},
  {minute:90,home:2,away:1,text:'Fin du match. Victoire 2–1 dans ce scénario de démonstration.'},
 ]
+// Illustrative formation coordinates; never a real-time tracking feed.
+export const MATCH_PITCH_POSITIONS = [[10,50],[27,15],[25,38],[25,62],[27,85],[43,50],[52,28],[52,72],[74,18],[81,50],[74,82]] as const
 export const CAREER_TABLE = [
  {name:'FC Barcelone',played:11,won:9,drawn:2,lost:0,gf:28,ga:8,points:29},
  {name:'Real Madrid',played:11,won:8,drawn:3,lost:0,gf:25,ga:9,points:27},
