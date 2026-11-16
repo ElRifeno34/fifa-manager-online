@@ -1,0 +1,31 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { RosterView } from "@/components/om/career/team-views";
+import { LoadingGate } from "@/components/om/career/ui";
+export const Route = createFileRoute("/equipe/effectif")({
+  head: () => ({
+    meta: [
+      { title: "Effectif — Online Manager" },
+      {
+        name: "description",
+        content:
+          "Effectif : maquette de carrière football 2026–27 avec données fictives et changements temporaires.",
+      },
+      { property: "og:title", content: "Effectif — Online Manager" },
+      {
+        property: "og:description",
+        content:
+          "Effectif : maquette de carrière football 2026–27 avec données fictives et changements temporaires.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Page,
+});
+function Page() {
+  return (
+    <LoadingGate id="/equipe/effectif">
+      <RosterView />
+    </LoadingGate>
+  );
+}
