@@ -1,0 +1,31 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { TransfersView } from "@/components/om/career/management-views";
+import { LoadingGate } from "@/components/om/career/ui";
+export const Route = createFileRoute("/gestion/transferts")({
+  head: () => ({
+    meta: [
+      { title: "Transferts et contrats — Online Manager" },
+      {
+        name: "description",
+        content:
+          "Transferts et contrats : maquette de carrière football 2026–27 avec données fictives et changements temporaires.",
+      },
+      { property: "og:title", content: "Transferts et contrats — Online Manager" },
+      {
+        property: "og:description",
+        content:
+          "Transferts et contrats : maquette de carrière football 2026–27 avec données fictives et changements temporaires.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Page,
+});
+function Page() {
+  return (
+    <LoadingGate id="/gestion/transferts">
+      <TransfersView />
+    </LoadingGate>
+  );
+}
